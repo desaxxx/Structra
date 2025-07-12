@@ -1,0 +1,35 @@
+{
+  "Version": 1.0,
+  "Size": {
+    "x": 5,
+    "y": 5,
+    "z": 10
+  },
+  "Relative": {
+    "x": 10,
+    "y": 2,
+    "z": 0
+  },
+  "Palette": {
+    "minecraft:stone": 0
+  },
+  "BlockData": [
+    0,0,0,0
+  ],
+  "TileEntities": [
+    {
+      "Offset": {
+        "x": 5,
+        "y": 0,
+        "z": 0
+      },
+      "Items": [
+        {
+          "Slot": 0,
+          "Id": "minecraft:diamond_sword",
+          "Count": 1
+        }
+      ]
+    }
+  ]
+}
