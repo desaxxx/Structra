@@ -12,7 +12,7 @@ public class ChiseledBookshelfState implements BlockStateHandler<ChiseledBookshe
         node.put("LastInteractedSlot", blockState.getLastInteractedSlot());
 
         ObjectNode inventoryNode = JsonNodeFactory.instance.objectNode();
-        NonState.saveInventory(blockState.getSnapshotInventory(), inventoryNode);
+        NonState.saveInventory(blockState.getInventory(), inventoryNode);
         node.set("Inventory", inventoryNode);
     }
 

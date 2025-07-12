@@ -25,7 +25,7 @@ public class BeaconState implements BlockStateHandler<Beacon> {
             NonState.savePotionEffectType(secondaryEffect, secondaryNode, MINECRAFT_VERSION);
             node.set("SecondaryEffect", secondaryNode);
         }
-        node.put("CustomName", blockState.getCustomName());
+        node.put("CustomName", miniMessage.serializeOrNull(blockState.customName()));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BeaconState implements BlockStateHandler<Beacon> {
         if (secondaryEffect != null) {
             blockState.setSecondaryEffect(secondaryEffect);
         }
-        blockState.setCustomName(node.has("CustomName") && !node.get("CustomName").isNull() ? node.get("CustomName").asText() : null);
+        blockState.customName(node.has("CustomName") ? miniMessage.deserialize(node.get("CustomName").asText("")) : null);
 
         blockState.update();
     }

@@ -1,0 +1,607 @@
+{
+  "Version" : 1.0,
+  "Size" : {
+    "x" : 21,
+    "y" : 6,
+    "z" : 4
+  },
+  "Relative" : {
+    "x" : -19,
+    "y" : -2,
+    "z" : 1
+  },
+  "Palette" : {
+    "0" : "minecraft:air",
+    "1" : "minecraft:grass_block[snowy=false]",
+    "2" : "minecraft:short_grass",
+    "3" : "minecraft:crafter[crafting=false,orientation=down_west,triggered=false]",
+    "4" : "minecraft:enchanting_table",
+    "5" : "minecraft:dirt",
+    "6" : "minecraft:chiseled_bookshelf[facing=south,slot_0_occupied=true,slot_1_occupied=true,slot_2_occupied=false,slot_3_occupied=false,slot_4_occupied=true,slot_5_occupied=false]",
+    "7" : "minecraft:jigsaw[orientation=up_south]",
+    "8" : "minecraft:jukebox[has_record=false]",
+    "9" : "minecraft:sculk",
+    "10" : "minecraft:brewing_stand[has_bottle_0=false,has_bottle_1=false,has_bottle_2=false]",
+    "11" : "minecraft:light_blue_shulker_box[facing=up]",
+    "12" : "minecraft:beacon",
+    "13" : "minecraft:trial_spawner[ominous=false,trial_spawner_state=inactive]",
+    "14" : "minecraft:glowstone",
+    "15" : "minecraft:daylight_detector[inverted=true,power=0]",
+    "16" : "minecraft:decorated_pot[cracked=false,facing=east,waterlogged=false]",
+    "17" : "minecraft:fern",
+    "18" : "minecraft:conduit[waterlogged=false]",
+    "19" : "minecraft:ender_chest[facing=south,waterlogged=false]",
+    "20" : "minecraft:chest[facing=south,type=single,waterlogged=false]",
+    "21" : "minecraft:campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]",
+    "22" : "minecraft:lectern[facing=west,has_book=false,powered=false]",
+    "23" : "minecraft:redstone_block",
+    "24" : "minecraft:sculk_vein[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]",
+    "25" : "minecraft:furnace[facing=south,lit=false]",
+    "26" : "minecraft:oak_sign[rotation=2,waterlogged=false]",
+    "27" : "minecraft:barrel[facing=up,open=false]",
+    "28" : "minecraft:vault[facing=south,ominous=false,vault_state=inactive]",
+    "29" : "minecraft:spawner",
+    "30" : "minecraft:dispenser[facing=up,triggered=false]",
+    "31" : "minecraft:comparator[facing=south,mode=compare,powered=false]",
+    "32" : "minecraft:cherry_hanging_sign[attached=false,rotation=0,waterlogged=false]",
+    "33" : "minecraft:calibrated_sculk_sensor[facing=north,power=0,sculk_sensor_phase=cooldown,waterlogged=false]",
+    "34" : "minecraft:sculk_catalyst[bloom=false]",
+    "35" : "minecraft:bell[attachment=floor,facing=north,powered=false]",
+    "36" : "minecraft:wither_skeleton_skull[powered=false,rotation=7]",
+    "37" : "minecraft:light_blue_banner[rotation=2]",
+    "38" : "minecraft:creaking_heart[axis=y,creaking_heart_state=uprooted,natural=false]",
+    "39" : "minecraft:dropper[facing=south,triggered=false]",
+    "40" : "minecraft:command_block[conditional=false,facing=south]",
+    "41" : "minecraft:hopper[enabled=true,facing=down]",
+    "42" : "minecraft:sculk_vein[down=false,east=false,north=false,south=true,up=false,waterlogged=false,west=false]",
+    "43" : "minecraft:suspicious_sand[dusted=0]",
+    "44" : "minecraft:sculk_shrieker[can_summon=false,shrieking=false,waterlogged=false]",
+    "45" : "minecraft:beehive[facing=south,honey_level=5]",
+    "46" : "minecraft:structure_block[mode=load]"
+  },
+  "BlockData" : [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 2, 1, 2, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 1, 5, 1, 0, 0, 0, 2, 1, 1, 1, 6, 2, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 5, 5, 5, 5, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1, 1, 5, 5, 5, 5, 0, 10, 2, 2, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 12, 0, 2, 0, 13, 0, 0, 0, 0, 0, 0, 14, 1, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 15, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 2, 1, 0, 17, 1, 5, 5, 5, 0, 18, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 5, 5, 5, 5, 2, 2, 0, 20, 5, 5, 5, 5, 0, 0, 0, 0, 2, 0, 21, 2, 1, 1, 1, 1, 22, 0, 0, 0, 0, 0, 0, 0, 5, 5, 23, 5, 0, 0, 0, 0, 24, 25, 0, 2, 1, 1, 1, 1, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 27, 0, 0, 0, 28, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 29, 0, 0, 1, 2, 2, 0, 0, 30, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 0, 0, 0, 0, 0, 31, 0, 0, 1, 1, 1, 1, 0, 32, 0, 0, 0, 0, 0, 0, 24, 33, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 1, 1, 1, 1, 0, 0, 0, 34, 2, 35, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 1, 1, 1, 1, 0, 36, 0, 0, 2, 37, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 17, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 1, 1, 5, 1, 1, 0, 1, 1, 0, 39, 0, 0, 0, 40, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 1, 1, 1, 1, 0, 41, 0, 0, 9, 1, 1, 1, 42, 43, 2, 2, 0, 0, 0, 0, 0, 0, 44, 0, 5, 5, 5, 5, 0, 0, 0, 0, 1, 1, 1, 1, 0, 45, 0, 0, 0, 0, 0, 0, 0, 46, 0, 0, 5, 5, 5, 0, 0, 0, 0, 5, 1, 1, 1, 1, 2, 0, 2, 0, 0, 0, 0, 0 ],
+  "TileEntities" : [ {
+    "Type" : "CrafterState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "CraftingTicks" : 0,
+    "SlotDisabled" : {
+      "0" : true,
+      "1" : true,
+      "2" : true,
+      "3" : true,
+      "4" : false,
+      "5" : true,
+      "6" : true,
+      "7" : true,
+      "8" : true
+    },
+    "Triggered" : false,
+    "Lootable" : {
+      "Seed" : 0
+    },
+    "Container" : {
+      "CustomName" : "",
+      "Inventory" : {
+        "Item" : {
+          "4" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    }
+  }, {
+    "Type" : "EnchantingTableState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "CustomName" : ""
+  }, {
+    "Type" : "ChiseledBookshelfState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "LastInteractedSlot" : 1,
+    "Inventory" : {
+      "Item" : { }
+    }
+  }, {
+    "Type" : "JukeboxState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Playing" : "AIR",
+    "Record" : {
+      "id" : "minecraft:air",
+      "DataVersion" : 4435,
+      "schema_version" : 1
+    }
+  }, {
+    "Type" : "BrewingStandState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "BrewingTime" : 0,
+    "FuelLevel" : 0,
+    "Container" : {
+      "CustomName" : "",
+      "Inventory" : {
+        "Item" : { }
+      }
+    }
+  }, {
+    "Type" : "ShulkerBoxState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Lootable" : {
+      "Seed" : 0
+    },
+    "Container" : {
+      "CustomName" : "",
+      "Inventory" : {
+        "Item" : {
+          "11" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:yellow_glazed_terracotta",
+            "count" : 64,
+            "schema_version" : 1
+          },
+          "13" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "14" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "15" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "16" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "24" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    }
+  }, {
+    "Type" : "BeaconState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "PrimaryEffect" : {
+      "PotionEffectType" : "minecraft:speed"
+    },
+    "CustomName" : null
+  }, {
+    "Type" : "TrialSpawnerState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Ominous" : false,
+    "CooldownLength" : 36000,
+    "RequiredPlayerRange" : 14
+  }, {
+    "Type" : "ChestState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Container" : {
+      "CustomName" : "",
+      "Inventory" : {
+        "Item" : { }
+      }
+    },
+    "Lootable" : {
+      "Seed" : 0
+    }
+  }, {
+    "Type" : "CampfireState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "0.CookTime" : 0,
+    "0.CookTimeTotal" : 0,
+    "0.Item" : null,
+    "1.CookTime" : 0,
+    "1.CookTimeTotal" : 0,
+    "1.Item" : null,
+    "2.CookTime" : 0,
+    "2.CookTimeTotal" : 0,
+    "2.Item" : null,
+    "3.CookTime" : 0,
+    "3.CookTimeTotal" : 0,
+    "3.Item" : null
+  }, {
+    "Type" : "LecternState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Page" : -1,
+    "Inventory" : {
+      "Item" : { }
+    }
+  }, {
+    "Type" : "FurnaceState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "BurnTime" : 0,
+    "CookTime" : 0,
+    "CookTimeTotal" : 200,
+    "Container" : {
+      "CustomName" : "",
+      "Inventory" : {
+        "Item" : {
+          "1" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:dried_kelp_block",
+            "count" : 60,
+            "schema_version" : 1
+          },
+          "2" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:dried_kelp",
+            "count" : 64,
+            "schema_version" : 1
+          }
+        }
+      }
+    }
+  }, {
+    "Type" : "SignState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Waxed" : false,
+    "FRONT" : {
+      "Color" : "BLACK",
+      "Glowing" : false,
+      "Lines" : {
+        "0" : "vvvv",
+        "1" : "",
+        "2" : "",
+        "3" : ""
+      }
+    },
+    "BACK" : {
+      "Color" : "BLACK",
+      "Glowing" : false,
+      "Lines" : {
+        "0" : "g",
+        "1" : "",
+        "2" : "",
+        "3" : ""
+      }
+    }
+  }, {
+    "Type" : "BarrelState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Container" : {
+      "CustomName" : "",
+      "Inventory" : {
+        "Item" : {
+          "2" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:end_portal_frame",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "5" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:diamond_pickaxe",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "7" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:ender_chest",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "9" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:end_crystal",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "20" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "24" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:mace",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "26" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:enderman_spawn_egg",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "Lootable" : {
+      "Seed" : 0
+    }
+  }, {
+    "Type" : "VaultState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "ActivationRange" : 4.0,
+    "DeactivationRange" : 4.5,
+    "LootTable" : {
+      "LootTable" : "minecraft:chests/trial_chambers/reward"
+    },
+    "KeyItem" : {
+      "DataVersion" : 4435,
+      "id" : "minecraft:trial_key",
+      "count" : 1,
+      "schema_version" : 1
+    }
+  }, {
+    "Type" : "CreatureSpawnerState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Delay" : 48,
+    "MinSpawnDelay" : 800,
+    "MaxSpawnDelay" : 800,
+    "SpawnCount" : 4,
+    "RequiredPlayerRange" : 0,
+    "SpawnedType" : "COW",
+    "SpawnRange" : 4
+  }, {
+    "Type" : "DispenserState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "CustomName" : "",
+    "Container" : {
+      "CustomName" : "",
+      "Inventory" : {
+        "Item" : { }
+      }
+    },
+    "Lootable" : {
+      "Seed" : 0
+    }
+  }, {
+    "Type" : "SignState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Waxed" : true,
+    "FRONT" : {
+      "Color" : "BLACK",
+      "Glowing" : false,
+      "Lines" : {
+        "0" : "hi",
+        "1" : "biş",
+        "2" : "",
+        "3" : ""
+      }
+    },
+    "BACK" : {
+      "Color" : "BLACK",
+      "Glowing" : false,
+      "Lines" : {
+        "0" : "",
+        "1" : "",
+        "2" : "",
+        "3" : ""
+      }
+    }
+  }, {
+    "Type" : "SculkSensorState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "LastVibrationFrequency" : 1
+  }, {
+    "Type" : "SkullState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "NoteBlockSound" : null
+  }, {
+    "Type" : "BannerState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "BaseColor" : "LIGHT_BLUE",
+    "Patterns" : [ ]
+  }, {
+    "Type" : "DropperState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Lootable" : {
+      "Seed" : 0
+    },
+    "Container" : {
+      "CustomName" : "",
+      "Inventory" : {
+        "Item" : { }
+      }
+    }
+  }, {
+    "Type" : "CommandBlockState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Name" : "@",
+    "Command" : ""
+  }, {
+    "Type" : "HopperState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "CustomName" : "",
+    "Container" : {
+      "CustomName" : "",
+      "Inventory" : {
+        "Item" : {
+          "0" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "1" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "2" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "3" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "4" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "Lootable" : { }
+  }, {
+    "Type" : "BrushableBlockState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Item" : {
+      "id" : "minecraft:air",
+      "DataVersion" : 4435,
+      "schema_version" : 1
+    },
+    "Lootable" : {
+      "Seed" : 0
+    }
+  }, {
+    "Type" : "SculkShriekerState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "WarningLevel" : 0
+  }, {
+    "Type" : "StructureState",
+    "Offset" : {
+      "x" : -2,
+      "y" : 1,
+      "z" : -19
+    },
+    "Author" : "yoshii01",
+    "Integrity" : 1.0,
+    "Metadata" : "",
+    "Mirror" : "NONE",
+    "RelativePosition" : {
+      "x" : 0.0,
+      "y" : 1.0,
+      "z" : 0.0
+    },
+    "Rotation" : "NONE",
+    "Seed" : 0,
+    "StructureName" : "",
+    "StructureSize" : {
+      "x" : 0.0,
+      "y" : 0.0,
+      "z" : 0.0
+    },
+    "UsageMode" : "LOAD",
+    "BoundingBoxVisible" : true,
+    "IgnoreEntities" : true,
+    "ShowAir" : false
+  } ]
+}

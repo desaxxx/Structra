@@ -17,7 +17,7 @@ public class CrafterState implements BlockStateHandler<Crafter> {
         node.put("CraftingTicks", blockState.getCraftingTicks());
 
         ObjectNode slotDisabledNode = JsonNodeFactory.instance.objectNode();
-        for (int i = 0; blockState.getInventory().getSize() > 0; i++) {
+        for (int i = 0; i < blockState.getInventory().getSize(); i++) { // düzeltim
             slotDisabledNode.put(String.valueOf(i), blockState.isSlotDisabled(i));
         }
         node.set("SlotDisabled", slotDisabledNode);

@@ -6,13 +6,18 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.block.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public interface BlockStateHandler<T extends BlockState> {
+public interface BlockStateHandler<T extends BlockState> { // somebody watching uuuuu yeeee
 
     MiniMessage miniMessage = MiniMessage.miniMessage();
     ObjectMapper objectMapper = new ObjectMapper();
 
     default int minSupportedVersion() {
         return 165;
+    }
+
+    @NotNull
+    default String name() {
+        return this.getClass().getSimpleName();
     }
 
     void save(@NotNull T blockState, @NotNull ObjectNode node);

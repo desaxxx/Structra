@@ -7,6 +7,7 @@ import com.desoi.structra.service.blockstate.BlockStateHandler;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -57,6 +58,16 @@ public class Structure {
         return maxVector.getBlockZ() - minVector.getBlockZ() + 1;
     }
 
+    public int getSize() {
+        return getXSize() + getYSize() + getZSize();
+    }
+
+    public void save(@NotNull File file, @NotNull Location originLocation) {
+        if(file.getParentFile() != null && !file.getParentFile().exists()) //noinspection ResultOfMethodCallIgnored
+            file.getParentFile().mkdirs();
+        new StructureSave(file, originLocation).save();
+    }
+
 
     private class StructureSave {
 
@@ -70,11 +81,7 @@ public class Structure {
             if(!file.getName().endsWith(".structra")) {
                 throw new IllegalArgumentException("File name must end with '.structra'");
             }
-            try {
-                this.root = objectMaper.readTree(file);
-            } catch (IOException e) {
-                throw new RuntimeException("[Structra] Couldn't load JsonNode from given file. " + e);
-            }
+            this.root = objectMaper.createObjectNode();
             this.rootObject = (ObjectNode) root;
             this.originLocation = originLocation.clone();
             this.world = originLocation.getWorld();
@@ -102,20 +109,19 @@ public class Structure {
             relative.put("y", startLocation.getBlockY() - originLocation.getBlockY());
             relative.put("z", startLocation.getBlockZ() - originLocation.getBlockZ());
 
-            writeBlocks(rootObject, originLocation, world);
+            writeBlocks(rootObject);
 
         }
 
 
-        private void writeBlocks(ObjectNode rootObject, @NotNull Location originLocation, @NotNull World world) {
-            Location startLocation = minVector.toLocation(world);
-
+        private void writeBlocks(ObjectNode rootObject) {
             List<Vector> vectors = new ArrayList<>(getVectors());
 
             ObjectNode palette = JsonHelper.getOrCreate(rootObject, "Palette");
-            ObjectNode blockData = JsonHelper.getOrCreate(rootObject, "BlockData");
+            ArrayNode blockData = JsonHelper.getOrCreateArray(rootObject, "BlockData");
+            ArrayNode tileEntities = JsonHelper.getOrCreateArray(rootObject, "TileEntities");
 
-            startRunnable(vectors, palette, blockData);
+            startRunnable(vectors, palette, blockData, tileEntities);
         }
 
 
@@ -133,8 +139,7 @@ public class Structure {
         }
 
 
-        private void startRunnable(@NotNull List<Vector> vectors, @NotNull ObjectNode palette, @NotNull ObjectNode blockData) {
-            final List<Byte> blocksData = new ArrayList<>();
+        private void startRunnable(@NotNull List<Vector> vectors, @NotNull ObjectNode palette, @NotNull ArrayNode blockData, @NotNull ArrayNode tileEntities) {
             final int size = vectors.size();
             new BukkitRunnable() {
                 int looped = 0;
@@ -144,6 +149,7 @@ public class Structure {
                 public void run() {
                     // information
                     float ratio = (float) looped / size;
+                    Util.tell(sender, String.format("&eCopying Structra to file... (%.1f)", ratio));
                     Util.log(String.format("Copying Structra to file... (%.1f)", ratio));
 
                     //
@@ -152,9 +158,8 @@ public class Structure {
                         if(index >= size) {
                             cancel();
                             saveToFile();
-                            rootObject.set("BlockData", objectMaper.valueToTree(blocksData));
                             end = System.currentTimeMillis();
-                            sender.sendMessage(String.format("[Structra] Saved '%d' to file '%s' in %d seconds", size, file.getName(), (end-start)));
+                            Util.tell(sender, String.format("[Structra] &aSaved '%d blocks' to file '%s' in %d ms", size, file.getName(), (end-start)));
                             return;
                         }
 
@@ -167,15 +172,31 @@ public class Structure {
                             id = nextId++;
                             palette.put(String.valueOf(id), data);
                         }
-                        blocksData.add(id);
+                        blockData.add(id);
 
                         BlockState state = block.getState();
-                        getStateHandler(state).save(state, JsonHelper.getOrCreate(rootObject, "TileEntities"));
+                        BlockStateHandler<BlockState> handler = BlockStateService.getHandler(state);
+                        ObjectNode tileEntity = objectMaper.createObjectNode();
+                        if(handler != null) {
+                            tileEntity.put("Type", handler.name());
+                            tileEntity.set("Offset", getOffsetNode(tileEntity));
+                            handler.save(state, tileEntity);
+                            tileEntities.add(tileEntity);
+                        }
                     }
 
                     looped += batchSize;
                 }
             }.runTaskTimer(Structra.getInstance(), delay, period);
+        }
+
+        private ObjectNode getOffsetNode(@NotNull ObjectNode tileEntity) {
+            ObjectNode offset = JsonHelper.getOrCreate(tileEntity, "Offset");
+            Location startLocation = minVector.toLocation(world);
+            offset.put("x", startLocation.getBlockY() - originLocation.getBlockY());
+            offset.put("y", startLocation.getBlockZ() - originLocation.getBlockZ());
+            offset.put("z", startLocation.getBlockX() - originLocation.getBlockX());
+            return offset;
         }
 
         private void saveToFile() {
@@ -184,15 +205,6 @@ public class Structure {
             } catch (IOException e) {
                 throw new RuntimeException(String.format("[Structra] Couldn't save to file '%s'", file.getName()), e);
             }
-        }
-
-        @NotNull
-        private BlockStateHandler<BlockState> getStateHandler(@NotNull BlockState blockState) {
-            BlockStateHandler<BlockState> stateHandler = BlockStateService.getHandler(blockState);
-            if(stateHandler == null) {
-                throw new RuntimeException(String.format("[Structra] Couldn't find BlockStateHandler for BlockState '%s'", blockState));
-            }
-            return stateHandler;
         }
     }
 

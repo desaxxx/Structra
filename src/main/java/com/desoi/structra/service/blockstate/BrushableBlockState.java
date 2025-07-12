@@ -1,5 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
+import com.desoi.structra.util.JsonHelper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -21,9 +23,12 @@ public class BrushableBlockState implements BlockStateHandler<BrushableBlock> {
     public void save(@NotNull BrushableBlock blockState, @NotNull ObjectNode node) {
         ItemStack item = blockState.getItem();
         if (item != null) {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode itemNode = mapper.valueToTree(item);
+            ObjectNode itemNode = node.objectNode();
+            Map<String, Object> serialized = item.serialize();
+            serialized.forEach(itemNode::putPOJO);
             node.set("Item", itemNode);
+        } else {
+            node.putNull("Item");
         }
 
         ObjectNode lootableNode = JsonNodeFactory.instance.objectNode();
@@ -36,8 +41,8 @@ public class BrushableBlockState implements BlockStateHandler<BrushableBlock> {
         JsonNode itemNode = node.get("Item");
         ItemStack item = null;
         if (itemNode != null && itemNode.isObject()) {
-            ObjectMapper mapper = new ObjectMapper();
-            item = ItemStack.deserialize(mapper.convertValue(itemNode, Map.class));
+            Map<String,Object> map = new ObjectMapper().convertValue(node.get("Item"), new TypeReference<Map<String, Object>>() {});
+            item = ItemStack.deserialize(map);
         }
         blockState.setItem(item);
 

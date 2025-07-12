@@ -1,5 +1,6 @@
 package com.desoi.structra.service.blockstate;
 
+import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -14,17 +15,14 @@ public class CampfireState implements BlockStateHandler<Campfire> {
 
     @Override
     public void save(@NotNull Campfire blockState, @NotNull ObjectNode node) {
-        ObjectMapper mapper = new ObjectMapper();
         for (int i = 0; i < blockState.getSize(); i++) {
-            node.put(i + ".CookTime", blockState.getCookTime(i));
-            node.put(i + ".CookTimeTotal", blockState.getCookTimeTotal(i));
+            ObjectNode slotNode = JsonHelper.getOrCreate(node, "Slot_" + i);
+
+            slotNode.put("CookTime", blockState.getCookTime(i));
+            slotNode.put("CookTimeTotal", blockState.getCookTimeTotal(i));
             ItemStack item = blockState.getItem(i);
-            if (item != null) {
-                JsonNode itemNode =  mapper.valueToTree(item.serialize());
-                node.set(i + ".Item", itemNode);
-            } else {
-                node.set(i + ".Item", JsonNodeFactory.instance.nullNode());
-            }
+            ObjectNode itemNode = item == null ? objectMapper.createObjectNode() : objectMapper.valueToTree(item.serialize());
+            slotNode.put("Item", itemNode);
         }
     }
 
@@ -32,14 +30,14 @@ public class CampfireState implements BlockStateHandler<Campfire> {
     public void loadTo(@NotNull Campfire blockState, ObjectNode node) {
         ObjectMapper mapper = new ObjectMapper();
         for (int i = 0; i < blockState.getSize(); i++) {
-            blockState.setCookTime(i, node.has(i + ".CookTime") ? node.get(i + ".CookTime").asInt() : 0);
-            blockState.setCookTimeTotal(i, node.has(i + ".CookTimeTotal") ? node.get(i + ".CookTimeTotal").asInt() : 0);
-            JsonNode itemNode = node.get(i + ".Item");
-            ItemStack item = null;
+            ObjectNode slotNode = JsonHelper.getOrCreate(node, "Slot_" + i);
+
+            blockState.setCookTime(i, slotNode.has("CookTime") ? slotNode.get("CookTime").asInt() : 0);
+            blockState.setCookTimeTotal(i, slotNode.has("CookTimeTotal") ? slotNode.get("CookTimeTotal").asInt() : 0);
+            JsonNode itemNode = slotNode.get("Item");
             if (itemNode != null && itemNode.isObject()) {
-                item = ItemStack.deserialize(mapper.convertValue(itemNode, Map.class));
+                blockState.setItem(i, JsonHelper.deserializeItemStack((ObjectNode) itemNode));
             }
-            blockState.setItem(i, item);
         }
         blockState.update();
     }

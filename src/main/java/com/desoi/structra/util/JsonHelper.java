@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,16 @@ public class JsonHelper {
             return (ObjectNode) existing;
         }else {
             return parent.putObject(key);
+        }
+    }
+
+    @NotNull
+    static public ArrayNode getOrCreateArray(@NotNull ObjectNode parent, @NotNull String key) {
+        JsonNode existing  = parent.get(key);
+        if(existing instanceof ArrayNode) {
+            return (ArrayNode) existing;
+        }else {
+            return parent.putArray(key);
         }
     }
 

@@ -18,6 +18,7 @@
   ],
   "TileEntities": [
     {
+      "Type": "chest",
       "Offset": {
         "x": 5,
         "y": 0,
