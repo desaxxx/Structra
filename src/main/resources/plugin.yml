@@ -1,5 +1,5 @@
 name: Structra
 version: '0.1'
-main: com.desaoi.structra.Structra
+main: com.desoi.structra.Structra
 api-version: '1.21'
 authors: [ desaxx, aysihuniks ]

@@ -1,4 +1,4 @@
-package com.desaoi.structra;
+package com.desoi.structra;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
