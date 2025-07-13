@@ -58,7 +58,7 @@ public class JsonHelper {
     }
 
     @NotNull
-    static public <T> T treeToValue(TreeNode treeNode, Class<T> valueType) {
+    static public <T> T treeToValue(@NotNull TreeNode treeNode, @NotNull Class<T> valueType) {
         try {
             return objectMapper.treeToValue(treeNode, valueType);
         } catch (JsonProcessingException e) {
@@ -71,7 +71,7 @@ public class JsonHelper {
 
     @NotNull
     static public Map<String, Object> exitNodeToMap(@NotNull ObjectNode node) {
-        return objectMapper.convertValue(node, new TypeReference<Map<String, Object>>() {});
+        return objectMapper.convertValue(node, new TypeReference<>() {});
     }
 
     public static Map<String, Object> itemNodeToMap(ObjectNode node) {

@@ -1,6 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.Structra;
+import com.desoi.structra.service.BlockStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.DyeColor;
 import org.bukkit.block.Sign;
@@ -18,6 +19,7 @@ public class SignState implements BlockStateHandler<Sign> {
             node.put("Waxed", blockState.isWaxed());
         }
         if (MINECRAFT_VERSION >= 194) {
+            // TODO look up for deprecations
             for (Side side : Side.values()) {
                 SignSide signSide = blockState.getSide(side);
                 String sideName = side.toString();
@@ -32,7 +34,7 @@ public class SignState implements BlockStateHandler<Sign> {
                 node.set(sideName, sideNode);
             }
         } else {
-            node.put("Color", blockState.getColor() == null ? "" : blockState.getColor().toString());
+            node.put("Color", blockState.getColor().toString());
             node.put("Editable", blockState.isEditable());
             ObjectNode linesNode = node.objectNode();
             for (int line = 0; line < blockState.getLines().length; line++) {

@@ -1,5 +1,6 @@
 package com.desoi.structra.service.blockstate;
 
+import com.desoi.structra.service.BlockStateHandler;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Structure;
@@ -20,26 +21,22 @@ public class StructureState implements BlockStateHandler<Structure> {
         node.put("Mirror", blockState.getMirror().name());
 
         BlockVector relativePosition = blockState.getRelativePosition();
-        if (relativePosition != null) {
-            ObjectNode relNode = node.objectNode();
-            Map<String, Object> relMap = relativePosition.serialize();
-            relMap.forEach((k,v) -> relNode.putPOJO(k,v));
-            node.set("RelativePosition", relNode);
-        } else {
-            node.putNull("RelativePosition");
-        }
+        ObjectNode relNode = node.objectNode();
+        Map<String, Object> relMap = relativePosition.serialize();
+        relMap.forEach(relNode::putPOJO);
+        node.set("RelativePosition", relNode);
+
 
         node.put("Rotation", blockState.getRotation().toString());
         node.put("Seed", blockState.getSeed());
         node.put("StructureName", blockState.getStructureName());
 
         BlockVector structureSize = blockState.getStructureSize();
-        if (structureSize != null) {
-            ObjectNode sizeNode = node.objectNode();
-            Map<String, Object> sizeMap = structureSize.serialize();
-            sizeMap.forEach((k,v) -> sizeNode.putPOJO(k,v));
-            node.set("StructureSize", sizeNode);
-        }
+        ObjectNode sizeNode = node.objectNode();
+        Map<String, Object> sizeMap = structureSize.serialize();
+        sizeMap.forEach(sizeNode::putPOJO);
+        node.set("StructureSize", sizeNode);
+
 
         node.put("UsageMode", blockState.getUsageMode().toString());
         node.put("BoundingBoxVisible", blockState.isBoundingBoxVisible());

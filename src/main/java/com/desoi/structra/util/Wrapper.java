@@ -29,9 +29,12 @@ public class Wrapper {
             major = Integer.parseInt(ver[1]);
         } catch (NumberFormatException ignored) {}
         int minor = 0;
-        try {
-            minor = Integer.parseInt(ver[2]);
-        } catch (NumberFormatException ignored) {}
+        if(ver.length > 2) {
+            try {
+                minor = Integer.parseInt(ver[2]);
+            } catch (NumberFormatException ignored) {
+            }
+        }
 
         int version = major * 10 + minor;
         if(version < 165) {

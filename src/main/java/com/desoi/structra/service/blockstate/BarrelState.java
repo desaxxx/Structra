@@ -1,5 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
+import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.NonState;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Barrel;

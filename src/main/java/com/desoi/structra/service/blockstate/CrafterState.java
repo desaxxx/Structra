@@ -1,5 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
+import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.NonState;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Crafter;
@@ -48,10 +50,14 @@ public class CrafterState implements BlockStateHandler<Crafter> {
         blockState.setTriggered(node.has("Triggered") && node.get("Triggered").asBoolean());
 
         ObjectNode lootableNode = node.has("Lootable") && node.get("Lootable").isObject() ? (ObjectNode) node.get("Lootable") : null;
-        NonState.saveLootable(blockState, lootableNode);
+        if(lootableNode != null) {
+            NonState.saveLootable(blockState, lootableNode);
+        }
 
         ObjectNode containerNode = node.has("Container") &&  node.get("Container").isObject() ? (ObjectNode) node.get("Container") : null;
-        NonState.saveContainer(blockState, containerNode);
+        if(containerNode != null) {
+            NonState.saveContainer(blockState, containerNode);
+        }
 
         blockState.update();
     }

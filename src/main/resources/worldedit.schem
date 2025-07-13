@@ -1,0 +1,741 @@
+"": {
+	Schematic: {
+		Blocks: {
+			Palette: {
+				"minecraft:conduit[waterlogged=false]": 24
+				"minecraft:creaking_heart[axis=y,creaking_heart_state=uprooted,natural=false]": 26
+				"minecraft:hopper[enabled=true,facing=down]": 40
+				"minecraft:trial_spawner[ominous=false,trial_spawner_state=inactive]": 30
+				"minecraft:lectern[facing=west,has_book=true,powered=false]": 37
+				"minecraft:chiseled_bookshelf[facing=south,slot_0_occupied=true,slot_1_occupied=true,slot_2_occupied=true,slot_3_occupied=false,slot_4_occupied=true,slot_5_occupied=false]": 21
+				"minecraft:vault[facing=south,ominous=false,vault_state=inactive]": 29
+				"minecraft:dirt": 0
+				"minecraft:dispenser[facing=up,triggered=false]": 45
+				"minecraft:sculk_shrieker[can_summon=false,shrieking=false,waterlogged=false]": 35
+				"minecraft:cherry_hanging_sign[attached=false,rotation=0,waterlogged=false]": 41
+				"minecraft:campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]": 19
+				"minecraft:sculk_vein[down=false,east=false,north=false,south=true,up=false,waterlogged=false,west=false]": 9
+				"minecraft:calibrated_sculk_sensor[facing=north,power=0,sculk_sensor_phase=cooldown,waterlogged=false]": 18
+				"minecraft:sculk_catalyst[bloom=false]": 36
+				"minecraft:fern": 7
+				"minecraft:beacon": 12
+				"minecraft:air": 4
+				"minecraft:sculk_vein[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]": 8
+				"minecraft:barrel[facing=up,open=false]": 11
+				"minecraft:wither_skeleton_skull[powered=false,rotation=7]": 32
+				"minecraft:glowstone": 2
+				"minecraft:spawner": 27
+				"minecraft:jukebox[has_record=false]": 38
+				"minecraft:grass_block[snowy=false]": 1
+				"minecraft:comparator[facing=south,mode=compare,powered=false]": 23
+				"minecraft:suspicious_sand[dusted=0]": 17
+				"minecraft:chest[facing=south,type=single,waterlogged=false]": 20
+				"minecraft:furnace[facing=south,lit=false]": 15
+				"minecraft:brewing_stand[has_bottle_0=true,has_bottle_1=true,has_bottle_2=true]": 16
+				"minecraft:enchanting_table": 43
+				"minecraft:light_blue_shulker_box[facing=up]": 34
+				"minecraft:daylight_detector[inverted=true,power=0]": 28
+				"minecraft:oak_sign[rotation=2,waterlogged=false]": 33
+				"minecraft:beehive[facing=south,honey_level=5]": 13
+				"minecraft:dropper[facing=south,triggered=false]": 44
+				"minecraft:decorated_pot[cracked=false,facing=east,waterlogged=false]": 46
+				"minecraft:crafter[crafting=false,orientation=down_west,triggered=false]": 25
+				"minecraft:redstone_block": 3
+				"minecraft:structure_block[mode=load]": 31
+				"minecraft:bell[attachment=floor,facing=north,powered=false]": 14
+				"minecraft:jigsaw[orientation=up_south]": 39
+				"minecraft:command_block[conditional=false,facing=south]": 22
+				"minecraft:sculk": 5
+				"minecraft:short_grass": 6
+				"minecraft:light_blue_banner[rotation=2]": 10
+				"minecraft:ender_chest[facing=south,waterlogged=false]": 42
+			}
+			Data: bytes(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 4, 6, 6, 4, 6, 6, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 4, 6, 7, 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 4, 6, 7, 4, 4, 4, 4, 4, 6, 6, 4, 4, 4, 6, 8, 4, 9, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 4, 6, 4, 4, 4, 4, 6, 4, 6, 6, 4, 6, 6, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 4, 6, 6, 6, 6, 6, 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4)
+			BlockEntities: [
+				{
+					Pos: ints(1, 2, 1)
+					Data: {
+						components: {}
+						id: "minecraft:banner"
+					}
+					Id: "minecraft:banner"
+				},
+				{
+					Pos: ints(2, 2, 1)
+					Data: {
+						components: {}
+						Items: [
+							{
+								count: 1
+								Slot: 2B
+								id: "minecraft:end_portal_frame"
+							},
+							{
+								count: 1
+								Slot: 5B
+								id: "minecraft:diamond_pickaxe"
+							},
+							{
+								count: 1
+								Slot: 7B
+								id: "minecraft:ender_chest"
+							},
+							{
+								count: 1
+								Slot: 9B
+								id: "minecraft:end_crystal"
+							},
+							{
+								count: 1
+								Slot: 20B
+								id: "minecraft:cooked_beef"
+							},
+							{
+								count: 1
+								Slot: 24B
+								id: "minecraft:mace"
+							},
+							{
+								count: 1
+								Slot: 26B
+								id: "minecraft:enderman_spawn_egg"
+							},
+						]
+						id: "minecraft:barrel"
+					}
+					Id: "minecraft:barrel"
+				},
+				{
+					Pos: ints(3, 2, 1)
+					Data: {
+						Paper.Range: -1.0
+						components: {}
+						secondary_effect: "minecraft:regeneration"
+						Levels: 0
+						id: "minecraft:beacon"
+						primary_effect: "minecraft:speed"
+					}
+					Id: "minecraft:beacon"
+				},
+				{
+					Pos: ints(4, 2, 1)
+					Data: {
+						components: {}
+						id: "minecraft:beehive"
+						Bukkit.MaxEntities: 3
+						bees: []
+					}
+					Id: "minecraft:beehive"
+				},
+				{
+					Pos: ints(5, 2, 1)
+					Data: {
+						components: {}
+						id: "minecraft:bell"
+					}
+					Id: "minecraft:bell"
+				},
+				{
+					Pos: ints(6, 2, 1)
+					Data: {
+						lit_total_time: 4001S
+						components: {}
+						cooking_time_spent: 0S
+						cooking_total_time: 200S
+						Items: [
+							{
+								count: 60
+								Slot: 1B
+								id: "minecraft:dried_kelp_block"
+							},
+							{
+								count: 64
+								Slot: 2B
+								id: "minecraft:dried_kelp"
+							},
+						]
+						id: "minecraft:furnace"
+						lit_time_remaining: 0S
+						Paper.CookSpeedMultiplier: 1.0
+						RecipesUsed: {
+							"minecraft:dried_kelp_from_smelting": 64
+						}
+					}
+					Id: "minecraft:furnace"
+				},
+				{
+					Pos: ints(7, 2, 1)
+					Data: {
+						components: {}
+						Fuel: 20B
+						Items: [
+							{
+								components: {
+									"minecraft:potion_contents": {
+										potion: "minecraft:water"
+									}
+								}
+								count: 1
+								Slot: 0B
+								id: "minecraft:potion"
+							},
+							{
+								components: {
+									"minecraft:potion_contents": {
+										potion: "minecraft:water"
+									}
+								}
+								count: 1
+								Slot: 1B
+								id: "minecraft:splash_potion"
+							},
+							{
+								components: {
+									"minecraft:potion_contents": {
+										potion: "minecraft:water"
+									}
+								}
+								count: 1
+								Slot: 2B
+								id: "minecraft:lingering_potion"
+							},
+						]
+						id: "minecraft:brewing_stand"
+						BrewTime: 0S
+					}
+					Id: "minecraft:brewing_stand"
+				},
+				{
+					Pos: ints(8, 2, 1)
+					Data: {
+						components: {}
+						id: "minecraft:brushable_block"
+					}
+					Id: "minecraft:brushable_block"
+				},
+				{
+					Pos: ints(9, 2, 1)
+					Data: {
+						components: {}
+						listener: {
+							selector: {
+								tick: -1L
+							}
+							event_delay: 0
+						}
+						last_vibration_frequency: 1
+						id: "minecraft:calibrated_sculk_sensor"
+					}
+					Id: "minecraft:calibrated_sculk_sensor"
+				},
+				{
+					Pos: ints(10, 2, 1)
+					Data: {
+						components: {}
+						Paper.StopCooking: bytes(0, 0, 0, 0)
+						Items: []
+						CookingTimes: ints(0, 0, 0, 0)
+						id: "minecraft:campfire"
+						CookingTotalTimes: ints(0, 0, 0, 0)
+					}
+					Id: "minecraft:campfire"
+				},
+				{
+					Pos: ints(11, 2, 1)
+					Data: {
+						components: {}
+						Items: []
+						id: "minecraft:chest"
+					}
+					Id: "minecraft:chest"
+				},
+				{
+					Pos: ints(12, 2, 1)
+					Data: {
+						last_interacted_slot: 0
+						components: {}
+						Items: [
+							{
+								components: {
+									"minecraft:stored_enchantments": {
+										"minecraft:efficiency": 5
+									}
+								}
+								count: 1
+								Slot: 0B
+								id: "minecraft:enchanted_book"
+							},
+							{
+								count: 1
+								Slot: 1B
+								id: "minecraft:book"
+							},
+							{
+								count: 1
+								Slot: 2B
+								id: "minecraft:book"
+							},
+							{
+								components: {
+									"minecraft:stored_enchantments": {
+										"minecraft:efficiency": 5
+									}
+								}
+								count: 1
+								Slot: 4B
+								id: "minecraft:enchanted_book"
+							},
+						]
+						id: "minecraft:chiseled_bookshelf"
+					}
+					Id: "minecraft:chiseled_bookshelf"
+				},
+				{
+					Pos: ints(13, 2, 1)
+					Data: {
+						conditionMet: 0B
+						components: {}
+						auto: 0B
+						powered: 0B
+						CustomName: {
+							extra: [ @, ]
+							text: ""
+						}
+						Command: ""
+						id: "minecraft:command_block"
+						SuccessCount: 0
+						TrackOutput: 1B
+						UpdateLastExecution: 1B
+					}
+					Id: "minecraft:command_block"
+				},
+				{
+					Pos: ints(14, 2, 1)
+					Data: {
+						components: {}
+						id: "minecraft:comparator"
+						OutputSignal: 0
+					}
+					Id: "minecraft:comparator"
+				},
+				{
+					Pos: ints(15, 2, 1)
+					Data: {
+						components: {}
+						id: "minecraft:conduit"
+					}
+					Id: "minecraft:conduit"
+				},
+				{
+					Pos: ints(16, 2, 1)
+					Data: {
+						components: {}
+						crafting_ticks_remaining: 0
+						triggered: 0
+						disabled_slots: ints(0, 1, 2, 3, 5, 6, 7, 8)
+						Items: [
+							{
+								count: 1
+								Slot: 4B
+								id: "minecraft:bone"
+							},
+						]
+						id: "minecraft:crafter"
+					}
+					Id: "minecraft:crafter"
+				},
+				{
+					Pos: ints(17, 2, 1)
+					Data: {
+						components: {}
+						id: "minecraft:creaking_heart"
+					}
+					Id: "minecraft:creaking_heart"
+				},
+				{
+					Pos: ints(18, 2, 1)
+					Data: {
+						components: {}
+						MaxNearbyEntities: 6S
+						RequiredPlayerRange: 0S
+						SpawnCount: 4S
+						SpawnData: {
+							entity: {
+								id: "minecraft:cow"
+								fall_distance: 0.0
+							}
+						}
+						id: "minecraft:mob_spawner"
+						MaxSpawnDelay: 800S
+						SpawnRange: 4S
+						Delay: 48S
+						MinSpawnDelay: 800S
+						SpawnPotentials: []
+					}
+					Id: "minecraft:mob_spawner"
+				},
+				{
+					Pos: ints(19, 2, 1)
+					Data: {
+						components: {}
+						id: "minecraft:daylight_detector"
+					}
+					Id: "minecraft:daylight_detector"
+				},
+				{
+					Pos: ints(2, 3, 1)
+					Data: {
+						components: {}
+						server_data: {
+							state_updating_resumes_at: 630030L
+						}
+						id: "minecraft:vault"
+						config: {
+							key_item: {
+								count: 1
+								id: "minecraft:trial_key"
+							}
+						}
+						shared_data: {}
+					}
+					Id: "minecraft:vault"
+				},
+				{
+					Pos: ints(3, 3, 1)
+					Data: {
+						components: {}
+						spawn_data: {
+							entity: {
+								fall_distance: 0.0
+							}
+						}
+						id: "minecraft:trial_spawner"
+					}
+					Id: "minecraft:trial_spawner"
+				},
+				{
+					Pos: ints(4, 3, 1)
+					Data: {
+						mirror: NONE
+						metadata: ""
+						components: {}
+						ignoreEntities: 1B
+						powered: 0B
+						seed: 0L
+						author: yoshii01
+						rotation: NONE
+						posX: 0
+						mode: LOAD
+						posY: 1
+						sizeX: 0
+						integrity: 1.0F
+						posZ: 0
+						showair: 0B
+						name: ""
+						id: "minecraft:structure_block"
+						strict: 0B
+						sizeY: 0
+						sizeZ: 0
+						showboundingbox: 1B
+					}
+					Id: "minecraft:structure_block"
+				},
+				{
+					Pos: ints(5, 3, 1)
+					Data: {
+						components: {}
+						id: "minecraft:skull"
+					}
+					Id: "minecraft:skull"
+				},
+				{
+					Pos: ints(6, 3, 1)
+					Data: {
+						back_text: {
+							has_glowing_text: 0B
+							color: black
+							messages: [ g, "", "", "", ]
+						}
+						components: {}
+						is_waxed: 0B
+						id: "minecraft:sign"
+						front_text: {
+							has_glowing_text: 0B
+							color: black
+							messages: [ vvvv, "", "", "", ]
+						}
+					}
+					Id: "minecraft:sign"
+				},
+				{
+					Pos: ints(7, 3, 1)
+					Data: {
+						components: {}
+						Items: [
+							{
+								count: 64
+								Slot: 11B
+								id: "minecraft:yellow_glazed_terracotta"
+							},
+							{
+								count: 1
+								Slot: 13B
+								id: "minecraft:cobbled_deepslate_wall"
+							},
+							{
+								count: 1
+								Slot: 14B
+								id: "minecraft:cobbled_deepslate_wall"
+							},
+							{
+								count: 1
+								Slot: 15B
+								id: "minecraft:cobbled_deepslate_wall"
+							},
+							{
+								count: 1
+								Slot: 16B
+								id: "minecraft:cobbled_deepslate_wall"
+							},
+							{
+								count: 1
+								Slot: 24B
+								id: "minecraft:cobbled_deepslate_wall"
+							},
+						]
+						id: "minecraft:shulker_box"
+					}
+					Id: "minecraft:shulker_box"
+				},
+				{
+					Pos: ints(8, 3, 1)
+					Data: {
+						warning_level: 0
+						components: {}
+						listener: {
+							selector: {
+								tick: -1L
+							}
+							event_delay: 0
+						}
+						id: "minecraft:sculk_shrieker"
+					}
+					Id: "minecraft:sculk_shrieker"
+				},
+				{
+					Pos: ints(9, 3, 1)
+					Data: {
+						cursors: []
+						components: {}
+						id: "minecraft:sculk_catalyst"
+					}
+					Id: "minecraft:sculk_catalyst"
+				},
+				{
+					Pos: ints(10, 3, 1)
+					Data: {
+						components: {}
+						Book: {
+							components: {
+								"minecraft:writable_book_content": {
+									pages: [
+										{
+											raw: hi bebi
+										},
+									]
+								}
+							}
+							count: 1
+							id: "minecraft:writable_book"
+						}
+						Page: 0
+						id: "minecraft:lectern"
+					}
+					Id: "minecraft:lectern"
+				},
+				{
+					Pos: ints(11, 3, 1)
+					Data: {
+						components: {}
+						id: "minecraft:jukebox"
+					}
+					Id: "minecraft:jukebox"
+				},
+				{
+					Pos: ints(12, 3, 1)
+					Data: {
+						components: {}
+						joint: rollable
+						name: "minecraft:empty"
+						placement_priority: 0
+						pool: "minecraft:empty"
+						final_state: "minecraft:air"
+						selection_priority: 0
+						id: "minecraft:jigsaw"
+						target: "minecraft:empty"
+					}
+					Id: "minecraft:jigsaw"
+				},
+				{
+					Pos: ints(13, 3, 1)
+					Data: {
+						components: {}
+						TransferCooldown: 0
+						Items: [
+							{
+								count: 1
+								Slot: 0B
+								id: "minecraft:bone_block"
+							},
+							{
+								count: 1
+								Slot: 1B
+								id: "minecraft:bone_block"
+							},
+							{
+								count: 1
+								Slot: 2B
+								id: "minecraft:bone_block"
+							},
+							{
+								count: 1
+								Slot: 3B
+								id: "minecraft:bone_block"
+							},
+							{
+								count: 1
+								Slot: 4B
+								id: "minecraft:bone_block"
+							},
+						]
+						id: "minecraft:hopper"
+					}
+					Id: "minecraft:hopper"
+				},
+				{
+					Pos: ints(14, 3, 1)
+					Data: {
+						back_text: {
+							has_glowing_text: 0B
+							color: black
+							messages: [ "", "", "", "", ]
+						}
+						components: {}
+						is_waxed: 1B
+						id: "minecraft:hanging_sign"
+						front_text: {
+							has_glowing_text: 0B
+							color: black
+							messages: [ hi, biş, "", "", ]
+						}
+					}
+					Id: "minecraft:hanging_sign"
+				},
+				{
+					Pos: ints(15, 3, 1)
+					Data: {
+						components: {}
+						id: "minecraft:ender_chest"
+					}
+					Id: "minecraft:ender_chest"
+				},
+				{
+					Pos: ints(16, 3, 1)
+					Data: {
+						components: {}
+						id: "minecraft:enchanting_table"
+					}
+					Id: "minecraft:enchanting_table"
+				},
+				{
+					Pos: ints(17, 3, 1)
+					Data: {
+						components: {}
+						Items: [
+							{
+								count: 1
+								Slot: 1B
+								id: "minecraft:cooked_beef"
+							},
+							{
+								count: 1
+								Slot: 4B
+								id: "minecraft:cooked_beef"
+							},
+							{
+								count: 1
+								Slot: 7B
+								id: "minecraft:cooked_beef"
+							},
+							{
+								count: 1
+								Slot: 8B
+								id: "minecraft:cooked_beef"
+							},
+						]
+						id: "minecraft:dropper"
+					}
+					Id: "minecraft:dropper"
+				},
+				{
+					Pos: ints(18, 3, 1)
+					Data: {
+						components: {}
+						Items: [
+							{
+								count: 1
+								Slot: 0B
+								id: "minecraft:cooked_beef"
+							},
+							{
+								count: 1
+								Slot: 1B
+								id: "minecraft:cooked_beef"
+							},
+							{
+								count: 1
+								Slot: 2B
+								id: "minecraft:cooked_beef"
+							},
+							{
+								count: 1
+								Slot: 3B
+								id: "minecraft:cooked_beef"
+							},
+						]
+						id: "minecraft:dispenser"
+					}
+					Id: "minecraft:dispenser"
+				},
+				{
+					Pos: ints(19, 3, 1)
+					Data: {
+						components: {}
+						id: "minecraft:decorated_pot"
+					}
+					Id: "minecraft:decorated_pot"
+				},
+			]
+		}
+		Version: 3
+		Length: 4S
+		Metadata: {
+			WorldEdit: {
+				Origin: ints(-149, 99, -228)
+				Platforms: {
+					"enginehub:bukkit": {
+						Version: "7.3.15+7187-33cf7a2"
+						Name: Bukkit-Official
+					}
+				}
+				EditingPlatform: "enginehub:bukkit"
+				Version: "7.3.15"
+			}
+			Date: 1752405701279L
+		}
+		Height: 6S
+		DataVersion: 4435
+		Width: 21S
+		Offset: ints(-2, -2, -2)
+	}
+}

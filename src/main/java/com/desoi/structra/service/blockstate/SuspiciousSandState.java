@@ -1,5 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
+import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.NonState;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.SuspiciousSand;
@@ -19,14 +21,11 @@ public class SuspiciousSandState implements BlockStateHandler<SuspiciousSand> {
     @Override
     public void save(@NotNull SuspiciousSand blockState, @NotNull ObjectNode node) {
         ItemStack item = blockState.getItem();
-        if (item != null) {
-            ObjectNode itemNode = node.objectNode();
-            Map<String,Object> serialized = item.serialize();
-            serialized.forEach(itemNode::putPOJO);
-            node.set("Item", itemNode);
-        } else {
-            node.putNull("Item");
-        }
+        ObjectNode itemNode = node.objectNode();
+        Map<String,Object> serialized = item.serialize();
+        serialized.forEach(itemNode::putPOJO);
+        node.set("Item", itemNode);
+
 
         ObjectNode lootNode = node.objectNode();
         NonState.saveLootable(blockState, lootNode);

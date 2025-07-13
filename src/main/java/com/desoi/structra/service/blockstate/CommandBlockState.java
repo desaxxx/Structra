@@ -1,5 +1,6 @@
 package com.desoi.structra.service.blockstate;
 
+import com.desoi.structra.service.BlockStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.CommandBlock;
 import org.jetbrains.annotations.NotNull;

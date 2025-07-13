@@ -1,7 +1,9 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.Structra;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.NonState;
+import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Beacon;
 import org.bukkit.potion.PotionEffect;
@@ -15,15 +17,11 @@ public class BeaconState implements BlockStateHandler<Beacon> {
         final int MINECRAFT_VERSION = Structra.getInstance().WRAPPER.getVersion();
         PotionEffect primaryEffect = blockState.getPrimaryEffect();
         if (primaryEffect != null) {
-            ObjectNode primaryNode = JsonNodeFactory.instance.objectNode();
-            NonState.savePotionEffectType(primaryEffect, primaryNode, MINECRAFT_VERSION);
-            node.set("PrimaryEffect", primaryNode);
+            NonState.savePotionEffectType(primaryEffect, JsonHelper.getOrCreate(node, "PrimaryEffect"), MINECRAFT_VERSION);
         }
         PotionEffect secondaryEffect = blockState.getSecondaryEffect();
         if (secondaryEffect != null) {
-            ObjectNode secondaryNode = JsonNodeFactory.instance.objectNode();
-            NonState.savePotionEffectType(secondaryEffect, secondaryNode, MINECRAFT_VERSION);
-            node.set("SecondaryEffect", secondaryNode);
+            NonState.savePotionEffectType(secondaryEffect, JsonHelper.getOrCreate(node, "SecondaryEffect"), MINECRAFT_VERSION);
         }
         node.put("CustomName", miniMessage.serializeOrNull(blockState.customName()));
     }

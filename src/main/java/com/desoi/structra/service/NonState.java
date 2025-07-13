@@ -1,4 +1,4 @@
-package com.desoi.structra.service.blockstate;
+package com.desoi.structra.service;
 
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.block.Container;
+import org.bukkit.block.EntityBlockStorage;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTable;
@@ -91,7 +93,6 @@ public class NonState {
     }
 
     static public <T extends LootTable> void saveLootTable(@NotNull T lootTable, @NotNull ObjectNode parentNode) {
-        lootTable.getKey();
         parentNode.put("LootTable", lootTable.getKey().toString());
     }
 
@@ -108,16 +109,35 @@ public class NonState {
         return null;
     }
 
+    static public <T extends Entity> void saveEntityBlockStorage(@NotNull EntityBlockStorage<T> entityBlockStorage, @NotNull ObjectNode parentNode) {
+        parentNode.put("MaxEntities", entityBlockStorage.getMaxEntities());
+    }
+
+    static public <T extends Entity> void loadToEntityBlockStorage(@NotNull EntityBlockStorage<T> entityBlockStorage, ObjectNode parentNode) {
+        if(parentNode.has("MaxEntities") && parentNode.get("MaxEntities").isInt()) {
+            entityBlockStorage.setMaxEntities(parentNode.get("MaxEntities").asInt());
+        }
+    }
+
+
+    // TODO TileState methods, LockableTileState, TileStateInventoryHolder
+
+
+
+
+    @SuppressWarnings("deprecation")
     static public void savePotionEffectType(@NotNull PotionEffect potionEffect, @NotNull ObjectNode parentNode, final int MINECRAFT_VERSION) {
         if (MINECRAFT_VERSION >= 205) {
             NamespacedKey key = potionEffect.getType().getKey();
             parentNode.put("PotionEffectType", key.toString());
         } else {
+            // PotionEffectType doesn't have a Registry or any key before 1.20.5
             String name = potionEffect.getType().getName();
             parentNode.put("PotionEffectType", name);
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Nullable
     static public PotionEffectType getPotionEffectType(ObjectNode parentNode, final int MINECRAFT_VERSION) {
         if (parentNode == null) return null;

@@ -3,7 +3,7 @@ package com.desoi.structra.model;
 import com.desoi.structra.Structra;
 import com.desoi.structra.Util;
 import com.desoi.structra.service.BlockStateService;
-import com.desoi.structra.service.blockstate.BlockStateHandler;
+import com.desoi.structra.service.BlockStateHandler;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
