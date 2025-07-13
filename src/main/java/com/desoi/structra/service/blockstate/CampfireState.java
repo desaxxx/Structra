@@ -1,6 +1,6 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -8,7 +8,7 @@ import org.bukkit.block.Campfire;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class CampfireState implements BlockStateHandler<Campfire> {
+public class CampfireState implements IStateHandler<Campfire> {
 
     @Override
     public void save(@NotNull Campfire blockState, @NotNull ObjectNode node) {

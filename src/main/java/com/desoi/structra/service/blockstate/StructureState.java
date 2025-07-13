@@ -1,6 +1,6 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Structure;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class StructureState implements BlockStateHandler<Structure> {
+public class StructureState implements IStateHandler<Structure> {
 
     @Override
     public void save(@NotNull Structure blockState, @NotNull ObjectNode node) {

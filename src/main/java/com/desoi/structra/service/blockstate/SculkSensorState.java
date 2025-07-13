@@ -1,11 +1,11 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.SculkSensor;
 import org.jetbrains.annotations.NotNull;
 
-public class SculkSensorState implements BlockStateHandler<SculkSensor> {
+public class SculkSensorState implements IStateHandler<SculkSensor> {
 
     @Override
     public int minSupportedVersion() {

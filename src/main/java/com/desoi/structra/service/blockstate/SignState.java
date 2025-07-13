@@ -1,7 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.Structra;
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.DyeColor;
 import org.bukkit.block.Sign;
@@ -9,7 +9,7 @@ import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
 import org.jetbrains.annotations.NotNull;
 
-public class SignState implements BlockStateHandler<Sign> {
+public class SignState implements IStateHandler<Sign> {
 
     @Override
     public void save(@NotNull Sign blockState, @NotNull ObjectNode node) {

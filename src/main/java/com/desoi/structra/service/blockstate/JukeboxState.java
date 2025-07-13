@@ -1,13 +1,13 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.Material;
 import org.bukkit.block.Jukebox;
 import org.jetbrains.annotations.NotNull;
 
-public class JukeboxState implements BlockStateHandler<Jukebox> {
+public class JukeboxState implements IStateHandler<Jukebox> {
 
     @Override
     public void save(@NotNull Jukebox blockState, @NotNull ObjectNode node) {

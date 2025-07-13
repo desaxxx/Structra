@@ -1,13 +1,13 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
-import com.desoi.structra.service.NonState;
+import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Lectern;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-public class LecternState implements BlockStateHandler<Lectern> {
+public class LecternState implements IStateHandler<Lectern> {
 
     @Override
     public void save(@NotNull Lectern blockState, @NotNull ObjectNode node) {

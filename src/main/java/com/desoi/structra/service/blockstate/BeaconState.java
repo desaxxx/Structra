@@ -1,8 +1,8 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.Structra;
-import com.desoi.structra.service.BlockStateHandler;
-import com.desoi.structra.service.NonState;
+import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Beacon;
@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-public class BeaconState implements BlockStateHandler<Beacon> {
+public class BeaconState implements IStateHandler<Beacon> {
 
     @Override
     public void save(@NotNull Beacon blockState, @NotNull ObjectNode node) {

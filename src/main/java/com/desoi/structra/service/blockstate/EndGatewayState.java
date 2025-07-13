@@ -1,6 +1,6 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.Location;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class EndGatewayState implements BlockStateHandler<EndGateway> {
+public class EndGatewayState implements IStateHandler<EndGateway> {
 
     @Override
     public void save(@NotNull EndGateway blockState, @NotNull ObjectNode node) {

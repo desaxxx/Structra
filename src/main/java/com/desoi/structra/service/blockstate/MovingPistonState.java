@@ -1,11 +1,11 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.papermc.paper.block.MovingPiston;
 import org.jetbrains.annotations.NotNull;
 
-public class MovingPistonState implements BlockStateHandler<MovingPiston> {
+public class MovingPistonState implements IStateHandler<MovingPiston> {
 
     @Override
     public int minSupportedVersion() {

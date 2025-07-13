@@ -1,11 +1,11 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.CommandBlock;
 import org.jetbrains.annotations.NotNull;
 
-public class CommandBlockState implements BlockStateHandler<CommandBlock> {
+public class CommandBlockState implements IStateHandler<CommandBlock> {
 
     @Override
     public void save(@NotNull CommandBlock blockState, @NotNull ObjectNode node) {

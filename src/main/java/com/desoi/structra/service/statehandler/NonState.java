@@ -1,4 +1,4 @@
-package com.desoi.structra.service;
+package com.desoi.structra.service.statehandler;
 
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.JsonNode;

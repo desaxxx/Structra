@@ -1,11 +1,11 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.SculkCatalyst;
 import org.jetbrains.annotations.NotNull;
 
-public class SculkCatalystState implements BlockStateHandler<SculkCatalyst> {
+public class SculkCatalystState implements IStateHandler<SculkCatalyst> {
 
     @Override
     public int minSupportedVersion() {

@@ -1,7 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
-import com.desoi.structra.service.NonState;
+import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.SuspiciousSand;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 @SuppressWarnings("removal")
-public class SuspiciousSandState implements BlockStateHandler<SuspiciousSand> {
+public class SuspiciousSandState implements IStateHandler<SuspiciousSand> {
 
     @Override
     public int minSupportedVersion() {

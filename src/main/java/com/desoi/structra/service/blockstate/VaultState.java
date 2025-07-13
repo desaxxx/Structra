@@ -1,7 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
-import com.desoi.structra.service.NonState;
+import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Vault;
@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
-public class VaultState implements BlockStateHandler<Vault> {
+public class VaultState implements IStateHandler<Vault> {
 
     @Override
     public int minSupportedVersion() {

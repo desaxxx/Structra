@@ -1,14 +1,14 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
-import com.desoi.structra.service.NonState;
+import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.Location;
 import org.bukkit.block.Beehive;
 import org.jetbrains.annotations.NotNull;
 
-public class BeehiveState implements BlockStateHandler<Beehive> {
+public class BeehiveState implements IStateHandler<Beehive> {
 
     @Override
     public void save(@NotNull Beehive blockState, @NotNull ObjectNode node) {

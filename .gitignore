@@ -9,5 +9,8 @@
 # Maven generated files
 **/dependency-reduced-pom.xml
 
+# Postponed classes
+**/postponed
+
 # Don't ignore the .gitignore file itself
 !.gitignore

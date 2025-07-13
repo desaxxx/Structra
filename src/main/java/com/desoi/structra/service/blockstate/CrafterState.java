@@ -1,13 +1,13 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
-import com.desoi.structra.service.NonState;
+import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Crafter;
 import org.jetbrains.annotations.NotNull;
 
-public class CrafterState implements BlockStateHandler<Crafter> {
+public class CrafterState implements IStateHandler<Crafter> {
 
     @Override
     public int minSupportedVersion() {

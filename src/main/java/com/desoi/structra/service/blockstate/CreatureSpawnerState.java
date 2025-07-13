@@ -1,12 +1,12 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
-public class CreatureSpawnerState implements BlockStateHandler<CreatureSpawner> {
+public class CreatureSpawnerState implements IStateHandler<CreatureSpawner> {
 
     @Override
     public void save(@NotNull CreatureSpawner blockState, @NotNull ObjectNode node) {

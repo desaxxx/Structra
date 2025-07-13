@@ -1,13 +1,13 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
-import com.desoi.structra.service.NonState;
+import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Dispenser;
 import org.jetbrains.annotations.NotNull;
 
-public class DispenserState implements BlockStateHandler<Dispenser> {
+public class DispenserState implements IStateHandler<Dispenser> {
 
     @Override
     public void save(@NotNull Dispenser blockState, @NotNull ObjectNode node) {

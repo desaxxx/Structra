@@ -1,6 +1,6 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BannerState implements BlockStateHandler<Banner> {
+public class BannerState implements IStateHandler<Banner> {
 
     @Override
     public void save(@NotNull Banner blockState, @NotNull ObjectNode node) {

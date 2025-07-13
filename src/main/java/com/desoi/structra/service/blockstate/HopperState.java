@@ -1,13 +1,13 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
-import com.desoi.structra.service.NonState;
+import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Hopper;
 import org.jetbrains.annotations.NotNull;
 
-public class HopperState implements BlockStateHandler<Hopper> {
+public class HopperState implements IStateHandler<Hopper> {
 
     @Override
     public void save(@NotNull Hopper blockState, @NotNull ObjectNode node) {

@@ -2,8 +2,8 @@ package com.desoi.structra.model;
 
 import com.desoi.structra.Structra;
 import com.desoi.structra.Util;
-import com.desoi.structra.service.BlockStateService;
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.StateService;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -175,7 +175,7 @@ public class Structure {
                         blockData.add(id);
 
                         BlockState state = block.getState();
-                        BlockStateHandler<BlockState> handler = BlockStateService.getHandler(state);
+                        IStateHandler<BlockState> handler = StateService.getHandler(state);
                         ObjectNode tileEntity = objectMaper.createObjectNode();
                         if(handler != null) {
                             tileEntity.put("Type", handler.name());

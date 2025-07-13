@@ -1,11 +1,11 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.TrialSpawner;
 import org.jetbrains.annotations.NotNull;
 
-public class TrialSpawnerState implements BlockStateHandler<TrialSpawner> {
+public class TrialSpawnerState implements IStateHandler<TrialSpawner> {
 
     @Override
     public void save(@NotNull TrialSpawner blockState, @NotNull ObjectNode node) {

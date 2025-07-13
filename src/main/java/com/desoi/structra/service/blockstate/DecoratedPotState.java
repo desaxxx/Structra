@@ -1,12 +1,12 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.DecoratedPot;
 import org.jetbrains.annotations.NotNull;
 
 
-public class DecoratedPotState implements BlockStateHandler<DecoratedPot> {
+public class DecoratedPotState implements IStateHandler<DecoratedPot> {
 
     /**
      * later of 1.20 -> added Sherd methods and Side enum

@@ -1,18 +1,20 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
-import com.desoi.structra.service.NonState;
+import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.BrewingStand;
 import org.jetbrains.annotations.NotNull;
 
-public class BrewingStandState implements BlockStateHandler<BrewingStand> {
+public class BrewingStandState implements IStateHandler<BrewingStand> {
 
     @Override
     public void save(@NotNull BrewingStand blockState, @NotNull ObjectNode node) {
         node.put("BrewingTime", blockState.getBrewingTime());
         node.put("FuelLevel", blockState.getFuelLevel());
+
+        // TODO BrewerInventory
 
         ObjectNode containerNode = JsonNodeFactory.instance.objectNode();
         NonState.saveContainer(blockState, containerNode);

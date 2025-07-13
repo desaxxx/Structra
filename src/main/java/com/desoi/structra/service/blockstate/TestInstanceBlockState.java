@@ -1,11 +1,11 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.TestInstanceBlock;
 import org.jetbrains.annotations.NotNull;
 
-public class TestInstanceBlockState implements BlockStateHandler<TestInstanceBlock> {
+public class TestInstanceBlockState implements IStateHandler<TestInstanceBlock> {
 
     @Override
     public int minSupportedVersion() {

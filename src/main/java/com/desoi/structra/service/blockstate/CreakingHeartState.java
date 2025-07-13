@@ -1,11 +1,11 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.CreakingHeart;
 import org.jetbrains.annotations.NotNull;
 
-public class CreakingHeartState implements BlockStateHandler<CreakingHeart> {
+public class CreakingHeartState implements IStateHandler<CreakingHeart> {
 
     @Override
     public int minSupportedVersion() {

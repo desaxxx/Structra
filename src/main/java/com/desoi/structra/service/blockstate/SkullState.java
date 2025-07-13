@@ -1,7 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.Structra;
-import com.desoi.structra.service.BlockStateHandler;
+import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -10,7 +10,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
 import org.jetbrains.annotations.NotNull;
 
-public class SkullState implements BlockStateHandler<Skull> {
+public class SkullState implements IStateHandler<Skull> {
 
     @Override
     public void save(@NotNull Skull blockState, @NotNull ObjectNode node) {
