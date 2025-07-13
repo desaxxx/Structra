@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class StateService {
 
@@ -60,13 +61,16 @@ public class StateService {
         handlers.put(TestInstanceBlock.class, new TestInstanceBlockState().getIfSupported());
         handlers.put(TrialSpawner.class, new TrialSpawnerState().getIfSupported());
         handlers.put(Vault.class, new VaultState().getIfSupported());
+
+        // remove unsupported BlockState handlers
+        handlers.values().removeIf(Objects::isNull);
     }
 
     @SuppressWarnings("unchecked")
     @Nullable
     public static <B extends BlockState> IStateHandler<B> getHandler(BlockState blockState) {
         return (IStateHandler<B>) handlers.entrySet().stream()
-                .filter(e -> e.getValue() != null && e.getKey().isInstance(blockState))
+                .filter(e -> e.getKey().isInstance(blockState))
                 .findFirst()
                 .map(Map.Entry::getValue)
                 .orElse(null);
