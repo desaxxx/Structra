@@ -7,8 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.block.EndGateway;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-
 public class EndGatewayState implements IStateHandler<EndGateway> {
 
     @Override
@@ -17,15 +15,7 @@ public class EndGatewayState implements IStateHandler<EndGateway> {
         node.put("ExactTeleport", blockState.isExactTeleport());
 
         Location exitLocation = blockState.getExitLocation();
-        if (exitLocation != null) {
-            ObjectNode exitNode = node.objectNode();
-            for (Map.Entry<String, Object> entry : exitLocation.serialize().entrySet()) {
-                exitNode.putPOJO(entry.getKey(), entry.getValue());
-            }
-            node.set("ExitLocation", exitNode);
-        } else {
-            node.putNull("ExitLocation");
-        }
+        node.set("ExitLocation", objectMapper.valueToTree(exitLocation == null ? null : exitLocation.serialize()));
     }
 
     @Override
@@ -33,12 +23,9 @@ public class EndGatewayState implements IStateHandler<EndGateway> {
         blockState.setAge(node.has("Age") ? node.get("Age").asInt() : 0);
         blockState.setExactTeleport(node.has("ExactTeleport") && node.get("ExactTeleport").asBoolean());
 
-        Location exitLocation = null;
-        if (node.has("ExitLocation") && node.get("ExitLocation").isObject()) {
-            ObjectNode exitNode = (ObjectNode) node.get("ExitLocation");
-            exitLocation = Location.deserialize(JsonHelper.exitNodeToMap(exitNode));
+        if (node.has("ExitLocation")) {
+            blockState.setExitLocation(JsonHelper.deserializeLocation(node.get("ExitLocation")));
         }
-        blockState.setExitLocation(exitLocation);
 
         blockState.update();
     }

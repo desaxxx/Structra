@@ -2,14 +2,15 @@ package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
+import com.fasterxml.jackson.databind.node.BooleanNode;
+import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Structure;
 import org.bukkit.block.structure.Mirror;
+import org.bukkit.block.structure.StructureRotation;
 import org.bukkit.block.structure.UsageMode;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 public class StructureState implements IStateHandler<Structure> {
 
@@ -20,25 +21,15 @@ public class StructureState implements IStateHandler<Structure> {
         node.put("Metadata", blockState.getMetadata());
         node.put("Mirror", blockState.getMirror().name());
 
-        BlockVector relativePosition = blockState.getRelativePosition();
-        ObjectNode relNode = node.objectNode();
-        Map<String, Object> relMap = relativePosition.serialize();
-        relMap.forEach(relNode::putPOJO);
-        node.set("RelativePosition", relNode);
+        node.set("RelativePosition", objectMapper.valueToTree(blockState.getRelativePosition().serialize()));
 
-
-        node.put("Rotation", blockState.getRotation().toString());
+        node.put("Rotation", blockState.getRotation().name());
         node.put("Seed", blockState.getSeed());
         node.put("StructureName", blockState.getStructureName());
 
-        BlockVector structureSize = blockState.getStructureSize();
-        ObjectNode sizeNode = node.objectNode();
-        Map<String, Object> sizeMap = structureSize.serialize();
-        sizeMap.forEach(sizeNode::putPOJO);
-        node.set("StructureSize", sizeNode);
+        node.set("StructureSize", objectMapper.valueToTree(blockState.getStructureSize().serialize()));
 
-
-        node.put("UsageMode", blockState.getUsageMode().toString());
+        node.put("UsageMode", blockState.getUsageMode().name());
         node.put("BoundingBoxVisible", blockState.isBoundingBoxVisible());
         node.put("IgnoreEntities", blockState.isIgnoreEntities());
         node.put("ShowAir", blockState.isShowAir());
@@ -46,29 +37,58 @@ public class StructureState implements IStateHandler<Structure> {
 
     @Override
     public void loadTo(@NotNull Structure blockState, ObjectNode node) {
-        blockState.setAuthor(node.has("Author") ? node.get("Author").asText("none") : "none");
-        blockState.setIntegrity(node.has("Integrity") ? node.get("Integrity").asInt(0) : 0);
-        blockState.setMetadata(node.has("Metadata") ? node.get("Metadata").asText("") : "");
-
-        try {
-            blockState.setMirror(node.has("Mirror") ? Mirror.valueOf(node.get("Mirror").asText("")) : Mirror.NONE);
-        } catch (IllegalArgumentException ignored) {}
-
-        blockState.setSeed(node.has("Seed") ? node.get("Seed").asInt(0) : 0);
-        blockState.setStructureName(node.has("StructureName") ? node.get("StructureName").asText("") : "");
-
-        if (node.has("StructureSize") && node.get("StructureSize").isObject()) {
-            BlockVector size = BlockVector.deserialize(JsonHelper.exitNodeToMap((ObjectNode) node.get("StructureSize")));
-            blockState.setStructureSize(size);
+        if(node.has("Author")) {
+            blockState.setAuthor(node.get("Author").asText());
+        }
+        if(node.has("Integrity") && node.get("Integrity") instanceof NumericNode numericNode) {
+            blockState.setIntegrity(numericNode.asInt());
+        }
+        if(node.has("Metadata") && node.get("Metadata") instanceof ObjectNode objectNode) {
+            blockState.setMetadata(objectNode.asText());
+        }
+        if(node.has("Mirror")) {
+            Mirror mirror = Mirror.NONE;
+            try {
+                mirror = Mirror.valueOf(node.get("Mirror").asText(""));
+            } catch (IllegalArgumentException ignored) {}
+            blockState.setMirror(mirror);
         }
 
-        try {
-            blockState.setUsageMode(node.has("UsageMode") ? UsageMode.valueOf(node.get("UsageMode").asText("")) : UsageMode.DATA);
-        } catch (IllegalArgumentException ignored) {}
+        if(node.has("RelativePosition")) {
+            blockState.setRelativePosition(BlockVector.deserialize(JsonHelper.nodeToMap(node.get("RelativePosition"))));
+        }
 
-        blockState.setBoundingBoxVisible(node.has("BoundingBoxVisible") && node.get("BoundingBoxVisible").isBoolean());
-        blockState.setIgnoreEntities(node.has("IgnoreEntities") && node.get("IgnoreEntities").isBoolean());
-        blockState.setShowAir(node.has("ShowAir") && node.get("ShowAir").isBoolean());
+        if(node.has("Rotation")) {
+            StructureRotation structureRotation = StructureRotation.NONE;
+            try {
+                structureRotation = StructureRotation.valueOf(node.get("Rotation").asText(""));
+            } catch (IllegalArgumentException ignored) {}
+            blockState.setRotation(structureRotation);
+        }
+        if(node.get("Seed") instanceof NumericNode numericNode) {
+            blockState.setSeed(numericNode.asInt());
+        }
+        if(node.get("StructureName") instanceof ObjectNode objectNode) {
+            blockState.setStructureName(objectNode.asText());
+        }
+
+        if (node.has("StructureSize")) {
+            blockState.setStructureSize(BlockVector.deserialize(JsonHelper.nodeToMap(node.get("StructureSize"))));
+        }
+        if(node.has("UsageMode")) {
+            try {
+                blockState.setUsageMode(UsageMode.valueOf(node.get("UsageMode").asText("")));
+            } catch (IllegalArgumentException ignored) {}
+        }
+        if(node.get("BoundingBoxVisible") instanceof BooleanNode booleanNode) {
+            blockState.setBoundingBoxVisible(booleanNode.asBoolean());
+        }
+        if(node.get("IgnoreEntities") instanceof BooleanNode booleanNode) {
+            blockState.setIgnoreEntities(booleanNode.asBoolean());
+        }
+        if(node.get("ShowAir") instanceof BooleanNode booleanNode) {
+            blockState.setShowAir(booleanNode.asBoolean());
+        }
 
         blockState.update();
     }

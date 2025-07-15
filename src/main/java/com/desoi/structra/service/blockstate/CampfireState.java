@@ -18,8 +18,9 @@ public class CampfireState implements IStateHandler<Campfire> {
             slotNode.put("CookTime", blockState.getCookTime(i));
             slotNode.put("CookTimeTotal", blockState.getCookTimeTotal(i));
             ItemStack item = blockState.getItem(i);
-            ObjectNode itemNode = item == null ? objectMapper.createObjectNode() : objectMapper.valueToTree(item.serialize());
-            slotNode.set("Item", itemNode);
+            if(item != null) {
+                slotNode.set("Item", objectMapper.valueToTree(item.serialize()));
+            }
         }
     }
 
@@ -32,7 +33,7 @@ public class CampfireState implements IStateHandler<Campfire> {
             blockState.setCookTimeTotal(i, slotNode.has("CookTimeTotal") ? slotNode.get("CookTimeTotal").asInt() : 0);
             JsonNode itemNode = slotNode.get("Item");
             if (itemNode != null && itemNode.isObject()) {
-                blockState.setItem(i, JsonHelper.deserializeItemStack((ObjectNode) itemNode));
+                blockState.setItem(i, JsonHelper.deserializeItemStack(itemNode));
             }
         }
         blockState.update();

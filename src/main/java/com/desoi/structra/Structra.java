@@ -9,6 +9,8 @@ import java.util.Objects;
 
 public final class Structra extends JavaPlugin {
 
+    static public final String FILE_EXTENSION = ".structra";
+
     public Wrapper WRAPPER;
 
     @Getter

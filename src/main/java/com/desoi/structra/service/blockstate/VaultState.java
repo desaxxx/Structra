@@ -26,13 +26,17 @@ public class VaultState implements IStateHandler<Vault> {
         node.set("LootTable", lootableNode);
 
         ItemStack keyItem = blockState.getKeyItem();
-        node.putPOJO("KeyItem", keyItem.serialize());
+        node.set("KeyItem", objectMapper.valueToTree(keyItem.serialize()));
     }
 
     @Override
     public void loadTo(@NotNull Vault blockState, ObjectNode node) {
-        blockState.setActivationRange(node.has("ActivationRange") ? node.get("ActivationRange").asDouble() : 0.0);
-        blockState.setDeactivationRange(node.has("DeactiverationRange") ? node.get("DeactivationRange").asDouble() : 0.0);
+        if(node.has("ActivationRange")) {
+            blockState.setActivationRange(node.get("ActivationRange").asDouble());
+        }
+        if (node.has("DeactivationRange")) {
+            blockState.setDeactivationRange(node.get("DeactivationRange").asDouble());
+        }
 
         LootTable lootTable = null;
         if (node.has("LootTable") && node.get("LootTable").isObject()) {
@@ -45,8 +49,8 @@ public class VaultState implements IStateHandler<Vault> {
 
         ItemStack keyItem = null;
 
-        if (node.has("KeyItem") && node.get("KeyItem").isObject()) {
-            keyItem = ItemStack.deserialize(JsonHelper.exitNodeToMap((ObjectNode) node.get("KeyItem")));
+        if (node.has("KeyItem")) {
+            keyItem = ItemStack.deserialize(JsonHelper.nodeToMap(node.get("KeyItem")));
         }
 
         if (keyItem != null) {

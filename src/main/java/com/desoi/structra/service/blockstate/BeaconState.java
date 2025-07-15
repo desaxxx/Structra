@@ -23,7 +23,7 @@ public class BeaconState implements IStateHandler<Beacon> {
         if (secondaryEffect != null) {
             NonState.savePotionEffectType(secondaryEffect, JsonHelper.getOrCreate(node, "SecondaryEffect"), MINECRAFT_VERSION);
         }
-        node.put("CustomName", miniMessage.serializeOrNull(blockState.customName()));
+        NonState.saveNameable(blockState, node);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class BeaconState implements IStateHandler<Beacon> {
         if (secondaryEffect != null) {
             blockState.setSecondaryEffect(secondaryEffect);
         }
-        blockState.customName(node.has("CustomName") ? miniMessage.deserialize(node.get("CustomName").asText("")) : null);
+        NonState.loadToNameable(blockState, node);
 
         blockState.update();
     }

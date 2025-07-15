@@ -1,5 +1,6 @@
 package com.desoi.structra.util;
 
+import com.desoi.structra.model.StructraException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -7,8 +8,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -37,7 +40,7 @@ public class JsonHelper {
     }
 
     @NotNull
-    static public String getChildMatches(@NotNull ObjectNode node, @NotNull Object obj, @NotNull String def) {
+    static public String getChildMatches(@NotNull JsonNode node, @NotNull Object obj, @NotNull String def) {
         return node.properties().stream()
                 .filter(entry -> {
                     JsonNode value = entry.getValue();
@@ -62,24 +65,29 @@ public class JsonHelper {
         try {
             return objectMapper.treeToValue(treeNode, valueType);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("[Structra] Failed to parse tree to value: " + e);
+            throw new StructraException("Failed to parse tree to value: " + e);
         }
     }
 
-
-
-
     @NotNull
-    static public Map<String, Object> exitNodeToMap(@NotNull ObjectNode node) {
+    static public Map<String, Object> nodeToMap(@NotNull JsonNode node) {
         return objectMapper.convertValue(node, new TypeReference<>() {});
     }
 
-    public static Map<String, Object> itemNodeToMap(ObjectNode node) {
-        return objectMapper.convertValue(node, new TypeReference<>() {});
-    }
+
+    // Deserialize Bukkit Objects
 
     @NotNull
-    static public ItemStack deserializeItemStack(@NotNull ObjectNode node) {
-        return ItemStack.deserialize(itemNodeToMap(node));
+    static public ItemStack deserializeItemStack(@NotNull JsonNode node) {
+        return ItemStack.deserialize(nodeToMap(node));
+    }
+
+    @Nullable
+    static public Location deserializeLocation(@NotNull JsonNode node) {
+        try {
+            return Location.deserialize(nodeToMap(node));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }

@@ -23,7 +23,7 @@ public class CreatureSpawnerState implements IStateHandler<CreatureSpawner> {
     public void loadTo(@NotNull CreatureSpawner blockState, ObjectNode node) {
         blockState.setDelay(node.has("Delay") ? node.get("Delay").asInt() : 0);
         blockState.setMinSpawnDelay(node.has("MinSpawnDelay") ? node.get("MinSpawnDelay").asInt() : 0);
-        blockState.setMaxSpawnDelay(node.has("MaxSpawnDelay") ? node.get("MaxSpawnDelay").asInt() : 0);
+        blockState.setMaxSpawnDelay(node.has("MaxSpawnDelay") ? node.get("MaxSpawnDelay").asInt() : 1); // must be greater than 0
         blockState.setSpawnCount(node.has("SpawnCount") ? node.get("SpawnCount").asInt() : 1);
         blockState.setRequiredPlayerRange(node.has("RequiredPlayerRange") ? node.get("RequiredPlayerRange").asInt() : 16);
         String spawnedType = node.has("SpawnedType") ? node.get("SpawnedType").asText() : "";

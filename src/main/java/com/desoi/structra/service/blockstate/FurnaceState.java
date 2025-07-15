@@ -24,7 +24,11 @@ public class FurnaceState implements IStateHandler<Furnace> {
         blockState.setCookTime(node.has("CookTime") ? node.get("CookTime").shortValue() : 0);
         blockState.setCookTimeTotal(node.has("CookTimeTotal") ? node.get("CookTimeTotal").shortValue() : 0);
         blockState.setCookSpeedMultiplier(node.has("CookSpeedMultiplier") ? node.get("CookSpeedMultiplier").shortValue() : 0);
-        NonState.loadToContainer(blockState, JsonHelper.getOrCreate(node,"Container"));
+
+        if(node.get("Container") instanceof ObjectNode containerNode) {
+            NonState.loadToContainer(blockState, containerNode);
+        }
+
         blockState.update();
     }
 }

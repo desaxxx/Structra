@@ -11,8 +11,6 @@ public class DispenserState implements IStateHandler<Dispenser> {
 
     @Override
     public void save(@NotNull Dispenser blockState, @NotNull ObjectNode node) {
-        node.put("CustomName", miniMessage.serializeOr(blockState.customName(),""));
-
         ObjectNode containerNode = JsonNodeFactory.instance.objectNode();
         NonState.saveContainer(blockState, containerNode);
         node.set("Container", containerNode);
@@ -25,8 +23,6 @@ public class DispenserState implements IStateHandler<Dispenser> {
 
     @Override
     public void loadTo(@NotNull Dispenser blockState, ObjectNode node) {
-        blockState.customName(miniMessage.deserialize(node.get("CustomName").asText("")));
-
         ObjectNode lootableNode = node.has("Lootable") && node.get("Lootable").isObject() ? (ObjectNode) node.get("Lootable") : null;
         NonState.loadToLootable(blockState, lootableNode);
 

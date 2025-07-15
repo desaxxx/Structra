@@ -9,14 +9,16 @@ public class CommandBlockState implements IStateHandler<CommandBlock> {
 
     @Override
     public void save(@NotNull CommandBlock blockState, @NotNull ObjectNode node) {
-        node.put("Name", miniMessage.serializeOr(blockState.name(), ""));
+        //noinspection deprecation
+        node.put("Name", blockState.getName());
         node.put("Command", blockState.getCommand());
     }
 
     @Override
     public void loadTo(@NotNull CommandBlock blockState, ObjectNode node) {
-        blockState.name(miniMessage.deserialize(node.has("Name") ? node.get("Name").asText() : ""));
-        blockState.setCommand(node.has("Command") ? node.get("Command").asText() : "");
+        //noinspection deprecation
+        blockState.setName(node.has("Name") ? node.get("Name").asText() : null);
+        blockState.setCommand(node.has("Command") ? node.get("Command").asText() : null);
 
         blockState.update();
     }

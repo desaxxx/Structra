@@ -3,7 +3,8 @@ package com.desoi.structra.command;
 import com.desoi.structra.HexUtil;
 import com.desoi.structra.Structra;
 import com.desoi.structra.Util;
-import com.desoi.structra.model.Structure;
+import com.desoi.structra.model.StructureLoader;
+import com.desoi.structra.model.StructureWriter;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -48,7 +49,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             }else {
                 VECTORS_2.put(player.getUniqueId(), vector);
             }
-            player.sendMessage(HexUtil.parse("&aSet POSITION " + args[0].replace("pos","") + " to location [" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ() + "]"));
+            player.sendMessage(HexUtil.parse("&aSet POSITION " + args[0].replace("pos","") + " to location [" + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "]"));
         }
         /*
          * /structra save <fileName> [<batchSize>]
@@ -67,12 +68,28 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             }
             Location originLocation = player.getLocation().clone();
 
-            Structure structure = new Structure(player, vector1, vector2, 0, 20, batchSize);
-            structure.save(new File(Structra.getInstance().getDataFolder(), fileName + ".structra"), originLocation);
+            StructureWriter structureWriter = new StructureWriter(player, vector1, vector2, 0, 20, batchSize);
+            structureWriter.save(new File(Structra.getInstance().getDataFolder(), fileName + Structra.FILE_EXTENSION), originLocation);
             Util.tell(player, "&aSaving Structure:");
-            Util.tell(player, "Min vector: [" + structure.getMinVector().getBlockX() + "," + structure.getMinVector().getBlockY() + "," + structure.getMinVector().getBlockZ() + "]");
-            Util.tell(player, "Max vector: [" + structure.getMaxVector().getBlockX() + "," + structure.getMaxVector().getBlockY() + "," + structure.getMaxVector().getBlockZ() + "]");
-            Util.tell(player, "Size: " + structure.getSize());
+            Util.tell(player, "&eMin vector: [" + structureWriter.getMinVector().getBlockX() + "," + structureWriter.getMinVector().getBlockY() + "," + structureWriter.getMinVector().getBlockZ() + "]");
+            Util.tell(player, "&eMax vector: [" + structureWriter.getMaxVector().getBlockX() + "," + structureWriter.getMaxVector().getBlockY() + "," + structureWriter.getMaxVector().getBlockZ() + "]");
+            Util.tell(player, "&eSize: " + structureWriter.getSize());
+        }
+        /*
+         * /structra load <fileName> [<batchSize>]
+         */
+        else if(args.length >= 2 && args[0].equals("load")) {
+            String fileName = args[1];
+            File file = new File(Structra.getInstance().getDataFolder(), fileName + Structra.FILE_EXTENSION);
+            int batchSize = 50;
+            if(args.length >= 3) {
+                batchSize = parseInt(args[2], batchSize);
+            }
+            Location originLocation = player.getLocation().clone();
+
+            StructureLoader structureLoader = new StructureLoader(sender, file, 0, 20, batchSize);
+            structureLoader.load(originLocation);
+            Util.tell(player, "&aLoading Structure:");
         }
         return true;
     }
@@ -89,7 +106,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
         if(args.length == 1) {
-            return List.of("pos1","pos2","save");
+            return List.of("pos1","pos2","save","load");
         }
         return List.of();
     }

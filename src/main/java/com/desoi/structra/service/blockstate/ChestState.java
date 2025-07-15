@@ -29,9 +29,6 @@ public class ChestState implements IStateHandler<Chest> {
         NonState.loadToContainer(blockState, containerNode);
         NonState.loadToLootable(blockState, lootableNode);
 
-        node.set("Container", containerNode);
-        node.set("Lootable", lootableNode);
-
-        blockState.update();
+        blockState.update(true);
     }
 }

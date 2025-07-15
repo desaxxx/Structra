@@ -1,12 +1,14 @@
 package com.desoi.structra.service.statehandler;
 
 import com.desoi.structra.util.JsonHelper;
+import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.Nameable;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.block.Container;
@@ -21,58 +23,49 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
 public class NonState {
 
-    private static final MiniMessage miniMessage = MiniMessage.miniMessage();
+    static private final ObjectMapper objectMapper = new ObjectMapper();
 
     static public <T extends Container> void saveContainer(@NotNull T container, @NotNull ObjectNode parentNode) {
-        Component customName = container.customName();
-        parentNode.put("CustomName", customName != null ? miniMessage.serialize(customName) : "");
+        NonState.saveNameable(container, parentNode);
 
-        ObjectNode inventoryNode = JsonNodeFactory.instance.objectNode();
-        saveInventory(container.getInventory(), inventoryNode);
-        parentNode.set("Inventory", inventoryNode);
+        saveInventory(container.getInventory(), JsonHelper.getOrCreate(parentNode,"Inventory"));
     }
 
     static public <T extends Container> void loadToContainer(@NotNull T container, ObjectNode parentNode) {
         if (parentNode == null) return;
-        if (parentNode.has("CustomName")) {
-            String customNameStr = parentNode.get("CustomName").asText();
-            container.customName(customNameStr.isEmpty() ? null : miniMessage.deserialize(customNameStr));
+        NonState.loadToNameable(container, parentNode);
+
+        if(parentNode.get("Inventory") instanceof ObjectNode inventoryNode) {
+            loadToInventory(container.getInventory(), inventoryNode);
         }
-        ObjectNode inventoryNode = parentNode.has("Inventory") && parentNode.get("Inventory").isObject() ? (ObjectNode) parentNode.get("Inventory") : null;
-        if (inventoryNode != null) loadToInventory(container.getInventory(), inventoryNode);
     }
 
     static public void saveInventory(@NotNull Inventory inventory, @NotNull ObjectNode parentNode) {
         ObjectNode itemsNode = JsonNodeFactory.instance.objectNode();
         for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack item = inventory.getItem(i);
-            if (item == null) continue;
-            Map<String, Object> serialized = item.serialize();
-            ObjectNode itemNode = JsonNodeFactory.instance.objectNode();
-            serialized.forEach((key, value) -> {
-                if (value != null) itemNode.putPOJO(key, value);
-            });
-            itemsNode.set(String.valueOf(i), itemNode);
+            if (item != null) {
+                itemsNode.set(String.valueOf(i), objectMapper.valueToTree(item.serialize()));
+            }
         }
-        parentNode.set("Item", itemsNode);
+        parentNode.set("Items", itemsNode);
     }
 
     static public void loadToInventory(@NotNull Inventory inventory, ObjectNode parentNode) {
         if (parentNode == null) return;
-        JsonNode itemsNode = parentNode.get("Item");
-        if (itemsNode == null || !itemsNode.isObject()) return;
-        ObjectNode objItemsNode = (ObjectNode) itemsNode;
-        for (int i = 0; i < inventory.getSize(); i++) {
-            JsonNode itemNode = objItemsNode.get(String.valueOf(i));
-            if (itemNode != null && itemNode.isObject()) {
-                ItemStack item = ItemStack.deserialize(JsonHelper.itemNodeToMap((ObjectNode) itemNode));
-                inventory.setItem(i, item);
-            } else {
-                inventory.setItem(i, null);
+        if (parentNode.get("Items") == null || !parentNode.get("Items").isObject()) return;
+
+        if(parentNode.get("Items") instanceof ObjectNode itemsNode) {
+            for (int i = 0; i < inventory.getSize(); i++) {
+                JsonNode itemNode = itemsNode.get(String.valueOf(i));
+                if (itemNode != null) {
+                    ItemStack item = ItemStack.deserialize(JsonHelper.nodeToMap(itemNode));
+                    inventory.setItem(i, item);
+                } else {
+                    inventory.setItem(i, null);
+                }
             }
         }
     }
@@ -116,6 +109,38 @@ public class NonState {
     static public <T extends Entity> void loadToEntityBlockStorage(@NotNull EntityBlockStorage<T> entityBlockStorage, ObjectNode parentNode) {
         if(parentNode.has("MaxEntities") && parentNode.get("MaxEntities").isInt()) {
             entityBlockStorage.setMaxEntities(parentNode.get("MaxEntities").asInt());
+        }
+    }
+
+    // MINI MESSAGE & NAMEABLE
+    @SuppressWarnings("deprecation")
+    static public <N extends Nameable> void saveNameable(@NotNull N nameable, @NotNull ObjectNode parentNode) {
+        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
+        /*
+         * Paper API doesn't bundle adventure minimessage before 1.19.
+         */
+        if(MINECRAFT_VERSION >= 190) {
+            if(nameable.customName() == null) return;
+            parentNode.put("CustomName", MiniMessage.miniMessage().serializeOrNull(nameable.customName()));
+        }else {
+            // Deprecated
+            if(nameable.getCustomName() == null) return;
+            parentNode.put("CustomName", nameable.getCustomName());
+        }
+    }
+
+    static public <N extends Nameable> void loadToNameable(@NotNull N nameable, ObjectNode parentNode) {
+        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
+        /*
+         * Paper API doesn't have a bundle for adventure minimessage before 1.19.
+         */
+        if(parentNode.has("CustomName") && parentNode.get("CustomName") != null) {
+            if(MINECRAFT_VERSION >= 190) {
+                nameable.customName(MiniMessage.miniMessage().deserializeOrNull(parentNode.get("CustomName").asText()));
+            }else {
+                //noinspection deprecation
+                nameable.setCustomName(parentNode.get("CustomName").asText());
+            }
         }
     }
 

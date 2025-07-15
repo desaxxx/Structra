@@ -15,6 +15,10 @@ public class Wrapper {
         version = fetchVersion();
     }
 
+    static public Wrapper getInstance() {
+        return Structra.getInstance().WRAPPER;
+    }
+
     @Getter
     private final int version;
 

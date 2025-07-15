@@ -22,22 +22,20 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
-public class Structure {
+public class StructureWriter {
 
     private final @NotNull CommandSender sender;
-    private final @NotNull ObjectMapper objectMaper = new ObjectMapper();
+    private final @NotNull ObjectMapper objectMapper = new ObjectMapper();
     private final @NotNull Vector minVector;
     private final @NotNull Vector maxVector;
     private final int delay;
     private final int period;
     private final int batchSize;
 
-    public Structure(@NotNull CommandSender sender, @NotNull Vector vector1, @NotNull Vector vector2, int delay, int period, int batchSize) {
+    public StructureWriter(@NotNull CommandSender sender, @NotNull Vector vector1, @NotNull Vector vector2, int delay, int period, int batchSize) {
         this.sender = sender;
         this.minVector = Vector.getMinimum(vector1, vector2);
         this.maxVector = Vector.getMaximum(vector1, vector2);
@@ -59,7 +57,7 @@ public class Structure {
     }
 
     public int getSize() {
-        return getXSize() + getYSize() + getZSize();
+        return getXSize() * getYSize() * getZSize();
     }
 
     public void save(@NotNull File file, @NotNull Location originLocation) {
@@ -78,43 +76,51 @@ public class Structure {
         private final @NotNull World world;
         public StructureSave(@NotNull File file, @NotNull Location originLocation) {
             this.file = file;
-            if(!file.getName().endsWith(".structra")) {
-                throw new IllegalArgumentException("File name must end with '.structra'");
+            if(!file.getName().endsWith(Structra.FILE_EXTENSION)) {
+                throw new StructraException("File name must end with '.structra'");
             }
-            this.root = objectMaper.createObjectNode();
+            this.root = objectMapper.createObjectNode();
+            if(!root.isObject()) {
+                throw new StructraException("Root object must be an object");
+            }
             this.rootObject = (ObjectNode) root;
-            this.originLocation = originLocation.clone();
+            this.originLocation = originLocation.getBlock().getLocation().clone();
             this.world = originLocation.getWorld();
             if(world == null) {
-                throw new RuntimeException("[Structra] World is null.");
+                throw new StructraException("Origin world is null.");
             }
         }
 
         private long start;
-        private long end;
 
 
         public void save() {
-            start = System.currentTimeMillis();
+            start = System.nanoTime();
 
-            rootObject.put("Version", 1.0f);
+            rootObject.put("Version", Structra.getInstance().getDescription().getVersion());
             ObjectNode size = JsonHelper.getOrCreate(rootObject, "Size");
             size.put("x", getXSize());
             size.put("y", getYSize());
             size.put("z", getZSize());
+            size.put("Total", getSize());
 
+            setRelativeNode();
+
+            writeBlocks();
+
+        }
+
+        // Relative = minLocation - originLocation
+        private void setRelativeNode() {
             Location startLocation = minVector.toLocation(world);
             ObjectNode relative = JsonHelper.getOrCreate(rootObject, "Relative");
             relative.put("x", startLocation.getBlockX() - originLocation.getBlockX());
             relative.put("y", startLocation.getBlockY() - originLocation.getBlockY());
             relative.put("z", startLocation.getBlockZ() - originLocation.getBlockZ());
-
-            writeBlocks(rootObject);
-
         }
 
 
-        private void writeBlocks(ObjectNode rootObject) {
+        private void writeBlocks() {
             List<Vector> vectors = new ArrayList<>(getVectors());
 
             ObjectNode palette = JsonHelper.getOrCreate(rootObject, "Palette");
@@ -125,12 +131,12 @@ public class Structure {
         }
 
 
-        private Set<Vector> getVectors() {
-            Set<Vector> vectors = new HashSet<>();
-            for(int i = 0; i < getXSize(); i++) {
-                for(int j = 0; j < getYSize(); j++) {
-                    for(int k = 0; k < getZSize(); k++) {
-                        Vector vec = new Vector(i, j, k);
+        private List<Vector> getVectors() {
+            List<Vector> vectors = new ArrayList<>();
+            for(int y = 0; y < getYSize(); y++) {
+                for(int z = 0; z < getZSize(); z++) {
+                    for(int x = 0; x < getXSize(); x++) {
+                        Vector vec = new Vector(x, y, z);
                         vectors.add(minVector.clone().add(vec));
                     }
                 }
@@ -149,8 +155,7 @@ public class Structure {
                 public void run() {
                     // information
                     float ratio = (float) looped / size;
-                    Util.tell(sender, String.format("&eCopying Structra to file... (%.1f)", ratio));
-                    Util.log(String.format("Copying Structra to file... (%.1f)", ratio));
+                    Util.tell(sender, String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
 
                     //
                     for(int i = 0; i < batchSize; i++) {
@@ -158,8 +163,10 @@ public class Structure {
                         if(index >= size) {
                             cancel();
                             saveToFile();
-                            end = System.currentTimeMillis();
-                            Util.tell(sender, String.format("[Structra] &aSaved '%d blocks' to file '%s' in %d ms", size, file.getName(), (end-start)));
+                            ratio = 1.0f;
+                            long elapsedMS = (System.nanoTime() - start) / 1_000_000;
+                            Util.tell(sender, String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
+                            Util.tell(sender, String.format("[Structra] &aSaved '%d blocks' to file '%s' in %d ms", size, file.getName(), elapsedMS));
                             return;
                         }
 
@@ -176,10 +183,10 @@ public class Structure {
 
                         BlockState state = block.getState();
                         IStateHandler<BlockState> handler = StateService.getHandler(state);
-                        ObjectNode tileEntity = objectMaper.createObjectNode();
+                        ObjectNode tileEntity = objectMapper.createObjectNode();
                         if(handler != null) {
                             tileEntity.put("Type", handler.name());
-                            tileEntity.set("Offset", getOffsetNode(tileEntity));
+                            tileEntity.set("Offset", getOffsetNode(blockLocation, tileEntity));
                             handler.save(state, tileEntity);
                             tileEntities.add(tileEntity);
                         }
@@ -190,20 +197,21 @@ public class Structure {
             }.runTaskTimer(Structra.getInstance(), delay, period);
         }
 
-        private ObjectNode getOffsetNode(@NotNull ObjectNode tileEntity) {
+        // Offset = blockLocation - minLocation
+        private ObjectNode getOffsetNode(@NotNull Location blockLocation, @NotNull ObjectNode tileEntity) {
             ObjectNode offset = JsonHelper.getOrCreate(tileEntity, "Offset");
             Location startLocation = minVector.toLocation(world);
-            offset.put("x", startLocation.getBlockY() - originLocation.getBlockY());
-            offset.put("y", startLocation.getBlockZ() - originLocation.getBlockZ());
-            offset.put("z", startLocation.getBlockX() - originLocation.getBlockX());
+            offset.put("x", blockLocation.getBlockX() - startLocation.getBlockX());
+            offset.put("y", blockLocation.getBlockY() - startLocation.getBlockY());
+            offset.put("z", blockLocation.getBlockZ() - startLocation.getBlockZ());
             return offset;
         }
 
         private void saveToFile() {
             try {
-                objectMaper.writerWithDefaultPrettyPrinter().writeValue(file, root);
+                objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, root);
             } catch (IOException e) {
-                throw new RuntimeException(String.format("[Structra] Couldn't save to file '%s'", file.getName()), e);
+                throw new StructraException(String.format("Couldn't save to file '%s'", file.getName()) + e);
             }
         }
     }

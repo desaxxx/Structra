@@ -2,7 +2,6 @@ package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.DyeColor;
 import org.bukkit.block.Banner;
@@ -18,8 +17,7 @@ public class BannerState implements IStateHandler<Banner> {
     public void save(@NotNull Banner blockState, @NotNull ObjectNode node) {
         node.put("BaseColor", blockState.getBaseColor().toString());
 
-        ObjectMapper mapper = new ObjectMapper();
-        node.set("Patterns", mapper.valueToTree(blockState.getPatterns()));
+        node.set("Patterns", objectMapper.valueToTree(blockState.getPatterns()));
     }
 
     @Override
@@ -30,9 +28,8 @@ public class BannerState implements IStateHandler<Banner> {
         List<Pattern> patterns = new ArrayList<>();
         JsonNode patternsNode = node.get("Patterns");
         if (patternsNode != null && patternsNode.isArray()) {
-            ObjectMapper mapper = new ObjectMapper();
             for (JsonNode patternNode : patternsNode) {
-                Pattern pattern = mapper.convertValue(patternNode, Pattern.class);
+                Pattern pattern = objectMapper.convertValue(patternNode, Pattern.class);
                 patterns.add(pattern);
             }
         }

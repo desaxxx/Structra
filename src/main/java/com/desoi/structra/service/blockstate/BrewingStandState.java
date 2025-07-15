@@ -25,8 +25,10 @@ public class BrewingStandState implements IStateHandler<BrewingStand> {
     public void loadTo(@NotNull BrewingStand blockState, ObjectNode node) {
         blockState.setBrewingTime(node.has("BrewingTime") ? node.get("BrewingTime").asInt() : 0);
         blockState.setFuelLevel(node.has("FuelLevel") ? node.get("FuelLevel").asInt() : 0);
-        ObjectNode containerNode = node.has("Container") && node.get("Container").isObject() ? (ObjectNode) node.get("Container") : null;
-        NonState.loadToContainer(blockState, containerNode);
+
+        if(node.has("Container") && node.get("Container") instanceof ObjectNode containerNode) {
+            NonState.loadToContainer(blockState, containerNode);
+        }
 
         blockState.update();
     }
