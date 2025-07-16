@@ -30,8 +30,9 @@ public class SuspiciousSandState implements IStateHandler<SuspiciousSand> {
             blockState.setItem(JsonHelper.deserializeItemStack(node.get("Item")));
         }
 
-        ObjectNode lootNode = node.has("Lootable") && node.get("Lootable").isObject() ? (ObjectNode) node.get("Lootable") : null;
-        NonState.loadToLootable(blockState, lootNode);
+        if(node.get("Lootable") instanceof ObjectNode lootableNode) {
+            NonState.loadToLootable(blockState, lootableNode);
+        }
 
         blockState.update();
     }

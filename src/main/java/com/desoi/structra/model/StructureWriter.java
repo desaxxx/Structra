@@ -1,7 +1,7 @@
 package com.desoi.structra.model;
 
 import com.desoi.structra.Structra;
-import com.desoi.structra.Util;
+import com.desoi.structra.util.Util;
 import com.desoi.structra.service.statehandler.StateService;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
@@ -125,7 +125,7 @@ public class StructureWriter {
 
             ObjectNode palette = JsonHelper.getOrCreate(rootObject, "Palette");
             ArrayNode blockData = JsonHelper.getOrCreateArray(rootObject, "BlockData");
-            ArrayNode tileEntities = JsonHelper.getOrCreateArray(rootObject, "TileEntities");
+            ObjectNode tileEntities = JsonHelper.getOrCreate(rootObject, "TileEntities");
 
             startRunnable(vectors, palette, blockData, tileEntities);
         }
@@ -145,11 +145,12 @@ public class StructureWriter {
         }
 
 
-        private void startRunnable(@NotNull List<Vector> vectors, @NotNull ObjectNode palette, @NotNull ArrayNode blockData, @NotNull ArrayNode tileEntities) {
+        private void startRunnable(@NotNull List<Vector> vectors, @NotNull ObjectNode palette, @NotNull ArrayNode blockData, @NotNull ObjectNode tileEntities) {
             final int size = vectors.size();
             new BukkitRunnable() {
                 int looped = 0;
                 byte nextId = 0;
+                int index = 0;
 
                 @Override
                 public void run() {
@@ -159,14 +160,14 @@ public class StructureWriter {
 
                     //
                     for(int i = 0; i < batchSize; i++) {
-                        int index = i + looped;
+                        index = i + looped;
                         if(index >= size) {
                             cancel();
                             saveToFile();
                             ratio = 1.0f;
                             long elapsedMS = (System.nanoTime() - start) / 1_000_000;
                             Util.tell(sender, String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
-                            Util.tell(sender, String.format("[Structra] &aSaved '%d blocks' to file '%s' in %d ms", size, file.getName(), elapsedMS));
+                            Util.tell(sender, String.format("&aSaved '%d blocks' to file '%s' in %d ms", size, file.getName(), elapsedMS));
                             return;
                         }
 
@@ -186,9 +187,9 @@ public class StructureWriter {
                         ObjectNode tileEntity = objectMapper.createObjectNode();
                         if(handler != null) {
                             tileEntity.put("Type", handler.name());
-                            tileEntity.set("Offset", getOffsetNode(blockLocation, tileEntity));
+                            //tileEntity.set("Offset", getOffsetNode(blockLocation, tileEntity));
                             handler.save(state, tileEntity);
-                            tileEntities.add(tileEntity);
+                            tileEntities.set(String.valueOf(index), tileEntity);
                         }
                     }
 
@@ -198,14 +199,14 @@ public class StructureWriter {
         }
 
         // Offset = blockLocation - minLocation
-        private ObjectNode getOffsetNode(@NotNull Location blockLocation, @NotNull ObjectNode tileEntity) {
-            ObjectNode offset = JsonHelper.getOrCreate(tileEntity, "Offset");
-            Location startLocation = minVector.toLocation(world);
-            offset.put("x", blockLocation.getBlockX() - startLocation.getBlockX());
-            offset.put("y", blockLocation.getBlockY() - startLocation.getBlockY());
-            offset.put("z", blockLocation.getBlockZ() - startLocation.getBlockZ());
-            return offset;
-        }
+//        private ObjectNode getOffsetNode(@NotNull Location blockLocation, @NotNull ObjectNode tileEntity) {
+//            ObjectNode offset = JsonHelper.getOrCreate(tileEntity, "Offset");
+//            Location startLocation = minVector.toLocation(world);
+//            offset.put("x", blockLocation.getBlockX() - startLocation.getBlockX());
+//            offset.put("y", blockLocation.getBlockY() - startLocation.getBlockY());
+//            offset.put("z", blockLocation.getBlockZ() - startLocation.getBlockZ());
+//            return offset;
+//        }
 
         private void saveToFile() {
             try {

@@ -2,9 +2,9 @@ package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.NonState;
+import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Lectern;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class LecternState implements IStateHandler<Lectern> {
@@ -13,21 +13,18 @@ public class LecternState implements IStateHandler<Lectern> {
     public void save(@NotNull Lectern blockState, @NotNull ObjectNode node) {
         node.put("Page", blockState.getPage());
 
-        Inventory snapshotInv = blockState.getSnapshotInventory();
-        ObjectNode invNode = node.objectNode();
-        NonState.saveInventory(snapshotInv, invNode);
-        node.set("Inventory", invNode);
+        NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
     }
 
     @Override
     public void loadTo(@NotNull Lectern blockState, ObjectNode node) {
         blockState.setPage(node.has("Page") ? node.get("Page").asInt() : 0);
 
-        if (node.has("Inventory") && node.get("Inventory").isObject()) {
-            ObjectNode invNode = (ObjectNode) node.get("Inventory");
-            NonState.loadToInventory(blockState.getInventory(), invNode);
-        }
-
         blockState.update();
+
+        // Live object
+        if (node.get("Inventory") instanceof ObjectNode inventoryNode) {
+            NonState.loadToInventory(blockState.getInventory(), inventoryNode);
+        }
     }
 }

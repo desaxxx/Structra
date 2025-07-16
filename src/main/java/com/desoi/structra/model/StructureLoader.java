@@ -1,12 +1,13 @@
 package com.desoi.structra.model;
 
 import com.desoi.structra.Structra;
-import com.desoi.structra.Util;
+import com.desoi.structra.util.Util;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.StateService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -20,7 +21,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -123,20 +123,17 @@ public class StructureLoader {
         private void pasteBlocks() {
             List<Vector> vectors = new ArrayList<>(getVectors());
 
-            JsonNode palette = rootObject.has("Palette") ? rootObject.get("Palette") : null;
-            if(palette == null || !palette.isObject()) {
+            if(!(rootObject.get("Palette") instanceof ObjectNode paletteNode)) {
                 throw new StructraException("There was a problem reading Palette information.");
             }
-            JsonNode blockData = rootObject.has("BlockData") ? rootObject.get("BlockData") : null;
-            if(blockData == null || !blockData.isArray()) {
+            if(!(rootObject.get("BlockData") instanceof ArrayNode blockDataNode)) {
                 throw new StructraException("There was a problem reading BlockData information.");
             }
-            JsonNode tileEntities = rootObject.has("TileEntities") ? rootObject.get("TileEntities") : null;
-            if(tileEntities == null || !tileEntities.isArray()) {
+            if(!(rootObject.get("TileEntities") instanceof ObjectNode tileEntitiesNode)) {
                 throw new StructraException("There was a problem reading TileEntities information.");
             }
 
-            startDataRunnable(vectors, (ObjectNode) palette, (ArrayNode) blockData, (ArrayNode) tileEntities);
+            startDataRunnable(vectors, paletteNode, blockDataNode, tileEntitiesNode);
         }
 
         private List<Vector> getVectors() {
@@ -152,7 +149,7 @@ public class StructureLoader {
             return vectors;
         }
 
-        private void startDataRunnable(@NotNull List<Vector> vectors, @NotNull ObjectNode palette, @NotNull ArrayNode blockData, @NotNull ArrayNode tileEntities) {
+        private void startDataRunnable(@NotNull List<Vector> vectors, @NotNull ObjectNode palette, @NotNull ArrayNode blockData, @NotNull ObjectNode tileEntities) {
             final int size = vectors.size();
             new BukkitRunnable() {
                 int looped = 0;
@@ -162,7 +159,7 @@ public class StructureLoader {
                 @Override
                 public void run() {
                     // information
-                    ratio = (float) looped / (size + tileEntities.size());
+                    ratio = (float) looped / size;
                     Util.tell(sender, String.format("&ePasting Structra to world '%s'... (%.1f%%)", world.getName(), ratio*100));
 
                     //
@@ -170,14 +167,20 @@ public class StructureLoader {
                         index = i + looped;
                         if(index >= size) {
                             cancel();
-                            startTileEntitiesRunnable(tileEntities);
+                            ratio = 1.0f;
+                            long elapsedMS = (System.nanoTime() - start) / 1_000_000;
+                            Util.tell(sender, String.format("&ePasting Structra to world '%s'... (%.1f%%)", world.getName(), ratio*100));
+                            Util.tell(sender, String.format("&aPasted '%d blocks' to world '%s' in %d ms", size, world.getName(), elapsedMS));
                             return;
                         }
 
                         Location blockLocation = vectors.get(index).toLocation(world);
+                        if(!blockLocation.getChunk().isLoaded()) {
+                            blockLocation.getChunk().load(true);
+                        }
                         Block block = blockLocation.getBlock();
 
-                        byte id = (byte) (blockData.has(index) ? blockData.get(index).shortValue() : -1);
+                        byte id = (byte) (blockData.get(index) instanceof NumericNode idNode ? idNode.shortValue() : -1);
                         if(id == -1) {
                             Util.tell(sender, String.format("There was an error reading BlockData for index '%s'", index));
                             continue;
@@ -192,56 +195,17 @@ public class StructureLoader {
                             Util.tell(sender, String.format("There was an error reading BlockData for index '%s'", index));
                             block.setType(Material.AIR, false);
                         }
-                    }
 
-                    looped += batchSize;
-                }
-            }.runTaskTimer(Structra.getInstance(), delay, period);
-        }
-
-
-        private void startTileEntitiesRunnable(@NotNull ArrayNode tileEntities) {
-            final int size = tileEntities.size();
-            new BukkitRunnable() {
-                int looped = 0;
-                int index = 0;
-                float ratio = 0f;
-
-                @Override
-                public void run() {
-                    // information
-                    ratio = (float) (looped + getSize()) / (getSize() + size);
-                    Util.tell(sender, String.format("&ePasting Structra to world '%s'... (%.1f%%)", world.getName(), ratio*100));
-
-                    //
-                    for(int i = 0; i < batchSize; i++) {
-                        index = i + looped;
-                        if(index >= size) {
-                            cancel();
-                            ratio = 1.0f;
-                            long elapsedMS = (System.nanoTime() - start) / 1_000_000;
-                            Util.tell(sender, String.format("&ePasting Structra to world '%s'... (%.1f%%)", world.getName(), ratio*100));
-                            Util.tell(sender, String.format("[Structra] &aPasted '%d blocks' to world '%s' in %d ms", getSize(), world.getName(), elapsedMS));
-                            return;
-                        }
-
-                        JsonNode tileEntityNode = tileEntities.get(index);
-                        if(tileEntityNode == null || !tileEntityNode.isObject()) {
-                            Util.log(String.format("There was a problem reading TileEntity with index '%d'", index));
-                            continue;
-                        }
-                        ObjectNode tileEntity = (ObjectNode) tileEntityNode;
-                        Vector offSet = getOffset(tileEntity);
-                        if(offSet == null) {
-                            Util.log(String.format("There was a problem reading Offset of TileEntity with index '%d'", index));
-                            continue;
-                        }
-
-                        Block block = minVector.clone().add(offSet).toLocation(world).getBlock();
-                        BlockState blockState = block.getState();
-                        IStateHandler<BlockState> handler = StateService.getHandler(blockState);
-                        if(handler != null) {
-                            handler.loadTo(blockState, tileEntity);
+                        if(tileEntities.get(String.valueOf(index)) instanceof ObjectNode tileEntity) {
+                            BlockState blockState = block.getState();
+                            IStateHandler<BlockState> handler = StateService.getHandler(blockState);
+                            if(handler != null) {
+                                handler.loadTo(blockState, tileEntity);
+//                                Util.debug("Loading tileEntity: " + tileEntity,
+//                                        "StateHandler: " + handler.name(),
+//                                        "Block: " + block,
+//                                        "State: " + blockState);
+                            }
                         }
                     }
 
@@ -250,17 +214,65 @@ public class StructureLoader {
             }.runTaskTimer(Structra.getInstance(), delay, period);
         }
 
-
-
-        @Nullable
-        private Vector getOffset(@NotNull JsonNode parentNode) {
-            JsonNode offsetNode = parentNode.get("Offset");
-            if(offsetNode == null || !offsetNode.isObject()) return null;
-            JsonNode xNode = offsetNode.get("x");
-            JsonNode yNode = offsetNode.get("y");
-            JsonNode zNode = offsetNode.get("z");
-            if(xNode == null || yNode == null || zNode == null) return null;
-            return new Vector(xNode.asInt(), yNode.asInt(), zNode.asInt());
-        }
+//
+//        private void startTileEntitiesRunnable(@NotNull ArrayNode tileEntities) {
+//            final int size = tileEntities.size();
+//            new BukkitRunnable() {
+//                int looped = 0;
+//                int index = 0;
+//                float ratio = 0f;
+//
+//                @Override
+//                public void run() {
+//                    // information
+//                    ratio = (float) (looped + getSize()) / (getSize() + size);
+//                    Util.tell(sender, String.format("&ePasting Structra to world '%s'... (%.1f%%)", world.getName(), ratio*100));
+//
+//                    //
+//                    for(int i = 0; i < batchSize; i++) {
+//                        index = i + looped;
+//                        if(index >= size) {
+//                            cancel();
+//                            ratio = 1.0f;
+//                            long elapsedMS = (System.nanoTime() - start) / 1_000_000;
+//                            Util.tell(sender, String.format("&ePasting Structra to world '%s'... (%.1f%%)", world.getName(), ratio*100));
+//                            Util.tell(sender, String.format("&aPasted '%d blocks' to world '%s' in %d ms", getSize(), world.getName(), elapsedMS));
+//                            return;
+//                        }
+//
+//                        if(!(tileEntities.get(index) instanceof ObjectNode tileEntity)) {
+//                            Util.log(String.format("There was a problem reading TileEntity with index '%d'", index));
+//                            continue;
+//                        }
+//                        Vector offSet = getOffset(tileEntity);
+//                        if(offSet == null) {
+//                            Util.log(String.format("There was a problem reading Offset of TileEntity with index '%d'", index));
+//                            continue;
+//                        }
+//
+//                        Block block = minVector.clone().add(offSet).toLocation(world).getBlock();
+//                        BlockState blockState = block.getState();
+//                        IStateHandler<BlockState> handler = StateService.getHandler(blockState);
+//                        if(handler != null) {
+//                            handler.loadTo(blockState, tileEntity);
+//                        }
+//                    }
+//
+//                    looped += batchSize;
+//                }
+//            }.runTaskTimer(Structra.getInstance(), 20, period);
+//        }
+//
+//
+//
+//        @Nullable
+//        private Vector getOffset(@NotNull JsonNode parentNode) {
+//            if(!(parentNode.get("Offset") instanceof ObjectNode offsetNode)) return null;
+//            JsonNode xNode = offsetNode.get("x");
+//            JsonNode yNode = offsetNode.get("y");
+//            JsonNode zNode = offsetNode.get("z");
+//            if(xNode == null || yNode == null || zNode == null) return null;
+//            return new Vector(xNode.asInt(), yNode.asInt(), zNode.asInt());
+//        }
     }
 }

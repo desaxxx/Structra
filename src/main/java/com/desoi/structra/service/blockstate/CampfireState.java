@@ -2,7 +2,6 @@ package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Campfire;
 import org.bukkit.inventory.ItemStack;
@@ -31,8 +30,7 @@ public class CampfireState implements IStateHandler<Campfire> {
 
             blockState.setCookTime(i, slotNode.has("CookTime") ? slotNode.get("CookTime").asInt() : 0);
             blockState.setCookTimeTotal(i, slotNode.has("CookTimeTotal") ? slotNode.get("CookTimeTotal").asInt() : 0);
-            JsonNode itemNode = slotNode.get("Item");
-            if (itemNode != null && itemNode.isObject()) {
+            if (slotNode.get("Item") instanceof ObjectNode itemNode) {
                 blockState.setItem(i, JsonHelper.deserializeItemStack(itemNode));
             }
         }

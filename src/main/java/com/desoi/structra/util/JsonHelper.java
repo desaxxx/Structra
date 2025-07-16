@@ -39,6 +39,26 @@ public class JsonHelper {
         }
     }
 
+    @Nullable
+    static public String findPath(@NotNull JsonNode root, @NotNull JsonNode target, @NotNull String currentPath) {
+        if (root.equals(target)) {
+            return currentPath;
+        }
+
+        if (root instanceof ObjectNode obj) {
+            for(Map.Entry<String, JsonNode> entry : obj.properties()) {
+                String result = findPath(entry.getValue(), target, currentPath + "/" + entry.getKey());
+                if(result != null) return result;
+            }
+        } else if (root instanceof ArrayNode array) {
+            for (int i = 0; i < array.size(); i++) {
+                String result = findPath(array.get(i), target, currentPath + "[" + i + "]");
+                if(result != null) return result;
+            }
+        }
+        return null;
+    }
+
     @NotNull
     static public String getChildMatches(@NotNull JsonNode node, @NotNull Object obj, @NotNull String def) {
         return node.properties().stream()

@@ -2,7 +2,8 @@ package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.NonState;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.desoi.structra.util.JsonHelper;
+import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Crafter;
 import org.jetbrains.annotations.NotNull;
@@ -18,47 +19,43 @@ public class CrafterState implements IStateHandler<Crafter> {
     public void save(@NotNull Crafter blockState, @NotNull ObjectNode node) {
         node.put("CraftingTicks", blockState.getCraftingTicks());
 
-        ObjectNode slotDisabledNode = JsonNodeFactory.instance.objectNode();
-        for (int i = 0; i < blockState.getInventory().getSize(); i++) { // düzeltim
+        ObjectNode slotDisabledNode = JsonHelper.getOrCreate(node,"SlotDisabled");
+        for (int i = 0; i < blockState.getInventory().getSize(); i++) {
             slotDisabledNode.put(String.valueOf(i), blockState.isSlotDisabled(i));
         }
-        node.set("SlotDisabled", slotDisabledNode);
-
         node.put("Triggered", blockState.isTriggered());
 
-        ObjectNode lootableNode = JsonNodeFactory.instance.objectNode();
-        NonState.saveLootable(blockState, lootableNode);
-        node.set("Lootable", lootableNode);
-
-        ObjectNode containerNode = JsonNodeFactory.instance.objectNode();
-        NonState.saveContainer(blockState, containerNode);
-        node.set("Container", containerNode);
+        NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
+        NonState.saveNameable(blockState, node);
+        NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
     }
 
     @Override
     public void loadTo(@NotNull Crafter blockState, ObjectNode node) {
-        blockState.setCraftingTicks(node.has("CraftingTicks") ? node.get("CraftingTicks").asInt() : 0);
+        blockState.setCraftingTicks(node.get("CraftingTicks") instanceof ObjectNode craftingTicksNode ? craftingTicksNode.asInt() : 0);
 
-        ObjectNode slotDisabledNode = node.has("SlotDisabled") && node.get("SlotDisabled").isObject() ? (ObjectNode) node.get("SlotDisabled") : null;
-        if (slotDisabledNode != null) {
+        if(node.get("SlotDisabled") instanceof ObjectNode slotDisabledNode) {
             for (int i = 0; i < blockState.getInventory().getSize(); i++) {
-                boolean disabled = slotDisabledNode.has(String.valueOf(i)) && slotDisabledNode.get(String.valueOf(i)).asBoolean();
-                blockState.setSlotDisabled(i, disabled);
+                if(slotDisabledNode.get(String.valueOf(i)) instanceof BooleanNode isDisabledNode) {
+                    blockState.setSlotDisabled(i, !isDisabledNode.asBoolean()); // it works the other way somehow.
+                }
             }
         }
 
-        blockState.setTriggered(node.has("Triggered") && node.get("Triggered").asBoolean());
-
-        ObjectNode lootableNode = node.has("Lootable") && node.get("Lootable").isObject() ? (ObjectNode) node.get("Lootable") : null;
-        if(lootableNode != null) {
-            NonState.saveLootable(blockState, lootableNode);
+        if(node.get("Triggered") instanceof BooleanNode triggeredNode) {
+            blockState.setTriggered(triggeredNode.asBoolean());
         }
 
-        ObjectNode containerNode = node.has("Container") &&  node.get("Container").isObject() ? (ObjectNode) node.get("Container") : null;
-        if(containerNode != null) {
-            NonState.saveContainer(blockState, containerNode);
+        if(node.get("Lootable") instanceof ObjectNode LootableNode) {
+            NonState.loadToLootable(blockState, LootableNode);
         }
+        NonState.loadToNameable(blockState, node);
 
         blockState.update();
+
+        // Live object
+        if(node.get("Inventory") instanceof ObjectNode inventoryNode) {        // Doesn't load idk why.
+            NonState.loadToInventory(blockState.getInventory(), inventoryNode);
+        }
     }
 }

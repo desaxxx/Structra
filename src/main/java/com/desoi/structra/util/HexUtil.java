@@ -1,4 +1,4 @@
-package com.desoi.structra;
+package com.desoi.structra.util;
 
 import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;

@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Nameable;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
-import org.bukkit.block.Container;
 import org.bukkit.block.EntityBlockStorage;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
@@ -27,21 +26,6 @@ public class NonState {
 
     static private final ObjectMapper objectMapper = new ObjectMapper();
 
-    static public <T extends Container> void saveContainer(@NotNull T container, @NotNull ObjectNode parentNode) {
-        NonState.saveNameable(container, parentNode);
-
-        saveInventory(container.getInventory(), JsonHelper.getOrCreate(parentNode,"Inventory"));
-    }
-
-    static public <T extends Container> void loadToContainer(@NotNull T container, ObjectNode parentNode) {
-        if (parentNode == null) return;
-        NonState.loadToNameable(container, parentNode);
-
-        if(parentNode.get("Inventory") instanceof ObjectNode inventoryNode) {
-            loadToInventory(container.getInventory(), inventoryNode);
-        }
-    }
-
     static public void saveInventory(@NotNull Inventory inventory, @NotNull ObjectNode parentNode) {
         ObjectNode itemsNode = JsonNodeFactory.instance.objectNode();
         for (int i = 0; i < inventory.getSize(); i++) {
@@ -55,17 +39,13 @@ public class NonState {
 
     static public void loadToInventory(@NotNull Inventory inventory, ObjectNode parentNode) {
         if (parentNode == null) return;
-        if (parentNode.get("Items") == null || !parentNode.get("Items").isObject()) return;
+        if (!(parentNode.get("Items") instanceof ObjectNode itemsNode)) return;
 
-        if(parentNode.get("Items") instanceof ObjectNode itemsNode) {
-            for (int i = 0; i < inventory.getSize(); i++) {
-                JsonNode itemNode = itemsNode.get(String.valueOf(i));
-                if (itemNode != null) {
-                    ItemStack item = ItemStack.deserialize(JsonHelper.nodeToMap(itemNode));
-                    inventory.setItem(i, item);
-                } else {
-                    inventory.setItem(i, null);
-                }
+        for (int i = 0; i < inventory.getSize(); i++) {
+            JsonNode itemNode = itemsNode.get(String.valueOf(i));
+            if (itemNode != null) {
+                ItemStack item = ItemStack.deserialize(JsonHelper.nodeToMap(itemNode));
+                inventory.setItem(i, item);
             }
         }
     }
@@ -134,7 +114,7 @@ public class NonState {
         /*
          * Paper API doesn't have a bundle for adventure minimessage before 1.19.
          */
-        if(parentNode.has("CustomName") && parentNode.get("CustomName") != null) {
+        if(parentNode.has("CustomName")) {
             if(MINECRAFT_VERSION >= 190) {
                 nameable.customName(MiniMessage.miniMessage().deserializeOrNull(parentNode.get("CustomName").asText()));
             }else {
@@ -164,8 +144,9 @@ public class NonState {
 
     @SuppressWarnings("deprecation")
     @Nullable
-    static public PotionEffectType getPotionEffectType(ObjectNode parentNode, final int MINECRAFT_VERSION) {
+    static public PotionEffectType getPotionEffectType(ObjectNode parentNode) {
         if (parentNode == null) return null;
+        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
         if (MINECRAFT_VERSION >= 205) {
             String keyStr = parentNode.has("PotionEffectType") ? parentNode.get("PotionEffectType").asText() : "";
             NamespacedKey key = NamespacedKey.fromString(keyStr);

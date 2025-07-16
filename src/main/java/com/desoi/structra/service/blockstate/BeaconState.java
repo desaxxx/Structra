@@ -28,17 +28,15 @@ public class BeaconState implements IStateHandler<Beacon> {
 
     @Override
     public void loadTo(@NotNull Beacon blockState, ObjectNode node) {
-        final int MINECRAFT_VERSION = Structra.getInstance().WRAPPER.getVersion();
-        ObjectNode primaryNode = node.has("PrimaryEffect") && node.get("PrimaryEffect").isObject() ? (ObjectNode) node.get("PrimaryEffect") : null;
-        PotionEffectType primaryEffect = NonState.getPotionEffectType(primaryNode, MINECRAFT_VERSION);
-        if (primaryEffect != null) {
-            blockState.setPrimaryEffect(primaryEffect);
+        if(node.get("PrimaryEffect") instanceof ObjectNode primaryNode) {
+            PotionEffectType primaryEffect = NonState.getPotionEffectType(primaryNode);
+            if(primaryEffect != null) blockState.setPrimaryEffect(primaryEffect);
         }
-        ObjectNode secondaryNode = node.has("SecondaryEffect") && node.get("SecondaryEFfect").isObject() ? (ObjectNode) node.get("SecondaryEffect") : null;
-        PotionEffectType secondaryEffect = NonState.getPotionEffectType(secondaryNode, MINECRAFT_VERSION);
-        if (secondaryEffect != null) {
-            blockState.setSecondaryEffect(secondaryEffect);
+        if(node.get("SecondaryEffect") instanceof ObjectNode secondaryNode) {
+            PotionEffectType secondaryEffect = NonState.getPotionEffectType(secondaryNode);
+            if(secondaryEffect != null) blockState.setSecondaryEffect(secondaryEffect);
         }
+
         NonState.loadToNameable(blockState, node);
 
         blockState.update();

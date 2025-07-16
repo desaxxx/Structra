@@ -1,7 +1,6 @@
 package com.desoi.structra.util;
 
 import com.desoi.structra.Structra;
-import com.desoi.structra.Util;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;

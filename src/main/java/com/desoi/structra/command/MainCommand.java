@@ -1,8 +1,8 @@
 package com.desoi.structra.command;
 
-import com.desoi.structra.HexUtil;
+import com.desoi.structra.util.HexUtil;
 import com.desoi.structra.Structra;
-import com.desoi.structra.Util;
+import com.desoi.structra.util.Util;
 import com.desoi.structra.model.StructureLoader;
 import com.desoi.structra.model.StructureWriter;
 import org.bukkit.Location;
@@ -17,15 +17,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class MainCommand implements CommandExecutor, TabCompleter {
-
-    static private final Map<UUID, Vector> VECTORS_1 = new HashMap<>();
-    static private final Map<UUID, Vector> VECTORS_2 = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
@@ -34,9 +30,16 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         /*
+         * /structra tool
+         */
+        if(args.length >= 1 && args[0].equals("tool")) {
+            player.give(Structra.SELECTOR_TOOL);
+            Util.tell(player, "&eHere your tool!");
+        }
+        /*
          * /structra <pos1|pos2>
          */
-        if(args.length >= 1 && (args[0].equals("pos1") || args[0].equals("pos2"))) {
+        else if(args.length >= 1 && (args[0].equals("pos1") || args[0].equals("pos2"))) {
             Block block = player.getTargetBlockExact(10);
             Location location = player.getLocation();
             if(block != null) {
@@ -44,19 +47,14 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             }
 
             Vector vector = new Vector(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-            if(args[0].equals("pos1")) {
-                VECTORS_1.put(player.getUniqueId(), vector);
-            }else {
-                VECTORS_2.put(player.getUniqueId(), vector);
-            }
-            player.sendMessage(HexUtil.parse("&aSet POSITION " + args[0].replace("pos","") + " to location [" + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "]"));
+            Util.selectVector(player, vector, args[0].equals("pos1") ? 1 : 2);
         }
         /*
          * /structra save <fileName> [<batchSize>]
          */
         else if(args.length >= 2 && args[0].equals("save")) {
-            Vector vector1 = VECTORS_1.get(player.getUniqueId());
-            Vector vector2 = VECTORS_2.get(player.getUniqueId());
+            Vector vector1 = Util.VECTORS_1.get(player.getUniqueId());
+            Vector vector2 = Util.VECTORS_2.get(player.getUniqueId());
             if(vector1 == null || vector2 == null) {
                 Util.tell(player, "&cYou have missing positions.");
                 return true;
@@ -69,7 +67,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             Location originLocation = player.getLocation().clone();
 
             StructureWriter structureWriter = new StructureWriter(player, vector1, vector2, 0, 20, batchSize);
-            structureWriter.save(new File(Structra.getInstance().getDataFolder(), fileName + Structra.FILE_EXTENSION), originLocation);
+            structureWriter.save(new File(Structra.SAVES_FOLDER, fileName + Structra.FILE_EXTENSION), originLocation);
             Util.tell(player, "&aSaving Structure:");
             Util.tell(player, "&eMin vector: [" + structureWriter.getMinVector().getBlockX() + "," + structureWriter.getMinVector().getBlockY() + "," + structureWriter.getMinVector().getBlockZ() + "]");
             Util.tell(player, "&eMax vector: [" + structureWriter.getMaxVector().getBlockX() + "," + structureWriter.getMaxVector().getBlockY() + "," + structureWriter.getMaxVector().getBlockZ() + "]");
@@ -80,7 +78,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
          */
         else if(args.length >= 2 && args[0].equals("load")) {
             String fileName = args[1];
-            File file = new File(Structra.getInstance().getDataFolder(), fileName + Structra.FILE_EXTENSION);
+            File file = new File(Structra.SAVES_FOLDER, fileName + Structra.FILE_EXTENSION);
             int batchSize = 50;
             if(args.length >= 3) {
                 batchSize = parseInt(args[2], batchSize);
@@ -106,8 +104,17 @@ public class MainCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
         if(args.length == 1) {
-            return List.of("pos1","pos2","save","load");
+            return List.of("tool","pos1","pos2","save","load");
+        } else if(args.length == 2 && args[0].equals("load")) {
+            return savesFileNames();
         }
         return List.of();
+    }
+
+    @NotNull
+    private List<String> savesFileNames() {
+        File[] saveFiles = Structra.SAVES_FOLDER.listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
+        if(saveFiles == null) return new ArrayList<>();
+        return Arrays.stream(saveFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
     }
 }

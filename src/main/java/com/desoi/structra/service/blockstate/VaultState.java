@@ -38,13 +38,9 @@ public class VaultState implements IStateHandler<Vault> {
             blockState.setDeactivationRange(node.get("DeactivationRange").asDouble());
         }
 
-        LootTable lootTable = null;
-        if (node.has("LootTable") && node.get("LootTable").isObject()) {
-            lootTable = NonState.getLootTable((ObjectNode) node.get("LootTable"));
-        }
-
-        if (lootTable != null){
-            blockState.setLootTable(lootTable);
+        if (node.get("LootTable") instanceof ObjectNode lootTableNode) {
+            LootTable lootTable = NonState.getLootTable(lootTableNode);
+            if(lootTable != null) blockState.setLootTable(lootTable);
         }
 
         ItemStack keyItem = null;

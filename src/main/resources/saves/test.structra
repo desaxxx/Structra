@@ -1,0 +1,637 @@
+{
+  "Version" : "0.1",
+  "Size" : {
+    "x" : 21,
+    "y" : 6,
+    "z" : 4,
+    "Total" : 504
+  },
+  "Relative" : {
+    "x" : -16,
+    "y" : -1,
+    "z" : 0
+  },
+  "Palette" : {
+    "0" : "minecraft:dirt",
+    "1" : "minecraft:grass_block[snowy=false]",
+    "2" : "minecraft:glowstone",
+    "3" : "minecraft:redstone_block",
+    "4" : "minecraft:air",
+    "5" : "minecraft:sculk",
+    "6" : "minecraft:short_grass",
+    "7" : "minecraft:fern",
+    "8" : "minecraft:sculk_vein[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]",
+    "9" : "minecraft:sculk_vein[down=false,east=false,north=false,south=true,up=false,waterlogged=false,west=false]",
+    "10" : "minecraft:light_blue_banner[rotation=2]",
+    "11" : "minecraft:barrel[facing=up,open=false]",
+    "12" : "minecraft:beacon",
+    "13" : "minecraft:beehive[facing=south,honey_level=5]",
+    "14" : "minecraft:bell[attachment=floor,facing=north,powered=false]",
+    "15" : "minecraft:furnace[facing=south,lit=false]",
+    "16" : "minecraft:brewing_stand[has_bottle_0=true,has_bottle_1=true,has_bottle_2=true]",
+    "17" : "minecraft:suspicious_sand[dusted=0]",
+    "18" : "minecraft:ancient_debris",
+    "19" : "minecraft:campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]",
+    "20" : "minecraft:chest[facing=north,type=single,waterlogged=false]",
+    "21" : "minecraft:chiseled_bookshelf[facing=south,slot_0_occupied=true,slot_1_occupied=true,slot_2_occupied=true,slot_3_occupied=false,slot_4_occupied=true,slot_5_occupied=false]",
+    "22" : "minecraft:command_block[conditional=false,facing=south]",
+    "23" : "minecraft:comparator[facing=south,mode=subtract,powered=false]",
+    "24" : "minecraft:conduit[waterlogged=false]",
+    "25" : "minecraft:crafter[crafting=false,orientation=down_west,triggered=false]",
+    "26" : "minecraft:creaking_heart[axis=y,creaking_heart_state=uprooted,natural=false]",
+    "27" : "minecraft:spawner",
+    "28" : "minecraft:daylight_detector[inverted=true,power=0]",
+    "29" : "minecraft:vault[facing=south,ominous=false,vault_state=inactive]",
+    "30" : "minecraft:trial_spawner[ominous=false,trial_spawner_state=inactive]",
+    "31" : "minecraft:structure_block[mode=load]",
+    "32" : "minecraft:wither_skeleton_skull[powered=false,rotation=7]",
+    "33" : "minecraft:oak_sign[rotation=2,waterlogged=false]",
+    "34" : "minecraft:light_blue_shulker_box[facing=up]",
+    "35" : "minecraft:sculk_shrieker[can_summon=false,shrieking=false,waterlogged=false]",
+    "36" : "minecraft:sculk_catalyst[bloom=false]",
+    "37" : "minecraft:lectern[facing=west,has_book=true,powered=false]",
+    "38" : "minecraft:jukebox[has_record=true]",
+    "39" : "minecraft:jigsaw[orientation=up_south]",
+    "40" : "minecraft:hopper[enabled=true,facing=down]",
+    "41" : "minecraft:cherry_hanging_sign[attached=false,rotation=0,waterlogged=false]",
+    "42" : "minecraft:ender_chest[facing=south,waterlogged=false]",
+    "43" : "minecraft:enchanting_table",
+    "44" : "minecraft:dropper[facing=south,triggered=false]",
+    "45" : "minecraft:dispenser[facing=up,triggered=false]",
+    "46" : "minecraft:decorated_pot[cracked=false,facing=east,waterlogged=false]"
+  },
+  "BlockData" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 1, 1, 1, 1, 4, 6, 6, 4, 6, 6, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 4, 6, 7, 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 4, 6, 7, 4, 4, 4, 4, 4, 6, 6, 4, 4, 4, 6, 8, 4, 9, 8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 4, 6, 4, 4, 4, 4, 6, 4, 6, 6, 4, 6, 6, 4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 4, 6, 6, 6, 6, 6, 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 ],
+  "TileEntities" : {
+    "190" : {
+      "Type" : "BannerState",
+      "BaseColor" : "LIGHT_BLUE",
+      "Patterns" : [ ]
+    },
+    "191" : {
+      "Type" : "BarrelState",
+      "Lootable" : {
+        "Seed" : 0
+      },
+      "Inventory" : {
+        "Items" : {
+          "2" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:end_portal_frame",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "5" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:diamond_pickaxe",
+            "count" : 1,
+            "components" : {
+              "minecraft:lore" : "[{extra:[{bold:0b,italic:0b,obfuscated:0b,strikethrough:0b,text:\"Hello guys!\",underlined:0b}],text:\"\"}]",
+              "minecraft:custom_name" : "{extra:[\"Hiii\"],text:\"\"}",
+              "minecraft:enchantments" : "{\"minecraft:efficiency\":2}"
+            },
+            "schema_version" : 1
+          },
+          "7" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:ender_chest",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "9" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:end_crystal",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "20" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "24" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:mace",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "26" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:enderman_spawn_egg",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "192" : {
+      "Type" : "BeaconState",
+      "PrimaryEffect" : {
+        "PotionEffectType" : "minecraft:speed"
+      }
+    },
+    "193" : {
+      "Type" : "BeehiveState",
+      "EntityBlockStorage" : {
+        "MaxEntities" : 3
+      }
+    },
+    "194" : {
+      "Type" : "BellState"
+    },
+    "195" : {
+      "Type" : "FurnaceState",
+      "BurnTime" : 0,
+      "CookTime" : 0,
+      "CookTimeTotal" : 200,
+      "CookSpeedMultiplier" : 1.0,
+      "Inventory" : {
+        "Items" : {
+          "1" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:dried_kelp_block",
+            "count" : 60,
+            "schema_version" : 1
+          },
+          "2" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:dried_kelp",
+            "count" : 64,
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "196" : {
+      "Type" : "BrewingStandState",
+      "BrewingTime" : 0,
+      "FuelLevel" : 20,
+      "Inventory" : {
+        "Items" : {
+          "0" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:potion",
+            "count" : 1,
+            "components" : {
+              "minecraft:potion_contents" : "{potion:\"minecraft:water\"}"
+            },
+            "schema_version" : 1
+          },
+          "1" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:splash_potion",
+            "count" : 1,
+            "components" : {
+              "minecraft:potion_contents" : "{potion:\"minecraft:water\"}"
+            },
+            "schema_version" : 1
+          },
+          "2" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:lingering_potion",
+            "count" : 1,
+            "components" : {
+              "minecraft:potion_contents" : "{potion:\"minecraft:water\"}"
+            },
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "197" : {
+      "Type" : "BrushableBlockState",
+      "Item" : {
+        "DataVersion" : 4435,
+        "schema_version" : 1,
+        "id" : "minecraft:air"
+      },
+      "Lootable" : {
+        "Seed" : 0
+      }
+    },
+    "199" : {
+      "Type" : "CampfireState",
+      "Slot_0" : {
+        "CookTime" : 0,
+        "CookTimeTotal" : 0
+      },
+      "Slot_1" : {
+        "CookTime" : 0,
+        "CookTimeTotal" : 0
+      },
+      "Slot_2" : {
+        "CookTime" : 0,
+        "CookTimeTotal" : 0
+      },
+      "Slot_3" : {
+        "CookTime" : 0,
+        "CookTimeTotal" : 0
+      }
+    },
+    "200" : {
+      "Type" : "ChestState",
+      "Lootable" : {
+        "Seed" : 0
+      },
+      "Inventory" : {
+        "Items" : {
+          "11" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:redstone_block",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "15" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:redstone_block",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "201" : {
+      "Type" : "ChiseledBookshelfState",
+      "LastInteractedSlot" : 0,
+      "Inventory" : {
+        "Items" : {
+          "0" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:enchanted_book",
+            "count" : 1,
+            "components" : {
+              "minecraft:stored_enchantments" : "{\"minecraft:efficiency\":5}"
+            },
+            "schema_version" : 1
+          },
+          "1" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:book",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "2" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:book",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "4" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:enchanted_book",
+            "count" : 1,
+            "components" : {
+              "minecraft:stored_enchantments" : "{\"minecraft:efficiency\":5}"
+            },
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "202" : {
+      "Type" : "CommandBlockState",
+      "Name" : "@",
+      "Command" : "say yoshithebest"
+    },
+    "203" : {
+      "Type" : "ComparatorState"
+    },
+    "204" : {
+      "Type" : "ConduitState"
+    },
+    "205" : {
+      "Type" : "CrafterState",
+      "CraftingTicks" : 0,
+      "SlotDisabled" : {
+        "0" : true,
+        "1" : true,
+        "2" : true,
+        "3" : true,
+        "4" : false,
+        "5" : true,
+        "6" : true,
+        "7" : true,
+        "8" : true
+      },
+      "Triggered" : false,
+      "Lootable" : {
+        "Seed" : 0
+      },
+      "Inventory" : {
+        "Items" : { }
+      }
+    },
+    "206" : {
+      "Type" : "CreakingHeartState"
+    },
+    "207" : {
+      "Type" : "CreatureSpawnerState",
+      "Delay" : 48,
+      "MinSpawnDelay" : 800,
+      "MaxSpawnDelay" : 800,
+      "SpawnCount" : 4,
+      "RequiredPlayerRange" : 0,
+      "SpawnedType" : "COW",
+      "SpawnRange" : 4
+    },
+    "208" : {
+      "Type" : "DaylightDetectorState"
+    },
+    "275" : {
+      "Type" : "VaultState",
+      "ActivationRange" : 4.0,
+      "DeactivationRange" : 4.5,
+      "LootTable" : {
+        "LootTable" : "minecraft:chests/trial_chambers/reward"
+      },
+      "KeyItem" : {
+        "DataVersion" : 4435,
+        "id" : "minecraft:trial_key",
+        "count" : 1,
+        "schema_version" : 1
+      }
+    },
+    "276" : {
+      "Type" : "TrialSpawnerState",
+      "Ominous" : false,
+      "CooldownLength" : 36000,
+      "RequiredPlayerRange" : 14
+    },
+    "277" : {
+      "Type" : "StructureState",
+      "Author" : "yoshii01",
+      "Integrity" : 1.0,
+      "Metadata" : "",
+      "Mirror" : "NONE",
+      "RelativePosition" : {
+        "x" : 0.0,
+        "y" : 1.0,
+        "z" : 0.0
+      },
+      "Rotation" : "NONE",
+      "Seed" : 0,
+      "StructureName" : "",
+      "StructureSize" : {
+        "x" : 0.0,
+        "y" : 0.0,
+        "z" : 0.0
+      },
+      "UsageMode" : "LOAD",
+      "BoundingBoxVisible" : true,
+      "IgnoreEntities" : true,
+      "ShowAir" : false
+    },
+    "278" : {
+      "Type" : "SkullState",
+      "NoteBlockSound" : null
+    },
+    "279" : {
+      "Type" : "SignState",
+      "Waxed" : false,
+      "FRONT" : {
+        "Color" : "BLACK",
+        "Glowing" : false,
+        "Lines" : {
+          "0" : "vvvv",
+          "1" : "",
+          "2" : "",
+          "3" : "yoshi ve aysi"
+        }
+      },
+      "BACK" : {
+        "Color" : "BLACK",
+        "Glowing" : false,
+        "Lines" : {
+          "0" : "vvvv",
+          "1" : "",
+          "2" : "",
+          "3" : "yoshi ve aysi"
+        }
+      }
+    },
+    "280" : {
+      "Type" : "ShulkerBoxState",
+      "Lootable" : {
+        "Seed" : 0
+      },
+      "Inventory" : {
+        "Items" : {
+          "11" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:yellow_glazed_terracotta",
+            "count" : 64,
+            "schema_version" : 1
+          },
+          "13" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "14" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "15" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "16" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "24" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cobbled_deepslate_wall",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "281" : {
+      "Type" : "SculkShriekerState",
+      "WarningLevel" : 0
+    },
+    "282" : {
+      "Type" : "SculkCatalystState"
+    },
+    "283" : {
+      "Type" : "LecternState",
+      "Page" : 0,
+      "Inventory" : {
+        "Items" : {
+          "0" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:writable_book",
+            "count" : 1,
+            "components" : {
+              "minecraft:writable_book_content" : "{pages:[{raw:\"hi bebi\"}]}"
+            },
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "284" : {
+      "Type" : "JukeboxState",
+      "Playing" : "MUSIC_DISC_MALL",
+      "Record" : {
+        "DataVersion" : 4435,
+        "id" : "minecraft:music_disc_mall",
+        "count" : 1,
+        "schema_version" : 1
+      }
+    },
+    "285" : {
+      "Type" : "JigsawState"
+    },
+    "286" : {
+      "Type" : "HopperState",
+      "Lootable" : {
+        "Seed" : 0
+      },
+      "Inventory" : {
+        "Items" : {
+          "0" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "1" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "2" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "3" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "4" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:bone_block",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "287" : {
+      "Type" : "SignState",
+      "Waxed" : true,
+      "FRONT" : {
+        "Color" : "BLACK",
+        "Glowing" : false,
+        "Lines" : {
+          "0" : "hi",
+          "1" : "biş",
+          "2" : "",
+          "3" : ""
+        }
+      },
+      "BACK" : {
+        "Color" : "BLACK",
+        "Glowing" : false,
+        "Lines" : {
+          "0" : "hi",
+          "1" : "biş",
+          "2" : "",
+          "3" : ""
+        }
+      }
+    },
+    "288" : {
+      "Type" : "EnderChestState"
+    },
+    "289" : {
+      "Type" : "EnchantingTableState"
+    },
+    "290" : {
+      "Type" : "DropperState",
+      "Lootable" : {
+        "Seed" : 0
+      },
+      "Inventory" : {
+        "Items" : {
+          "1" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "4" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "7" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "8" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "291" : {
+      "Type" : "DispenserState",
+      "Lootable" : {
+        "Seed" : 0
+      },
+      "Inventory" : {
+        "Items" : {
+          "0" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "1" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "2" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          },
+          "3" : {
+            "DataVersion" : 4435,
+            "id" : "minecraft:cooked_beef",
+            "count" : 1,
+            "schema_version" : 1
+          }
+        }
+      }
+    },
+    "292" : {
+      "Type" : "DecoratedPotState"
+    }
+  }
+}

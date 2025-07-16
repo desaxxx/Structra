@@ -2,6 +2,8 @@ package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.Structra;
 import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.util.JsonHelper;
+import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.DyeColor;
 import org.bukkit.block.Sign;
@@ -22,21 +24,20 @@ public class SignState implements IStateHandler<Sign> {
             // TODO look up for deprecations
             for (Side side : Side.values()) {
                 SignSide signSide = blockState.getSide(side);
-                String sideName = side.toString();
-                ObjectNode sideNode = node.objectNode();
+                String sideName = side.name();
+                ObjectNode sideNode = JsonHelper.getOrCreate(node, sideName);
+
                 sideNode.put("Color", signSide.getColor() == null ? "" : signSide.getColor().toString());
                 sideNode.put("Glowing", signSide.isGlowingText());
-                ObjectNode linesNode = node.objectNode();
+                ObjectNode linesNode = JsonHelper.getOrCreate(sideNode, "Lines");
                 for (int line = 0; line < blockState.getLines().length; line++) {
-                    linesNode.put(String.valueOf(line), signSide.getLine(line));
+                    linesNode.put(String.valueOf(line), blockState.getLine(line));
                 }
-                sideNode.set("Lines", linesNode);
-                node.set(sideName, sideNode);
             }
         } else {
             node.put("Color", blockState.getColor().toString());
             node.put("Editable", blockState.isEditable());
-            ObjectNode linesNode = node.objectNode();
+            ObjectNode linesNode = JsonHelper.getOrCreate(node, "Lines");
             for (int line = 0; line < blockState.getLines().length; line++) {
                 linesNode.put(String.valueOf(line), blockState.getLine(line));
             }
@@ -52,33 +53,47 @@ public class SignState implements IStateHandler<Sign> {
         }
         if (MINECRAFT_VERSION >= 194) {
             for (Side side: Side.values()) {
-                String sideName = side.toString();
-                if (!node.has(sideName) || !node.get(sideName).isObject()) continue;
-                ObjectNode sideNode = node.objectNode();
+                if (!(node.get(side.name()) instanceof ObjectNode sideNode)) continue;
+
                 SignSide signSide = blockState.getSide(side);
-                try {
-                    signSide.setColor(DyeColor.valueOf(sideNode.has("Color") ? sideNode.get("Color").asText("") : ""));
-                } catch (IllegalArgumentException ignored) {}
-                signSide.setGlowingText(node.has("Glowing") && node.get("Glowing").asBoolean());
-                if (sideNode.has("Lines") && sideNode.get("Lines").isObject()) {
-                    ObjectNode linesNode = (ObjectNode) sideNode.get("Lines");
+
+                if(sideNode.get("Color") instanceof ObjectNode colorNode) {
+                    try {
+                        signSide.setColor(DyeColor.valueOf(colorNode.asText()));
+                    } catch (IllegalArgumentException ignored) {}
+                }
+
+                if(sideNode.get("Glowing") instanceof BooleanNode glowingNode) {
+                    signSide.setGlowingText(glowingNode.asBoolean());
+                }
+                if (sideNode.get("Lines") instanceof ObjectNode linesNode) {
                     for (int i = 0; i < signSide.getLines().length; i++) {
-                        signSide.setLine(i, linesNode.has(String.valueOf(i)) ? linesNode.get(String.valueOf(i)).asText(""): "");
+                        if(linesNode.get(String.valueOf(i)) instanceof ObjectNode lineNode) {
+                            signSide.setLine(i, lineNode.asText());
+                        }
                     }
                 }
             }
         } else {
-            try {
-                blockState.setColor(DyeColor.valueOf(node.has("Color") ? node.get("Color").asText("") : ""));
-            } catch (IllegalArgumentException ignored) {}
-            blockState.setEditable(node.has("Editable") && node.get("Editable").asBoolean());
-            if (node.has("Lines") && node.get("Lines").isObject()) {
-                ObjectNode linesNode = (ObjectNode) node.get("Lines");
+            if(node.get("Color") instanceof ObjectNode colorNode) {
+                try {
+                    blockState.setColor(DyeColor.valueOf(colorNode.asText()));
+                }catch (IllegalArgumentException ignored) {}
+            }
+
+            if(node.get("Editable") instanceof BooleanNode editableNode) {
+                blockState.setEditable(editableNode.asBoolean());
+            }
+
+            if (node.get("Lines") instanceof ObjectNode linesNode) {
                 for (int i = 0; i < blockState.getLines().length; i++) {
-                    blockState.setLine(i, linesNode.has(String.valueOf(i)) ? linesNode.get(String.valueOf(i)).asText(""): "");
+                    if(linesNode.get(String.valueOf(i)) instanceof ObjectNode lineNode) {
+                        blockState.setLine(i, lineNode.asText());
+                    }
                 }
             }
         }
+
         blockState.update();
     }
 }

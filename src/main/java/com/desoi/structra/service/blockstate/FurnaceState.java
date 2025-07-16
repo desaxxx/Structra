@@ -15,7 +15,9 @@ public class FurnaceState implements IStateHandler<Furnace> {
         node.put("CookTime", blockState.getCookTime());
         node.put("CookTimeTotal", blockState.getCookTimeTotal());
         node.put("CookSpeedMultiplier", blockState.getCookSpeedMultiplier());
-        NonState.saveContainer(blockState, JsonHelper.getOrCreate(node,"Container"));
+
+        NonState.saveNameable(blockState, node);
+        NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
     }
 
     @Override
@@ -25,10 +27,13 @@ public class FurnaceState implements IStateHandler<Furnace> {
         blockState.setCookTimeTotal(node.has("CookTimeTotal") ? node.get("CookTimeTotal").shortValue() : 0);
         blockState.setCookSpeedMultiplier(node.has("CookSpeedMultiplier") ? node.get("CookSpeedMultiplier").shortValue() : 0);
 
-        if(node.get("Container") instanceof ObjectNode containerNode) {
-            NonState.loadToContainer(blockState, containerNode);
-        }
+        NonState.loadToNameable(blockState, node);
 
         blockState.update();
+
+        // Live object
+        if(node.get("Inventory") instanceof ObjectNode inventoryNode) {
+            NonState.loadToInventory(blockState.getInventory(), inventoryNode);
+        }
     }
 }

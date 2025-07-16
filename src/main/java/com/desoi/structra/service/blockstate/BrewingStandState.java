@@ -2,7 +2,7 @@ package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.NonState;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.BrewingStand;
 import org.jetbrains.annotations.NotNull;
@@ -14,11 +14,10 @@ public class BrewingStandState implements IStateHandler<BrewingStand> {
         node.put("BrewingTime", blockState.getBrewingTime());
         node.put("FuelLevel", blockState.getFuelLevel());
 
-        // TODO BrewerInventory
+        NonState.saveNameable(blockState, node);
+        NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
 
-        ObjectNode containerNode = JsonNodeFactory.instance.objectNode();
-        NonState.saveContainer(blockState, containerNode);
-        node.set("Container", containerNode);
+        // TODO check out other BrewerInventory fields
     }
 
     @Override
@@ -26,10 +25,13 @@ public class BrewingStandState implements IStateHandler<BrewingStand> {
         blockState.setBrewingTime(node.has("BrewingTime") ? node.get("BrewingTime").asInt() : 0);
         blockState.setFuelLevel(node.has("FuelLevel") ? node.get("FuelLevel").asInt() : 0);
 
-        if(node.has("Container") && node.get("Container") instanceof ObjectNode containerNode) {
-            NonState.loadToContainer(blockState, containerNode);
-        }
+        NonState.loadToNameable(blockState, node);
 
         blockState.update();
+
+        // Live object
+        if(node.get("Inventory") instanceof ObjectNode inventoryNode) {
+            NonState.loadToInventory(blockState.getInventory(), inventoryNode);
+        }
     }
 }

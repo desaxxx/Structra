@@ -12,13 +12,20 @@ public class ShulkerBoxState implements IStateHandler<ShulkerBox> {
     @Override
     public void save(@NotNull ShulkerBox blockState, @NotNull ObjectNode node) {
         NonState.saveLootable(blockState, JsonHelper.getOrCreate(node,"Lootable"));
-        NonState.saveContainer(blockState, JsonHelper.getOrCreate(node,"Container"));
+        NonState.saveNameable(blockState, node);
+        NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
     }
 
     @Override
     public void loadTo(@NotNull ShulkerBox blockState, @NotNull ObjectNode node) {
         NonState.loadToLootable(blockState, JsonHelper.getOrCreate(node,"Lootable"));
-        NonState.loadToContainer(blockState, JsonHelper.getOrCreate(node,"Container"));
+        NonState.loadToNameable(blockState, node);
+
         blockState.update();
+
+        // Live object
+        if(node.get("Inventory") instanceof ObjectNode inventoryNode) {
+            NonState.loadToInventory(blockState.getInventory(), inventoryNode);
+        }
     }
 }
