@@ -9,9 +9,12 @@ public class BellState implements IStateHandler<Bell> {
 
     @Override
     public void save(@NotNull Bell blockState, @NotNull ObjectNode node) {
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull Bell blockState, ObjectNode node) {
+        loadToTileState(blockState, node);
+        blockState.update();
     }
 }

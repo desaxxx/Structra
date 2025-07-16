@@ -67,7 +67,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             Location originLocation = player.getLocation().clone();
 
             StructureWriter structureWriter = new StructureWriter(player, vector1, vector2, 0, 20, batchSize);
-            structureWriter.save(new File(Structra.SAVES_FOLDER, fileName + Structra.FILE_EXTENSION), originLocation);
+            structureWriter.save(new File(Structra.getSavesFolder(), fileName + Structra.FILE_EXTENSION), originLocation);
             Util.tell(player, "&aSaving Structure:");
             Util.tell(player, "&eMin vector: [" + structureWriter.getMinVector().getBlockX() + "," + structureWriter.getMinVector().getBlockY() + "," + structureWriter.getMinVector().getBlockZ() + "]");
             Util.tell(player, "&eMax vector: [" + structureWriter.getMaxVector().getBlockX() + "," + structureWriter.getMaxVector().getBlockY() + "," + structureWriter.getMaxVector().getBlockZ() + "]");
@@ -78,7 +78,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
          */
         else if(args.length >= 2 && args[0].equals("load")) {
             String fileName = args[1];
-            File file = new File(Structra.SAVES_FOLDER, fileName + Structra.FILE_EXTENSION);
+            File file = new File(Structra.getSavesFolder(), fileName + Structra.FILE_EXTENSION);
             int batchSize = 50;
             if(args.length >= 3) {
                 batchSize = parseInt(args[2], batchSize);
@@ -113,7 +113,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
     @NotNull
     private List<String> savesFileNames() {
-        File[] saveFiles = Structra.SAVES_FOLDER.listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
+        File[] saveFiles = Structra.getSavesFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
         if(saveFiles == null) return new ArrayList<>();
         return Arrays.stream(saveFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
     }

@@ -14,6 +14,7 @@ public class HopperState implements IStateHandler<Hopper> {
         NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
         NonState.saveNameable(blockState, node);
         NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -22,6 +23,7 @@ public class HopperState implements IStateHandler<Hopper> {
             NonState.loadToLootable(blockState, lootableNode);
         }
         NonState.loadToNameable(blockState, node);
+        loadToTileState(blockState, node);
 
         blockState.update();
 

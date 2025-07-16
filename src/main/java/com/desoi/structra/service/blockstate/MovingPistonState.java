@@ -14,9 +14,12 @@ public class MovingPistonState implements IStateHandler<MovingPiston> {
 
     @Override
     public void save(@NotNull MovingPiston blockState, @NotNull ObjectNode node) {
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull MovingPiston blockState, ObjectNode node) {
+        loadToTileState(blockState, node);
+        blockState.update();
     }
 }

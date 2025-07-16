@@ -14,11 +14,13 @@ public class LecternState implements IStateHandler<Lectern> {
         node.put("Page", blockState.getPage());
 
         NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull Lectern blockState, ObjectNode node) {
         blockState.setPage(node.has("Page") ? node.get("Page").asInt() : 0);
+        loadToTileState(blockState, node);
 
         blockState.update();
 

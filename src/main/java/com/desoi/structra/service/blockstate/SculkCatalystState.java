@@ -14,9 +14,12 @@ public class SculkCatalystState implements IStateHandler<SculkCatalyst> {
 
     @Override
     public void save(@NotNull SculkCatalyst blockState, @NotNull ObjectNode node) {
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull SculkCatalyst blockState, ObjectNode node) {
+        loadToTileState(blockState, node);
+        blockState.update();
     }
 }

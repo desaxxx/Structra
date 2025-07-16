@@ -12,6 +12,7 @@ public class TrialSpawnerState implements IStateHandler<TrialSpawner> {
         node.put("Ominous", blockState.isOminous());
         node.put("CooldownLength", blockState.getCooldownLength());
         node.put("RequiredPlayerRange", blockState.getRequiredPlayerRange());
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -19,6 +20,7 @@ public class TrialSpawnerState implements IStateHandler<TrialSpawner> {
         blockState.setOminous(node.has("Ominous") && node.get("Ominous").asBoolean());
         blockState.setCooldownLength(node.has("CooldownLength") ? node.get("CooldownLength").asInt() : 0);
         blockState.setRequiredPlayerRange(node.has("RequiredPlayerRange") ? node.get("RequiredPlayerRange").asInt() : 0);
+        loadToTileState(blockState, node);
         blockState.update();
     }
 }

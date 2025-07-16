@@ -21,6 +21,7 @@ public class CampfireState implements IStateHandler<Campfire> {
                 slotNode.set("Item", objectMapper.valueToTree(item.serialize()));
             }
         }
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -34,6 +35,7 @@ public class CampfireState implements IStateHandler<Campfire> {
                 blockState.setItem(i, JsonHelper.deserializeItemStack(itemNode));
             }
         }
+        loadToTileState(blockState, node);
         blockState.update();
     }
 }

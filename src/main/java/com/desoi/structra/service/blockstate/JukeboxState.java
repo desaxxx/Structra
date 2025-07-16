@@ -13,6 +13,7 @@ public class JukeboxState implements IStateHandler<Jukebox> {
     public void save(@NotNull Jukebox blockState, @NotNull ObjectNode node) {
         node.put("Playing", blockState.getPlaying().toString());
         node.set("Record", objectMapper.valueToTree(blockState.getRecord().serialize()));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -23,6 +24,7 @@ public class JukeboxState implements IStateHandler<Jukebox> {
         if (node.has("Record") && node.get("Record") instanceof ObjectNode recordNode) {
             blockState.setRecord(JsonHelper.deserializeItemStack(recordNode));
         }
+        loadToTileState(blockState, node);
         blockState.update();
     }
 }

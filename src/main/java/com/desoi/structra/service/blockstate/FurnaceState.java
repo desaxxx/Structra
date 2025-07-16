@@ -18,6 +18,7 @@ public class FurnaceState implements IStateHandler<Furnace> {
 
         NonState.saveNameable(blockState, node);
         NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -28,6 +29,7 @@ public class FurnaceState implements IStateHandler<Furnace> {
         blockState.setCookSpeedMultiplier(node.has("CookSpeedMultiplier") ? node.get("CookSpeedMultiplier").shortValue() : 0);
 
         NonState.loadToNameable(blockState, node);
+        loadToTileState(blockState, node);
 
         blockState.update();
 

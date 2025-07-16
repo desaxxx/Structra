@@ -9,9 +9,12 @@ public class JigsawState implements IStateHandler<Jigsaw> {
 
     @Override
     public void save(@NotNull Jigsaw blockState, @NotNull ObjectNode node) {
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull Jigsaw blockState, ObjectNode node) {
+        loadToTileState(blockState, node);
+        blockState.update();
     }
 }

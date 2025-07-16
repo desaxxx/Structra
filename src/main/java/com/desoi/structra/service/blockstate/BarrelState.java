@@ -14,6 +14,7 @@ public class BarrelState implements IStateHandler<Barrel> {
         NonState.saveNameable(blockState, node);
         NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
         NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -22,11 +23,11 @@ public class BarrelState implements IStateHandler<Barrel> {
             NonState.loadToLootable(blockState, lootableNode);
         }
         NonState.loadToNameable(blockState, node);
+        loadToTileState(blockState, node);
 
         blockState.update();
 
         // [*] Live objects like inventory should be modified after blockState#update();
-        // [*] Live object example: blockState.getX().setY(), NOT directly like blockState.setY()
         if(node.get("Inventory") instanceof ObjectNode inventoryNode) {
             NonState.loadToInventory(blockState.getInventory(), inventoryNode);
         }

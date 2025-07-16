@@ -2,6 +2,7 @@ package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.bukkit.block.CommandBlock;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,13 +13,19 @@ public class CommandBlockState implements IStateHandler<CommandBlock> {
         //noinspection deprecation
         node.put("Name", blockState.getName());
         node.put("Command", blockState.getCommand());
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull CommandBlock blockState, ObjectNode node) {
-        //noinspection deprecation
-        blockState.setName(node.has("Name") ? node.get("Name").asText() : null);
-        blockState.setCommand(node.has("Command") ? node.get("Command").asText() : null);
+        if(node.get("Name") instanceof TextNode nameNode) {
+            //noinspection deprecation
+            blockState.setName(nameNode.asText());
+        }
+        if(node.get("Command") instanceof TextNode commandNode) {
+            blockState.setCommand(commandNode.asText());
+        }
+        loadToTileState(blockState, node);
 
         blockState.update();
     }

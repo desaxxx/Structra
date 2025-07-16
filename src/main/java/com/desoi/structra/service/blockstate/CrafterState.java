@@ -28,6 +28,7 @@ public class CrafterState implements IStateHandler<Crafter> {
         NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
         NonState.saveNameable(blockState, node);
         NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -50,6 +51,7 @@ public class CrafterState implements IStateHandler<Crafter> {
             NonState.loadToLootable(blockState, LootableNode);
         }
         NonState.loadToNameable(blockState, node);
+        loadToTileState(blockState, node);
 
         blockState.update();
 

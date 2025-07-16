@@ -19,6 +19,7 @@ public class BrushableBlockState implements IStateHandler<BrushableBlock> {
         node.set("Item", objectMapper.valueToTree(blockState.getItem().serialize()));
 
         NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -30,6 +31,7 @@ public class BrushableBlockState implements IStateHandler<BrushableBlock> {
         if(node.get("Lootable") instanceof ObjectNode lootableNode) {
             NonState.loadToLootable(blockState, lootableNode);
         }
+        loadToTileState(blockState, node);
 
         blockState.update();
     }

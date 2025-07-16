@@ -12,9 +12,12 @@ public class EnderChestState implements IStateHandler<EnderChest> {
 
     @Override
     public void save(@NotNull EnderChest blockState, @NotNull ObjectNode node) {
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull EnderChest blockState, ObjectNode node) {
+        loadToTileState(blockState, node);
+        blockState.update();
     }
 }

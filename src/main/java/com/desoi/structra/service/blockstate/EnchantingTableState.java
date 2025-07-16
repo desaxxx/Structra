@@ -11,11 +11,13 @@ public class EnchantingTableState implements IStateHandler<EnchantingTable> {
     @Override
     public void save(@NotNull EnchantingTable blockState, @NotNull ObjectNode node) {
         NonState.saveNameable(blockState, node);
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull EnchantingTable blockState, ObjectNode node) {
         NonState.loadToNameable(blockState, node);
+        loadToTileState(blockState, node);
 
         blockState.update();
     }

@@ -1,10 +1,11 @@
 package com.desoi.structra.service.blockstate;
 
-import com.desoi.structra.Structra;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.util.JsonHelper;
+import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.bukkit.DyeColor;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
@@ -15,23 +16,21 @@ public class SignState implements IStateHandler<Sign> {
 
     @Override
     public void save(@NotNull Sign blockState, @NotNull ObjectNode node) {
-        final int MINECRAFT_VERSION = Structra.getInstance().WRAPPER.getVersion();
+        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
 
         if (MINECRAFT_VERSION >= 200) {
             node.put("Waxed", blockState.isWaxed());
         }
         if (MINECRAFT_VERSION >= 194) {
-            // TODO look up for deprecations
             for (Side side : Side.values()) {
                 SignSide signSide = blockState.getSide(side);
-                String sideName = side.name();
-                ObjectNode sideNode = JsonHelper.getOrCreate(node, sideName);
+                ObjectNode sideNode = JsonHelper.getOrCreate(node, side.name());
 
                 sideNode.put("Color", signSide.getColor() == null ? "" : signSide.getColor().toString());
                 sideNode.put("Glowing", signSide.isGlowingText());
                 ObjectNode linesNode = JsonHelper.getOrCreate(sideNode, "Lines");
-                for (int line = 0; line < blockState.getLines().length; line++) {
-                    linesNode.put(String.valueOf(line), blockState.getLine(line));
+                for (int line = 0; line < signSide.getLines().length; line++) {
+                    linesNode.put(String.valueOf(line), signSide.getLine(line));
                 }
             }
         } else {
@@ -43,21 +42,22 @@ public class SignState implements IStateHandler<Sign> {
             }
             node.set("Lines", linesNode);
         }
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull Sign blockState, ObjectNode node) {
-        final int MINECRAFT_VERSION = Structra.getInstance().WRAPPER.getVersion();
-        if (MINECRAFT_VERSION >= 200) {
-            blockState.setWaxed(node.has("Waxed") && node.get("Waxed").asBoolean());
+        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
+        if (MINECRAFT_VERSION >= 200 && node.get("Waxed") instanceof BooleanNode waxedNode) {
+            blockState.setWaxed(waxedNode.asBoolean());
         }
+
         if (MINECRAFT_VERSION >= 194) {
             for (Side side: Side.values()) {
                 if (!(node.get(side.name()) instanceof ObjectNode sideNode)) continue;
-
                 SignSide signSide = blockState.getSide(side);
 
-                if(sideNode.get("Color") instanceof ObjectNode colorNode) {
+                if(sideNode.get("Color") instanceof TextNode colorNode) {
                     try {
                         signSide.setColor(DyeColor.valueOf(colorNode.asText()));
                     } catch (IllegalArgumentException ignored) {}
@@ -68,13 +68,14 @@ public class SignState implements IStateHandler<Sign> {
                 }
                 if (sideNode.get("Lines") instanceof ObjectNode linesNode) {
                     for (int i = 0; i < signSide.getLines().length; i++) {
-                        if(linesNode.get(String.valueOf(i)) instanceof ObjectNode lineNode) {
+                        if(linesNode.get(String.valueOf(i)) instanceof TextNode lineNode) {
                             signSide.setLine(i, lineNode.asText());
                         }
                     }
                 }
             }
-        } else {
+        }
+        else {
             if(node.get("Color") instanceof ObjectNode colorNode) {
                 try {
                     blockState.setColor(DyeColor.valueOf(colorNode.asText()));
@@ -93,6 +94,7 @@ public class SignState implements IStateHandler<Sign> {
                 }
             }
         }
+        loadToTileState(blockState, node);
 
         blockState.update();
     }

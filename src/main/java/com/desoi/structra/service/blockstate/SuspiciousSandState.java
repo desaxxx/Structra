@@ -19,9 +19,8 @@ public class SuspiciousSandState implements IStateHandler<SuspiciousSand> {
     public void save(@NotNull SuspiciousSand blockState, @NotNull ObjectNode node) {
         node.set("Item", objectMapper.valueToTree(blockState.getItem().serialize()));
 
-        ObjectNode lootNode = node.objectNode();
-        NonState.saveLootable(blockState, lootNode);
-        node.set("Lootable", lootNode);
+        NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -29,10 +28,10 @@ public class SuspiciousSandState implements IStateHandler<SuspiciousSand> {
         if(node.has("Item")) {
             blockState.setItem(JsonHelper.deserializeItemStack(node.get("Item")));
         }
-
         if(node.get("Lootable") instanceof ObjectNode lootableNode) {
             NonState.loadToLootable(blockState, lootableNode);
         }
+        loadToTileState(blockState, node);
 
         blockState.update();
     }

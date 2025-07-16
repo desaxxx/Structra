@@ -15,6 +15,7 @@ public class ChestState implements IStateHandler<Chest> {
         NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
         NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
         // check out #getBlockInventory(), plain inventory may not be live.
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -24,6 +25,7 @@ public class ChestState implements IStateHandler<Chest> {
         if(node.get("Lootable") instanceof ObjectNode lootableNode) {
             NonState.loadToLootable(blockState, lootableNode);
         }
+        loadToTileState(blockState, node);
 
         blockState.update();
 

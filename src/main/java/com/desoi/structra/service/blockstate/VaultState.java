@@ -5,7 +5,6 @@ import com.desoi.structra.service.statehandler.NonState;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Vault;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,12 +20,9 @@ public class VaultState implements IStateHandler<Vault> {
         node.put("ActivationRange", blockState.getActivationRange());
         node.put("DeactivationRange", blockState.getDeactivationRange());
 
-        ObjectNode lootableNode = node.objectNode();
-        NonState.saveLootTable(blockState.getLootTable(), lootableNode);
-        node.set("LootTable", lootableNode);
-
-        ItemStack keyItem = blockState.getKeyItem();
-        node.set("KeyItem", objectMapper.valueToTree(keyItem.serialize()));
+        NonState.saveLootTable(blockState.getLootTable(), JsonHelper.getOrCreate(node, "LootTable"));
+        node.set("KeyItem", objectMapper.valueToTree(blockState.getKeyItem().serialize()));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -43,15 +39,10 @@ public class VaultState implements IStateHandler<Vault> {
             if(lootTable != null) blockState.setLootTable(lootTable);
         }
 
-        ItemStack keyItem = null;
-
         if (node.has("KeyItem")) {
-            keyItem = ItemStack.deserialize(JsonHelper.nodeToMap(node.get("KeyItem")));
+            blockState.setKeyItem(JsonHelper.deserializeItemStack(node.get("KeyItem")));
         }
-
-        if (keyItem != null) {
-            blockState.setKeyItem(keyItem);
-        }
+        loadToTileState(blockState, node);
 
         blockState.update();
     }

@@ -15,6 +15,7 @@ public class ChiseledBookshelfState implements IStateHandler<ChiseledBookshelf> 
         node.put("LastInteractedSlot", blockState.getLastInteractedSlot());
 
         NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -22,6 +23,7 @@ public class ChiseledBookshelfState implements IStateHandler<ChiseledBookshelf> 
         if(node.get("LastInteractedSlot") instanceof IntNode lastInteractedSlotNode) {
             blockState.setLastInteractedSlot(lastInteractedSlotNode.asInt());
         }
+        loadToTileState(blockState, node);
 
         blockState.update();
 

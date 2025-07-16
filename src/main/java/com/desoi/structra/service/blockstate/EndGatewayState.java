@@ -16,6 +16,7 @@ public class EndGatewayState implements IStateHandler<EndGateway> {
 
         Location exitLocation = blockState.getExitLocation();
         node.set("ExitLocation", objectMapper.valueToTree(exitLocation == null ? null : exitLocation.serialize()));
+        saveTileState(blockState, node);
     }
 
     @Override
@@ -26,6 +27,7 @@ public class EndGatewayState implements IStateHandler<EndGateway> {
         if (node.has("ExitLocation")) {
             blockState.setExitLocation(JsonHelper.deserializeLocation(node.get("ExitLocation")));
         }
+        loadToTileState(blockState, node);
 
         blockState.update();
     }

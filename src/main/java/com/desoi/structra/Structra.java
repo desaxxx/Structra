@@ -17,12 +17,15 @@ public final class Structra extends JavaPlugin {
 
     static public final String FILE_EXTENSION = ".structra";
     static public final ItemStack SELECTOR_TOOL = ItemCreator.of(Material.STICK).name("<#e4e471>Structra Tool").get();
-    static public File SAVES_FOLDER;
-
-    public Wrapper WRAPPER;
 
     @Getter
+    static private File savesFolder;
+    @Getter
+    private Wrapper wrapper;
+    @Getter
     static private Structra instance;
+
+
     @Override
     public void onEnable() {
         instance = this;
@@ -34,11 +37,11 @@ public final class Structra extends JavaPlugin {
 
         if(!getDataFolder().exists()) //noinspection ResultOfMethodCallIgnored
             getDataFolder().mkdirs();
-        SAVES_FOLDER = new File(Structra.instance.getDataFolder(), "saves");
-        if(!SAVES_FOLDER.exists()) //noinspection ResultOfMethodCallIgnored
-            SAVES_FOLDER.mkdirs();
+        savesFolder = new File(Structra.instance.getDataFolder(), "saves");
+        if(!savesFolder.exists()) //noinspection ResultOfMethodCallIgnored
+            savesFolder.mkdirs();
 
-        WRAPPER = new Wrapper(this);
+        wrapper = new Wrapper(this);
     }
 
     @Override

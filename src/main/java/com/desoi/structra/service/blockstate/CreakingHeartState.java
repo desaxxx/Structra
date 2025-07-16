@@ -14,9 +14,12 @@ public class CreakingHeartState implements IStateHandler<CreakingHeart> {
 
     @Override
     public void save(@NotNull CreakingHeart blockState, @NotNull ObjectNode node) {
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull CreakingHeart blockState, ObjectNode node) {
+        loadToTileState(blockState, node);
+        blockState.update();
     }
 }

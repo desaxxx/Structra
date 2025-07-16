@@ -15,7 +15,7 @@ public class Wrapper {
     }
 
     static public Wrapper getInstance() {
-        return Structra.getInstance().WRAPPER;
+        return Structra.getInstance().getWrapper();
     }
 
     @Getter

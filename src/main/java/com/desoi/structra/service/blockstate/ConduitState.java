@@ -9,9 +9,12 @@ public class ConduitState implements IStateHandler<Conduit> {
 
     @Override
     public void save(@NotNull Conduit blockState, @NotNull ObjectNode node) {
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull Conduit blockState, ObjectNode node) {
+        loadToTileState(blockState, node);
+        blockState.update();
     }
 }

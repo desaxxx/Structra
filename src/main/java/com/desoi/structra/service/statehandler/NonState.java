@@ -1,17 +1,20 @@
 package com.desoi.structra.service.statehandler;
 
+import com.desoi.structra.model.StructraException;
 import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Nameable;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.block.EntityBlockStorage;
+import org.bukkit.block.TileState;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +24,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
+import java.util.Base64;
 
 public class NonState {
 
@@ -72,10 +78,9 @@ public class NonState {
     @Nullable
     static public LootTable getLootTable(ObjectNode parentNode) {
         if (parentNode == null) return null;
-        String keyString = parentNode.has("LootTable") ? parentNode.get("LootTable").asText() : null;
-        if (keyString != null) {
-            NamespacedKey key = NamespacedKey.fromString(keyString);
-            if (key != null) {
+        if(parentNode.get("LootTable") instanceof TextNode lootTableNode) {
+            NamespacedKey key = NamespacedKey.fromString(lootTableNode.asText());
+            if(key != null) {
                 return Bukkit.getLootTable(key);
             }
         }
@@ -97,7 +102,7 @@ public class NonState {
     static public <N extends Nameable> void saveNameable(@NotNull N nameable, @NotNull ObjectNode parentNode) {
         final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
         /*
-         * Paper API doesn't bundle adventure minimessage before 1.19.
+         * Paper API doesn't have a bundle for adventure minimessage before 1.19.
          */
         if(MINECRAFT_VERSION >= 190) {
             if(nameable.customName() == null) return;
@@ -125,7 +130,34 @@ public class NonState {
     }
 
 
-    // TODO TileState methods, LockableTileState, TileStateInventoryHolder
+    static public <T extends TileState> void saveTileState(@NotNull T tileState, @NotNull ObjectNode parentNode) {
+        /*
+         * Serialization is added on Paper 1.19.2
+         * It's nearly impossible to store data without serialization since primitive or complex type can be of any object.
+         */
+        if(Wrapper.getInstance().getVersion() >= 192) {
+            try {
+                byte[] bytes = tileState.getPersistentDataContainer().serializeToBytes();
+                parentNode.put("PersistentDataContainer", Base64.getEncoder().encodeToString(bytes));
+            } catch (IOException e) {
+                throw new StructraException("There was a problem saving PersistentDataContainer. " + e);
+            }
+        }
+    }
+
+    static public <T extends TileState> void loadToTileState(@NotNull T tileState, ObjectNode parentNode) {
+        /*
+         * Deserialization is added on Paper 1.19.2
+         * It's nearly impossible to store data without deserialization since primitive or complex type can be of any object.
+         */
+        if(Wrapper.getInstance().getVersion() >= 192 && parentNode.get("PersistentDataContainer") instanceof TextNode pdcNode) {
+            try {
+                tileState.getPersistentDataContainer().readFromBytes(Base64.getDecoder().decode(pdcNode.asText()));
+            } catch (IOException e) {
+                throw new StructraException("There was a problem reading PersistentDataContainer. " + e);
+            }
+        }
+    }
 
 
 

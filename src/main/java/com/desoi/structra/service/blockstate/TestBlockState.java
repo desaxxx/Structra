@@ -14,9 +14,12 @@ public class TestBlockState implements IStateHandler<TestBlock> {
 
     @Override
     public void save(@NotNull TestBlock blockState, @NotNull ObjectNode node) {
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull TestBlock blockState, ObjectNode node) {
+        loadToTileState(blockState, node);
+        blockState.update();
     }
 }

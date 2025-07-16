@@ -15,11 +15,13 @@ public class SculkSensorState implements IStateHandler<SculkSensor> {
     @Override
     public void save(@NotNull SculkSensor blockState, @NotNull ObjectNode node) {
         node.put("LastVibrationFrequency", blockState.getLastVibrationFrequency());
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull SculkSensor blockState, ObjectNode node) {
         blockState.setLastVibrationFrequency(node.has("LastVibrationFrequency") ? node.get("LastVibrationFrequency").asInt() : 0);
+        loadToTileState(blockState, node);
         blockState.update();
     }
 }

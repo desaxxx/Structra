@@ -9,9 +9,12 @@ public class DaylightDetectorState implements IStateHandler<DaylightDetector> {
 
     @Override
     public void save(@NotNull DaylightDetector blockState, @NotNull ObjectNode node) {
+        saveTileState(blockState, node);
     }
 
     @Override
     public void loadTo(@NotNull DaylightDetector blockState, ObjectNode node) {
+        loadToTileState(blockState, node);
+        blockState.update();
     }
 }
