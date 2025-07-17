@@ -11,8 +11,8 @@
     "z": 0
   },
   "Palette": {
-    "0": "minecraft:stone",
-    "1": "minecraft:chest"
+    "minecraft:stone": 0,
+    "minecraft:chest": 1
   },
   "BlockData": [
     1,0,0,0

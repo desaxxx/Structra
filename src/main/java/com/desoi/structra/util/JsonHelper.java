@@ -60,18 +60,21 @@ public class JsonHelper {
     }
 
     @NotNull
-    static public String getChildMatches(@NotNull JsonNode node, @NotNull Object obj, @NotNull String def) {
-        return node.properties().stream()
+    static public String getPropertyMatching(@NotNull JsonNode parentNode, @NotNull Object compare, @NotNull String def) {
+        return parentNode.properties().stream()
                 .filter(entry -> {
                     JsonNode value = entry.getValue();
-                    if(obj instanceof String) {
-                        return value.isTextual() && value.asText().equals(obj);
+                    if(compare instanceof String str) {
+                        return value.isTextual() && value.asText().equals(str);
                     }
-                    else if (obj instanceof Integer) {
-                        return value.isInt() && value.asInt() == (int) obj;
+                    else if(compare instanceof Short s) {
+                        return value.isShort() && value.shortValue() == s;
                     }
-                    else if(obj instanceof Boolean) {
-                        return value.isBoolean() && value.asBoolean() == (boolean) obj;
+                    else if (compare instanceof Integer i) {
+                        return value.isInt() && value.asInt() == i;
+                    }
+                    else if(compare instanceof Boolean b) {
+                        return value.isBoolean() && value.asBoolean() == b;
                     }
                     return false;
                 })

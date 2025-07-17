@@ -1,10 +1,11 @@
 package com.desoi.structra.command;
 
+import com.desoi.structra.loader.StructureFile;
+import com.desoi.structra.loader.StructureLoader;
 import com.desoi.structra.util.HexUtil;
 import com.desoi.structra.Structra;
 import com.desoi.structra.util.Util;
-import com.desoi.structra.model.StructureLoader;
-import com.desoi.structra.model.StructureWriter;
+import com.desoi.structra.writer.StructureWriter;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -60,14 +61,15 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
             String fileName = args[1];
+            File file = new File(Structra.getSavesFolder(), fileName + Structra.FILE_EXTENSION);
             int batchSize = 50;
             if(args.length >= 3) {
                 batchSize = parseInt(args[2], batchSize);
             }
             Location originLocation = player.getLocation().clone();
 
-            StructureWriter structureWriter = new StructureWriter(player, vector1, vector2, 0, 20, batchSize);
-            structureWriter.save(new File(Structra.getSavesFolder(), fileName + Structra.FILE_EXTENSION), originLocation);
+            StructureWriter structureWriter = new StructureWriter(file, sender, vector1, vector2, originLocation, 0, 20, batchSize);
+            structureWriter.execute();
             Util.tell(player, "&aSaving Structure:");
             Util.tell(player, "&eMin vector: [" + structureWriter.getMinVector().getBlockX() + "," + structureWriter.getMinVector().getBlockY() + "," + structureWriter.getMinVector().getBlockZ() + "]");
             Util.tell(player, "&eMax vector: [" + structureWriter.getMaxVector().getBlockX() + "," + structureWriter.getMaxVector().getBlockY() + "," + structureWriter.getMaxVector().getBlockZ() + "]");
@@ -85,8 +87,9 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             }
             Location originLocation = player.getLocation().clone();
 
-            StructureLoader structureLoader = new StructureLoader(sender, file, 0, 20, batchSize);
-            structureLoader.load(originLocation);
+            StructureFile structureFile = new StructureFile(file);
+            StructureLoader structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation);
+            structureLoader.execute();
             Util.tell(player, "&aLoading Structure:");
         }
         return true;
