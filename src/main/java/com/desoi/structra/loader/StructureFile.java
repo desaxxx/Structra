@@ -2,6 +2,7 @@ package com.desoi.structra.loader;
 
 import com.desoi.structra.Structra;
 import com.desoi.structra.model.BlockTraversalOrder;
+import com.desoi.structra.model.Position;
 import com.desoi.structra.util.Validate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -9,7 +10,6 @@ import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import lombok.Getter;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -26,7 +26,7 @@ public class StructureFile {
     private final int xSize;
     private final int ySize;
     private final int zSize;
-    private final @NotNull Vector relative;
+    private final @NotNull Position relative;
     private final @NotNull BlockTraversalOrder blockTraversalOrder = BlockTraversalOrder.DEFAULT;
 
     private final @NotNull ObjectNode paletteNode;
@@ -58,7 +58,7 @@ public class StructureFile {
         this.ySize = sizeNode.get("y").asInt();
         this.zSize = sizeNode.get("z").asInt();
         ObjectNode relativeNode = (ObjectNode) root.get("Relative");
-        this.relative = new Vector(relativeNode.get("x").asInt(), relativeNode.get("y").asInt(), relativeNode.get("z").asInt());
+        this.relative = new Position(relativeNode.get("x").asInt(), relativeNode.get("y").asInt(), relativeNode.get("z").asInt());
         this.paletteNode = (ObjectNode) root.get("Palette");
         this.blockDataNode = (ArrayNode) root.get("BlockData");
         this.tileEntitiesNode = (ObjectNode) root.get("TileEntities");

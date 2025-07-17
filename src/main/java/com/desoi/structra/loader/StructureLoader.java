@@ -1,12 +1,12 @@
 package com.desoi.structra.loader;
 
+import com.desoi.structra.model.Position;
 import com.desoi.structra.util.Validate;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -24,10 +24,10 @@ public class StructureLoader {
 
     private final @NotNull Location originBlockLocation;
     private final @NotNull World originWorld;
-    private final @NotNull Vector minVector;
-    private final @NotNull Vector maxVector;
+    private final @NotNull Position minPosition;
+    private final @NotNull Position maxPosition;
 
-    private final @NotNull List<Vector> vectors;
+    private final @NotNull List<Position> positions;
     @Setter
     private long startNanoTime;
 
@@ -48,9 +48,9 @@ public class StructureLoader {
 
         this.originBlockLocation = originLocation.getBlock().getLocation().clone();
         this.originWorld = originLocation.getWorld();
-        this.minVector = structureFile.getRelative().clone().add(originBlockLocation.toVector());
-        this.maxVector = minVector.clone().add(new Vector(structureFile.getXSize(), structureFile.getYSize(), structureFile.getZSize()));
-        this.vectors = new ArrayList<>(structureFile.getBlockTraversalOrder().getVectors(minVector, maxVector));
+        this.minPosition = structureFile.getRelative().clone().add(Position.fromLocation(originBlockLocation));
+        this.maxPosition = minPosition.clone().add(new Position(structureFile.getXSize(), structureFile.getYSize(), structureFile.getZSize()));
+        this.positions = new ArrayList<>(structureFile.getBlockTraversalOrder().getPositions(minPosition, maxPosition));
     }
 
     @NotNull

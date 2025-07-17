@@ -1,123 +1,63 @@
 package com.desoi.structra.command;
 
-import com.desoi.structra.loader.StructureFile;
-import com.desoi.structra.loader.StructureLoader;
-import com.desoi.structra.util.HexUtil;
-import com.desoi.structra.Structra;
 import com.desoi.structra.util.Util;
-import com.desoi.structra.writer.StructureWriter;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
-        if(!(sender instanceof Player player)) {
-            sender.sendMessage(HexUtil.parse("&cNuh uh!"));
-            return true;
-        }
         /*
-         * /structra tool
+         * PLAYER: /structra tool
          */
         if(args.length >= 1 && args[0].equals("tool")) {
-            player.give(Structra.SELECTOR_TOOL);
-            Util.tell(player, "&eHere your tool!");
+            return ToolCommand.INSTANCE.onCommand(sender, args);
         }
         /*
-         * /structra <pos1|pos2>
+         * PLAYER: /structra <pos1|pos2> [<x>] [<y>] [<z>] [<world>]
+         * CONSOLE: /structra <pos1|pos2> <x> <y> <z> <world>
          */
         else if(args.length >= 1 && (args[0].equals("pos1") || args[0].equals("pos2"))) {
-            Block block = player.getTargetBlockExact(10);
-            Location location = player.getLocation();
-            if(block != null) {
-                location = block.getLocation();
-            }
-
-            Vector vector = new Vector(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-            Util.selectVector(player, vector, args[0].equals("pos1") ? 1 : 2);
+            return PosCommand.INSTANCE.onCommand(sender, args);
         }
         /*
-         * /structra save <fileName> [<batchSize>]
+         * PLAYER: /structra write <fileName> [<batchSize>] [<x>] [<y>] [<z>] [<world>]
+         * CONSOLE: /structra write <fileName> <x> <y> <z> <world> [<batchSize>]
          */
-        else if(args.length >= 2 && args[0].equals("save")) {
-            Vector vector1 = Util.VECTORS_1.get(player.getUniqueId());
-            Vector vector2 = Util.VECTORS_2.get(player.getUniqueId());
-            if(vector1 == null || vector2 == null) {
-                Util.tell(player, "&cYou have missing positions.");
-                return true;
-            }
-            String fileName = args[1];
-            File file = new File(Structra.getSavesFolder(), fileName + Structra.FILE_EXTENSION);
-            int batchSize = 50;
-            if(args.length >= 3) {
-                batchSize = parseInt(args[2], batchSize);
-            }
-            Location originLocation = player.getLocation().clone();
-
-            StructureWriter structureWriter = new StructureWriter(file, sender, vector1, vector2, originLocation, 0, 20, batchSize);
-            structureWriter.execute();
-            Util.tell(player, "&aSaving Structure:");
-            Util.tell(player, "&eMin vector: [" + structureWriter.getMinVector().getBlockX() + "," + structureWriter.getMinVector().getBlockY() + "," + structureWriter.getMinVector().getBlockZ() + "]");
-            Util.tell(player, "&eMax vector: [" + structureWriter.getMaxVector().getBlockX() + "," + structureWriter.getMaxVector().getBlockY() + "," + structureWriter.getMaxVector().getBlockZ() + "]");
-            Util.tell(player, "&eSize: " + structureWriter.getSize());
+        else if(args.length >= 2 && args[0].equals("write")) {
+            return WriteCommand.INSTANCE.onCommand(sender, args);
         }
         /*
-         * /structra load <fileName> [<batchSize>]
+         * PLAYER: /structra paste <fileName> [<batchSize>] [<x>] [<y>] [<z>] [<world>]
+         * CONSOLE: /structra paste <fileName> <x> <y> <z> <world> [<batchSize>]
          */
-        else if(args.length >= 2 && args[0].equals("load")) {
-            String fileName = args[1];
-            File file = new File(Structra.getSavesFolder(), fileName + Structra.FILE_EXTENSION);
-            int batchSize = 50;
-            if(args.length >= 3) {
-                batchSize = parseInt(args[2], batchSize);
-            }
-            Location originLocation = player.getLocation().clone();
-
-            StructureFile structureFile = new StructureFile(file);
-            StructureLoader structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation);
-            structureLoader.execute();
-            Util.tell(player, "&aLoading Structure:");
+        else if(args.length >= 2 && args[0].equals("paste")) {
+            return PasteCommand.INSTANCE.onCommand(sender, args);
+        }
+        /*
+         * /structra delete <fileName>
+         */
+        else if(args.length >= 2 && args[0].equals("delete")) {
+            return DeleteCommand.INSTANCE.onCommand(sender, args);
         }
         return true;
-    }
-
-    private int parseInt(@NotNull String s, int def) {
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return def;
-        }
     }
 
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
         if(args.length == 1) {
-            return List.of("tool","pos1","pos2","save","load");
-        } else if(args.length == 2 && args[0].equals("load")) {
-            return savesFileNames();
+            return List.of("tool", "pos1", "pos2", "write", "paste","delete");
+        } else if(args.length == 2 && List.of("paste","delete").contains(args[0])) {
+            return Util.savesFileNames();
         }
         return List.of();
-    }
-
-    @NotNull
-    private List<String> savesFileNames() {
-        File[] saveFiles = Structra.getSavesFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
-        if(saveFiles == null) return new ArrayList<>();
-        return Arrays.stream(saveFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
     }
 }

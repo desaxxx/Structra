@@ -1,12 +1,12 @@
 package com.desoi.structra.listener;
 
 import com.desoi.structra.Structra;
+import com.desoi.structra.model.Position;
 import com.desoi.structra.util.Util;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.util.Vector;
 
 public class BukkitListener implements Listener {
 
@@ -18,11 +18,11 @@ public class BukkitListener implements Listener {
         if(event.getClickedBlock() == null) return;
 
         event.setCancelled(true);
-        Vector vector = event.getClickedBlock().getLocation().toVector();
+        Position position = Position.fromLocation(event.getClickedBlock().getLocation());
         if(action == Action.LEFT_CLICK_BLOCK) {
-            Util.selectVector(event.getPlayer(), vector, 1);
+            Util.selectPosition(event.getPlayer(), position, 1);
         }else {
-            Util.selectVector(event.getPlayer(), vector, 2);
+            Util.selectPosition(event.getPlayer(), position, 2);
         }
     }
 }

@@ -6,3 +6,22 @@ authors: [ desaxx, aysihuniks ]
 commands:
   structra:
     description: Main command of the plugin.
+permissions:
+  structra.admin:
+    default: op
+    children:
+      structra.paste.*: true
+      structra.write: true
+      structra.select: true
+      structra.tool: true
+      structra.delete.*:
+  structra.paste.*: # requires permission management to add children as files are added or removed.
+    default: op
+  structra.write:
+    default: op
+  structra.select:
+    default: op
+  structra.tool:
+    default: op
+  structra.delete.*:
+    default: op

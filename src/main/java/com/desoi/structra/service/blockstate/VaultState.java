@@ -21,7 +21,16 @@ public class VaultState implements IStateHandler<Vault> {
         node.put("DeactivationRange", blockState.getDeactivationRange());
 
         NonState.saveLootTable(blockState.getLootTable(), JsonHelper.getOrCreate(node, "LootTable"));
+
+        if (blockState.getDisplayedLootTable() != null) {
+            NonState.saveLootTable(blockState.getDisplayedLootTable(), JsonHelper.getOrCreate(node, "DisplayedLootTable"));
+        }
+
         node.set("KeyItem", objectMapper.valueToTree(blockState.getKeyItem().serialize()));
+        node.set("DisplayedItem", objectMapper.valueToTree(blockState.getDisplayedItem().serialize()));
+
+        node.put("NextStateUpdateTime", blockState.getNextStateUpdateTime());
+
         saveTileState(blockState, node);
     }
 
@@ -39,9 +48,22 @@ public class VaultState implements IStateHandler<Vault> {
             if(lootTable != null) blockState.setLootTable(lootTable);
         }
 
+        if (node.get("DisplayedLootTable") instanceof ObjectNode displayedLootTableNode) {
+            blockState.setDisplayedLootTable(NonState.getLootTable(displayedLootTableNode));
+        }
+
         if (node.has("KeyItem")) {
             blockState.setKeyItem(JsonHelper.deserializeItemStack(node.get("KeyItem")));
         }
+
+        if (node.has("DisplayedItem")) {
+            blockState.setDisplayedItem(JsonHelper.deserializeItemStack(node.get("DisplayedItem")));
+        }
+
+        if (node.has("NextStateUpdateTime")) {
+            blockState.setNextStateUpdateTime(node.get("NextStateUpdateTime").asLong());
+        }
+
         loadToTileState(blockState, node);
 
         blockState.update();

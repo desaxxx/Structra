@@ -16,7 +16,7 @@ public class CreatureSpawnerState implements IStateHandler<CreatureSpawner> {
         node.put("MaxSpawnDelay", blockState.getMaxSpawnDelay());
         node.put("SpawnCount", blockState.getSpawnCount());
         node.put("RequiredPlayerRange", blockState.getRequiredPlayerRange());
-        node.put("SpawnedType", blockState.getSpawnedType()  == null ? "" : blockState.getSpawnedType().toString());
+        node.put("SpawnedType", blockState.getSpawnedType()  == null ? "" : blockState.getSpawnedType().name()); // toString() -> name()
         node.put("SpawnRange", blockState.getSpawnRange());
         saveTileState(blockState, node);
     }

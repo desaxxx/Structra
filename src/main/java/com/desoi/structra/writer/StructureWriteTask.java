@@ -29,7 +29,7 @@ public class StructureWriteTask {
 
     public void execute() {
         structureWriter.setStartNanoTime(System.nanoTime());
-        final int size = structureWriter.getVectors().size();
+        final int size = structureWriter.getPositions().size();
         new BukkitRunnable() {
             int looped = 0;
             byte nextId = 0;
@@ -54,7 +54,7 @@ public class StructureWriteTask {
                         return;
                     }
 
-                    Location blockLocation = structureWriter.getVectors().get(index).toLocation(structureWriter.getOriginWorld());
+                    Location blockLocation = structureWriter.getPositions().get(index).toLocation(structureWriter.getOriginWorld());
                     Block block = blockLocation.getBlock();
 
                     String data = block.getBlockData().getAsString();

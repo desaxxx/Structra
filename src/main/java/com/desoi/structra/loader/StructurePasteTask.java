@@ -28,7 +28,7 @@ public class StructurePasteTask {
 
     public void execute() {
         structureLoader.setStartNanoTime(System.nanoTime());
-        final int size = structureLoader.getVectors().size();
+        final int size = structureLoader.getPositions().size();
         new BukkitRunnable() {
             int looped = 0;
             int index = 0;
@@ -52,7 +52,7 @@ public class StructurePasteTask {
                         return;
                     }
 
-                    Location blockLocation = structureLoader.getVectors().get(index).toLocation(structureLoader.getOriginWorld());
+                    Location blockLocation = structureLoader.getPositions().get(index).toLocation(structureLoader.getOriginWorld());
                     if(!blockLocation.getChunk().isLoaded()) {
                         blockLocation.getChunk().load(true);
                     }

@@ -17,7 +17,7 @@ public class SkullState implements IStateHandler<Skull> {
     public void save(@NotNull Skull blockState, @NotNull ObjectNode node) {
         final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
         if(MINECRAFT_VERSION >= 193) {
-            node.put("NoteBlockSound", blockState.getNoteBlockSound() == null ? null : blockState.getNoteBlockSound().toString());
+            node.put("NoteBlockSound", blockState.getNoteBlockSound() == null ? "" : blockState.getNoteBlockSound().toString());
         }
         if(MINECRAFT_VERSION >= 181) {
             if(blockState.getPlayerProfile() != null) {

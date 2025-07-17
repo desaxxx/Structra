@@ -87,8 +87,8 @@ public class StructureState implements IStateHandler<Structure> {
         if(node.get("ShowAir") instanceof BooleanNode booleanNode) {
             blockState.setShowAir(booleanNode.asBoolean());
         }
-        loadToTileState(blockState, node);
 
+        loadToTileState(blockState, node);
         blockState.update();
     }
 }

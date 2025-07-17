@@ -1,14 +1,14 @@
 package com.desoi.structra.util;
 
+import com.desoi.structra.Structra;
+import com.desoi.structra.model.Position;
+import com.desoi.structra.service.Cache;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.File;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class Util {
@@ -39,17 +39,30 @@ public class Util {
     }
 
 
-    static public final Map<UUID, Vector> VECTORS_1 = new HashMap<>();
-    static public final Map<UUID, Vector> VECTORS_2 = new HashMap<>();
-
-    static public void selectVector(@NotNull Player player, @NotNull Vector vector, int pos) {
+    static public void selectPosition(@NotNull CommandSender sender, @NotNull Position position, int pos) {
         if(!(pos == 1 || pos == 2)) return;
 
         if(pos == 1) {
-            VECTORS_1.put(player.getUniqueId(), vector);
+            Cache.getSelections(sender).setPosition1(position);
         }else {
-            VECTORS_2.put(player.getUniqueId(), vector);
+            Cache.getSelections(sender).setPosition2(position);
         }
-        Util.tell(player,"&aSet POSITION " + pos + " to location [" + vector.getX() + "," + vector.getY() + "," + vector.getZ() + "]");
+        Util.tell(sender,"&aSet POSITION " + pos + " to location [" + position.getX() + "," + position.getY() + "," + position.getZ() + "]");
+    }
+
+
+    static public int parseInt(@NotNull String str, int def) {
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return def;
+        }
+    }
+
+    @NotNull
+    static public List<String> savesFileNames() {
+        File[] saveFiles = Structra.getSavesFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
+        if(saveFiles == null) return new ArrayList<>();
+        return Arrays.stream(saveFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
     }
 }

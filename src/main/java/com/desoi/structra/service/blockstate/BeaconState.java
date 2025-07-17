@@ -4,6 +4,7 @@ import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.NonState;
 import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Wrapper;
+import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Beacon;
 import org.bukkit.potion.PotionEffect;
@@ -23,6 +24,7 @@ public class BeaconState implements IStateHandler<Beacon> {
         if (secondaryEffect != null) {
             NonState.savePotionEffectType(secondaryEffect, JsonHelper.getOrCreate(node, "SecondaryEffect"), MINECRAFT_VERSION);
         }
+        node.put("EffectRange", blockState.getEffectRange());
         NonState.saveNameable(blockState, node);
         saveTileState(blockState, node);
     }
@@ -36,6 +38,10 @@ public class BeaconState implements IStateHandler<Beacon> {
         if(node.get("SecondaryEffect") instanceof ObjectNode secondaryNode) {
             PotionEffectType secondaryEffect = NonState.getPotionEffectType(secondaryNode);
             if(secondaryEffect != null) blockState.setSecondaryEffect(secondaryEffect);
+        }
+
+        if (node.get("EffectRange") instanceof DoubleNode effectRangeNode) {
+            blockState.setEffectRange(effectRangeNode.asDouble());
         }
 
         NonState.loadToNameable(blockState, node);

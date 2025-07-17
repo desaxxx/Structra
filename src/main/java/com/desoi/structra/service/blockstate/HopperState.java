@@ -3,6 +3,7 @@ package com.desoi.structra.service.blockstate;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.NonState;
 import com.desoi.structra.util.JsonHelper;
+import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.Hopper;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,7 @@ public class HopperState implements IStateHandler<Hopper> {
         NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
         NonState.saveNameable(blockState, node);
         NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
+        node.put("TransferCooldown", blockState.getTransferCooldown());
         saveTileState(blockState, node);
     }
 
@@ -24,6 +26,10 @@ public class HopperState implements IStateHandler<Hopper> {
         }
         NonState.loadToNameable(blockState, node);
         loadToTileState(blockState, node);
+
+        if (node.get("TransferCooldown") instanceof IntNode transferCooldownNode) {
+            blockState.setTransferCooldown(transferCooldownNode.asInt());
+        }
 
         blockState.update();
 
