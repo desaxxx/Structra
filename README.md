@@ -18,17 +18,23 @@
 >   - **Left-click** with the tool: Sets **Position 1** at the clicked block.
 >   - **Right-click** with the tool: Sets **Position 2** at the clicked block.
 >
-> - `/structra pos1`: Sets **Position 1** to the **block you are looking at** (within **10 blocks**).
+> - `/structra pos1 [<x> <y> <z> <world>]`: Sets **Position 1**.
+>   - **As a player**: If no coordinates are given, selects your current target block or location.
+>   - **As console**: Coordinates and world must be provided.
 >
-> - `/structra pos2`: Sets **Position 2** to the **block you are looking at** (within **10 blocks**).
+> - `/structra pos2 [<x> <y> <z> <world>]`: Sets **Position 2**.
+>   - **As a player**: If no coordinates are given, selects your current target block or location.
+>   - **As console**: Coordinates and world must be provided.
 >
-> - `/structra save <fileName> [<batchSize>]`: Saves the selected region as a structure.
->   - `fileName`: The name for your structra file.
->   - `batchSize` (optional): Number of blocks processed per time (default: 50).
+> - `/structra write <fileName> [<batchSize>] [<x> <y> <z> <world>]`: Saves (writes) the selected region as a structure file.
+>   - **As a player**: Coordinates are optional (defaults to your current location).
+>   - **As console**: Coordinates and world are required.
 >
-> - `/structra load <fileName> [<batchSize>]`: Load a structure at your current location.
->   - `fileName`: The name for your structra file to load.
->   - `batchSize` (optional): Number of blocks processed per time (default: 50).
+> - `/structra paste <fileName> [<batchSize>] [<x> <y> <z> <world>]`: Loads (pastes) a structure at the given location.
+>   - **As a player**: Coordinates are optional (defaults to your current location).
+>   - **As console**: Coordinates and world are required.
+>   
+> <span style="color: lightgreen;"> `batchSize` (optional): Number of blocks processed per tick (default: 50).</span>
 
 > ## Compatibility
 > - Paper 1.17 or newer.
