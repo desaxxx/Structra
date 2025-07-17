@@ -34,7 +34,7 @@
 >   - **As a player**: Coordinates are optional (defaults to your current location).
 >   - **As console**: Coordinates and world are required.
 >   
-> <span style="color: lightgreen;"> `batchSize` (optional): Number of blocks processed per tick (default: 50).</span>
+> $\color{lightgreen}{\textsf{ batchSize (optional): Number of blocks processed per tick (default: 50). }}$
 
 > ## Compatibility
 > - Paper 1.17 or newer.
