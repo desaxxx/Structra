@@ -1,5 +1,5 @@
 name: Structra
-version: '0.1'
+version: '${project.version}'
 main: com.desoi.structra.Structra
 api-version: '1.17'
 authors: [ desaxx, aysihuniks ]
@@ -14,8 +14,8 @@ permissions:
       structra.write: true
       structra.select: true
       structra.tool: true
-      structra.delete.*:
-  structra.paste.*: # requires permission management to add children as files are added or removed.
+      structra.delete.*: true
+  structra.paste.*:
     default: op
   structra.write:
     default: op

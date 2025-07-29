@@ -24,7 +24,7 @@ public class PasteCommand implements BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         String fileName = args[1];
-        if(!sender.hasPermission("structra.paste." + fileName)) {
+        if(!sender.hasPermission("structra.paste." + fileName) && !sender.hasPermission("structra.paste.*")) {
             Util.tell(sender, "&cYou don't have permission to paste this Structra.");
             return true;
         }
@@ -68,7 +68,7 @@ public class PasteCommand implements BaseCommand {
 
         StructureFile structureFile = new StructureFile(file);
         StructureLoader structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation);
-        structureLoader.execute();
+        structureLoader.saveHistory(() -> structureLoader.getTask().execute());
         Util.tell(sender, "&aLoading Structure...");
         return true;
     }

@@ -42,6 +42,12 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             return PasteCommand.INSTANCE.onCommand(sender, args);
         }
         /*
+         * /structra pasteHistory <fileName> [<batchSize>]
+         */
+        else if(args.length >= 2 && args[0].equals("pasteHistory")) {
+            return PasteHistoryCommand.INSTANCE.onCommand(sender, args);
+        }
+        /*
          * /structra delete <fileName>
          */
         else if(args.length >= 2 && args[0].equals("delete")) {
@@ -54,9 +60,11 @@ public class MainCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
         if(args.length == 1) {
-            return List.of("tool", "pos1", "pos2", "write", "paste","delete");
+            return List.of("tool", "pos1", "pos2", "write", "paste","delete","pasteHistory");
         } else if(args.length == 2 && List.of("paste","delete").contains(args[0])) {
             return Util.savesFileNames();
+        } else if(args.length == 2 && "pasteHistory".equals(args[0])) {
+            return Util.historyFileNames();
         }
         return List.of();
     }

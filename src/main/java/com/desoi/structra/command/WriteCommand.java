@@ -75,7 +75,7 @@ public class WriteCommand implements BaseCommand {
         Location originLocation = new Location(world, x, y, z);
 
         StructureWriter structureWriter = new StructureWriter(file, sender, position1, position2, originLocation, 0, 20, batchSize);
-        structureWriter.execute();
+        structureWriter.getTask().execute();
         Util.tell(sender, "&aWriting Structure...");
         return true;
     }

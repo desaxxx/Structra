@@ -19,19 +19,19 @@ public class StructureFile {
     @Getter
     static private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final @NotNull File file;
-    private final @NotNull ObjectNode root;
+    protected final @NotNull File file;
+    protected final @NotNull ObjectNode root;
 
-    private final @NotNull String version;
-    private final int xSize;
-    private final int ySize;
-    private final int zSize;
-    private final @NotNull Position relative;
-    private final @NotNull BlockTraversalOrder blockTraversalOrder = BlockTraversalOrder.DEFAULT;
+    protected final @NotNull String version;
+    protected final int xSize;
+    protected final int ySize;
+    protected final int zSize;
+    protected final @NotNull Position relative;
+    protected final @NotNull BlockTraversalOrder blockTraversalOrder = BlockTraversalOrder.DEFAULT;
 
-    private final @NotNull ObjectNode paletteNode;
-    private final @NotNull ArrayNode blockDataNode;
-    private final @NotNull ObjectNode tileEntitiesNode;
+    protected final @NotNull ObjectNode paletteNode;
+    protected final @NotNull ArrayNode blockDataNode;
+    protected final @NotNull ObjectNode tileEntitiesNode;
 
     public StructureFile(File file) {
         Validate.validate(file != null, "File cannot be null.");
@@ -62,5 +62,9 @@ public class StructureFile {
         this.paletteNode = (ObjectNode) root.get("Palette");
         this.blockDataNode = (ArrayNode) root.get("BlockData");
         this.tileEntitiesNode = (ObjectNode) root.get("TileEntities");
+    }
+
+    public boolean isHistoryFile() {
+        return false;
     }
 }

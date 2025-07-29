@@ -18,7 +18,7 @@ public class BukkitListener implements Listener {
         if(event.getClickedBlock() == null) return;
 
         event.setCancelled(true);
-        Position position = Position.fromLocation(event.getClickedBlock().getLocation());
+        Position position = Position.fromLocation(event.getClickedBlock().getLocation(), true);
         if(action == Action.LEFT_CLICK_BLOCK) {
             Util.selectPosition(event.getPlayer(), position, 1);
         }else {

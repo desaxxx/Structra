@@ -15,7 +15,7 @@ public class DeleteCommand implements BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         String fileName = args[1];
-        if(!sender.hasPermission("structra.delete." + fileName)) {
+        if(!sender.hasPermission("structra.delete." + fileName) && !sender.hasPermission("structra.delete.*")) {
             Util.tell(sender, "&cYou don't have permission to delete this Structra.");
             return true;
         }

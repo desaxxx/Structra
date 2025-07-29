@@ -39,24 +39,30 @@ public class JsonHelper {
         }
     }
 
-    @Nullable
-    static public String findPath(@NotNull JsonNode root, @NotNull JsonNode target, @NotNull String currentPath) {
+    @NotNull
+    static public String findPath(@NotNull JsonNode root, @NotNull JsonNode target) {
+        return findPath(root, target, "", 0);
+    }
+
+    @NotNull
+    static private String findPath(@NotNull JsonNode root, @NotNull JsonNode target, @NotNull String currentPath, int attempt) {
         if (root.equals(target)) {
             return currentPath;
         }
+        if(attempt >= 100) return currentPath + "/... (Keeps on)";
 
         if (root instanceof ObjectNode obj) {
             for(Map.Entry<String, JsonNode> entry : obj.properties()) {
-                String result = findPath(entry.getValue(), target, currentPath + "/" + entry.getKey());
+                String result = findPath(entry.getValue(), target, currentPath + "/" + entry.getKey(), attempt+1);
                 if(result != null) return result;
             }
         } else if (root instanceof ArrayNode array) {
             for (int i = 0; i < array.size(); i++) {
-                String result = findPath(array.get(i), target, currentPath + "[" + i + "]");
+                String result = findPath(array.get(i), target, currentPath + "[" + i + "]", attempt+1);
                 if(result != null) return result;
             }
         }
-        return null;
+        return currentPath + "/- (Reached to an element that is neither Object nor Array)";
     }
 
     @NotNull
@@ -66,9 +72,6 @@ public class JsonHelper {
                     JsonNode value = entry.getValue();
                     if(compare instanceof String str) {
                         return value.isTextual() && value.asText().equals(str);
-                    }
-                    else if(compare instanceof Short s) {
-                        return value.isShort() && value.shortValue() == s;
                     }
                     else if (compare instanceof Integer i) {
                         return value.isInt() && value.asInt() == i;

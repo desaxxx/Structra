@@ -2,6 +2,7 @@ package com.desoi.structra.writer;
 
 import com.desoi.structra.Structra;
 import com.desoi.structra.model.BlockTraversalOrder;
+import com.desoi.structra.model.IInform;
 import com.desoi.structra.model.Position;
 import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Validate;
@@ -14,12 +15,13 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
 
 @Getter
-public class StructureWriter {
+public class StructureWriter implements IInform {
     @Getter
     static private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -38,6 +40,7 @@ public class StructureWriter {
     private final int ySize;
     private final int zSize;
     private final @NotNull Position relative;
+    private @Nullable Position origin = null; // History-specific
 
     private final @NotNull ObjectNode paletteNode;
     private final @NotNull ArrayNode blockDataNode;
@@ -47,11 +50,11 @@ public class StructureWriter {
     private final int periodTicks;
     private final int batchSize;
 
-    private final @NotNull List<Position> Positions;
+    private final @NotNull List<Position> positions;
     @Setter
     private long startNanoTime;
 
-    public StructureWriter(File file, CommandSender executor, Position position1, Position position2, Location originLocation, int delayTicks, int periodTicks, int batchSize) {
+    public StructureWriter(File file, CommandSender executor, Position position1, Position position2, Location originLocation, int delayTicks, int periodTicks, int batchSize, boolean historyWriter) {
         Validate.validate(file != null, "File cannot be null.");
         Validate.validate(file.getName().endsWith(Structra.FILE_EXTENSION), String.format("File extension must be '%s'.", Structra.FILE_EXTENSION));
         Validate.validate(executor != null, "Executor cannot be null.");
@@ -82,11 +85,19 @@ public class StructureWriter {
         sizeNode.put("y", ySize);
         sizeNode.put("z", zSize);
         sizeNode.put("Total", getSize());
-        this.relative = minPosition.clone().subtract(Position.fromLocation(originBlockLocation));
+        this.relative = minPosition.clone().subtract(Position.fromLocation(originBlockLocation, false));
         ObjectNode relativeNode = JsonHelper.getOrCreate(root, "Relative");
         relativeNode.put("x", relative.getX());
         relativeNode.put("y", relative.getY());
         relativeNode.put("z", relative.getZ());
+        if(historyWriter) {
+            this.origin = Position.fromLocation(originBlockLocation, true);
+            ObjectNode originNode = JsonHelper.getOrCreate(root, "Origin");
+            originNode.put("x", origin.getX());
+            originNode.put("y", origin.getY());
+            originNode.put("z", origin.getZ());
+            originNode.put("world", origin.getWorldName());
+        }
 
         this.paletteNode = JsonHelper.getOrCreate(root, "Palette");
         this.blockDataNode = JsonHelper.getOrCreateArray(root, "BlockData");
@@ -95,12 +106,30 @@ public class StructureWriter {
         this.delayTicks = delayTicks;
         this.periodTicks = periodTicks;
         this.batchSize = batchSize;
-        this.Positions = blockTraversalOrder.getPositions(minPosition, maxPosition);
+        this.positions = blockTraversalOrder.getPositions(minPosition, maxPosition);
+    }
+    public StructureWriter(File file, CommandSender executor, Position position1, Position position2, Location originLocation, int delayTicks, int periodTicks, int batchSize) {
+        this(file, executor, position1, position2, originLocation, delayTicks, periodTicks, batchSize, false);
     }
 
-    public StructureWriteTask execute() {
-        StructureWriteTask writeTask = new StructureWriteTask(this);
-        writeTask.execute();
+    @Override
+    public @NotNull CommandSender informer() {
+        return executor;
+    }
+
+    @Setter
+    private boolean silent = false;
+    @Override
+    public boolean isSilent() {
+        return silent;
+    }
+
+
+    private StructureWriteTask writeTask;
+
+    @NotNull
+    public StructureWriteTask getTask() {
+        if(writeTask == null) writeTask = new StructureWriteTask(this);
         return writeTask;
     }
 

@@ -2,23 +2,24 @@ package com.desoi.structra.writer;
 
 import com.desoi.structra.Structra;
 import com.desoi.structra.model.StructraException;
+import com.desoi.structra.model.IInform;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.StateService;
 import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Validate;
+import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.ShortNode;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-import static com.desoi.structra.service.statehandler.IStateHandler.objectMapper;
-
-public class StructureWriteTask {
+public class StructureWriteTask implements IInform {
 
     private final @NotNull StructureWriter structureWriter;
 
@@ -27,19 +28,47 @@ public class StructureWriteTask {
         this.structureWriter = structureWriter;
     }
 
-    public void execute() {
+    @Getter
+    private boolean running = false;
+
+    @Override
+    public @NotNull CommandSender informer() {
+        return structureWriter.informer();
+    }
+    @Override
+    public boolean isSilent() {
+        return structureWriter.isSilent();
+    }
+    public void setSilent(boolean silent) {
+        structureWriter.setSilent(silent);
+    }
+
+
+    /**
+     * Execute with a complete task.
+     * @param completeTask Task to run after completion.
+     * @since 1.0-SNAPSHOT
+     */
+    public void execute(Runnable completeTask) {
+        Validate.validate(completeTask != null, "Complete task cannot be null.");
+        if(running) {
+            Util.tell(structureWriter.getExecutor(), "&cStructure writer is already running!");
+            return;
+        }
+        running = true;
         structureWriter.setStartNanoTime(System.nanoTime());
         final int size = structureWriter.getPositions().size();
         new BukkitRunnable() {
             int looped = 0;
             byte nextId = 0;
             int index = 0;
+            float ratio = 0.0f;
 
             @Override
             public void run() {
                 // information
-                float ratio = (float) looped / size;
-                Util.tell(structureWriter.getExecutor(), String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
+                ratio = (float) looped / size;
+                inform(String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
 
                 //
                 for(int i = 0; i < structureWriter.getBatchSize(); i++) {
@@ -49,8 +78,9 @@ public class StructureWriteTask {
                         saveToFile();
                         ratio = 1.0f;
                         long elapsedMS = (System.nanoTime() - structureWriter.getStartNanoTime()) / 1_000_000;
-                        Util.tell(structureWriter.getExecutor(), String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
-                        Util.tell(structureWriter.getExecutor(), String.format("&aSaved '%d blocks' to file '%s' in %d ms", size, structureWriter.getFile().getName(), elapsedMS));
+                        inform(String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
+                        informIgnoreSilent(String.format("&aSaved '%d blocks' to file '%s' in %d ms", size, structureWriter.getFile().getName(), elapsedMS));
+                        completeTask.run();
                         return;
                     }
 
@@ -59,7 +89,7 @@ public class StructureWriteTask {
 
                     String data = block.getBlockData().getAsString();
                     short id;
-                    if(structureWriter.getPaletteNode().get(data) instanceof ShortNode idNode) {
+                    if(structureWriter.getPaletteNode().get(data) instanceof NumericNode idNode) {
                         id = idNode.shortValue();
                     }else {
                         id = nextId++;
@@ -69,7 +99,7 @@ public class StructureWriteTask {
 
                     BlockState state = block.getState();
                     IStateHandler<BlockState> handler = StateService.getHandler(state);
-                    ObjectNode tileEntity = objectMapper.createObjectNode();
+                    ObjectNode tileEntity = StructureWriter.getObjectMapper().createObjectNode();
                     if(handler != null) {
                         tileEntity.put("Type", handler.name());
                         //tileEntity.set("Offset", getOffsetNode(blockLocation, tileEntity));
@@ -89,5 +119,13 @@ public class StructureWriteTask {
         } catch (IOException e) {
             throw new StructraException(String.format("Couldn't save to file '%s'", structureWriter.getFile().getName()) + e);
         }
+    }
+
+    /**
+     * Execute with no complete task.
+     * @since 1.0-SNAPSHOT
+     */
+    public void execute() {
+        execute(() -> {});
     }
 }

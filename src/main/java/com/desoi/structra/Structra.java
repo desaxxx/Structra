@@ -21,6 +21,8 @@ public final class Structra extends JavaPlugin {
     @Getter
     static private File savesFolder;
     @Getter
+    static private File historyFolder;
+    @Getter
     private Wrapper wrapper;
     @Getter
     static private Structra instance;
@@ -40,6 +42,9 @@ public final class Structra extends JavaPlugin {
         savesFolder = new File(Structra.instance.getDataFolder(), "saves");
         if(!savesFolder.exists()) //noinspection ResultOfMethodCallIgnored
             savesFolder.mkdirs();
+        historyFolder = new File(Structra.instance.getDataFolder(), "history");
+        if(!historyFolder.exists()) //noinspection ResultOfMethodCallIgnored
+            historyFolder.mkdirs();
 
         wrapper = new Wrapper(this);
     }

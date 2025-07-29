@@ -65,4 +65,11 @@ public class Util {
         if(saveFiles == null) return new ArrayList<>();
         return Arrays.stream(saveFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
     }
+
+    @NotNull
+    static public List<String> historyFileNames() {
+        File[] historyFiles = Structra.getHistoryFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
+        if (historyFiles == null) return new ArrayList<>();
+        return Arrays.stream(historyFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
+    }
 }

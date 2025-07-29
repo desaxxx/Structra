@@ -25,8 +25,9 @@ public class Cache {
      * @param key Key of the map
      * @return Selections if found, else returns a new created value.
      */
+    @NotNull
     static public Selections getSelections(CommandSender key) {
         Validate.validate(key != null, "Selection key cannot be null.");
-        return SELECTIONS_MAP.putIfAbsent(key, new Selections());
+        return SELECTIONS_MAP.computeIfAbsent(key, k -> new Selections());
     }
 }

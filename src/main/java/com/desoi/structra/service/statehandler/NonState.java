@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Nameable;
 import org.bukkit.NamespacedKey;
@@ -97,35 +96,17 @@ public class NonState {
         }
     }
 
-    // MINI MESSAGE & NAMEABLE
+    // NAMEABLE
     @SuppressWarnings("deprecation")
     static public <N extends Nameable> void saveNameable(@NotNull N nameable, @NotNull ObjectNode parentNode) {
-        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
-        /*
-         * Paper API doesn't have a bundle for adventure minimessage before 1.19.
-         */
-        if(MINECRAFT_VERSION >= 190) {
-            if(nameable.customName() == null) return;
-            parentNode.put("CustomName", MiniMessage.miniMessage().serializeOrNull(nameable.customName()));
-        }else {
-            // Deprecated
-            if(nameable.getCustomName() == null) return;
-            parentNode.put("CustomName", nameable.getCustomName());
-        }
+        if(nameable.getCustomName() == null) return;
+        parentNode.put("CustomName", nameable.getCustomName());
     }
 
+    @SuppressWarnings("deprecation")
     static public <N extends Nameable> void loadToNameable(@NotNull N nameable, ObjectNode parentNode) {
-        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
-        /*
-         * Paper API doesn't have a bundle for adventure minimessage before 1.19.
-         */
-        if(parentNode.has("CustomName")) {
-            if(MINECRAFT_VERSION >= 190) {
-                nameable.customName(MiniMessage.miniMessage().deserializeOrNull(parentNode.get("CustomName").asText()));
-            }else {
-                //noinspection deprecation
-                nameable.setCustomName(parentNode.get("CustomName").asText());
-            }
+        if(parentNode.get("CustomName") instanceof TextNode customNameNode) {
+            nameable.setCustomName(customNameNode.asText());
         }
     }
 
@@ -133,7 +114,7 @@ public class NonState {
     static public <T extends TileState> void saveTileState(@NotNull T tileState, @NotNull ObjectNode parentNode) {
         /*
          * Serialization is added on Paper 1.19.2
-         * It's nearly impossible to store data without serialization since primitive or complex type can be of any object.
+         * I don't know how to store data without serialization since primitive or complex type can be of any object.
          */
         if(Wrapper.getInstance().getVersion() >= 192) {
             try {
@@ -148,7 +129,7 @@ public class NonState {
     static public <T extends TileState> void loadToTileState(@NotNull T tileState, ObjectNode parentNode) {
         /*
          * Deserialization is added on Paper 1.19.2
-         * It's nearly impossible to store data without deserialization since primitive or complex type can be of any object.
+         * I don't know how to store data without deserialization since primitive or complex type can be of any object.
          */
         if(Wrapper.getInstance().getVersion() >= 192 && parentNode.get("PersistentDataContainer") instanceof TextNode pdcNode) {
             try {

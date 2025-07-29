@@ -10,13 +10,17 @@
     "y": 2,
     "z": 0
   },
-  "Palette": {
-    "minecraft:stone": 0,
-    "minecraft:chest": 1
+  "Origin": {
+    "x": 104,
+    "y": 75,
+    "z": 214,
+    "world": "world"
   },
-  "BlockData": [
-    1,0,0,0
-  ],
+  "Palette": {
+    "0": "minecraft:stone",
+    "1": "minecraft:chest"
+  },
+  "BlockData": [ 1, 0, 0, 0 ],
   "TileEntities": {
     "0": {
       "Type": "ChestState",
