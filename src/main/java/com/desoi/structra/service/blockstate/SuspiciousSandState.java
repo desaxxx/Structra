@@ -17,7 +17,9 @@ public class SuspiciousSandState implements IStateHandler<SuspiciousSand> {
 
     @Override
     public void save(@NotNull SuspiciousSand blockState, @NotNull ObjectNode node) {
-        node.set("Item", objectMapper.valueToTree(blockState.getItem().serialize()));
+        if(!blockState.getItem().isEmpty()) {
+            node.put("Item", JsonHelper.serializeItemStack(blockState.getItem()));
+        }
 
         NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
         saveTileState(blockState, node);

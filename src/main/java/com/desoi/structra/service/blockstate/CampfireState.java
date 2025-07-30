@@ -17,8 +17,8 @@ public class CampfireState implements IStateHandler<Campfire> {
             slotNode.put("CookTime", blockState.getCookTime(i));
             slotNode.put("CookTimeTotal", blockState.getCookTimeTotal(i));
             ItemStack item = blockState.getItem(i);
-            if(item != null) {
-                slotNode.set("Item", objectMapper.valueToTree(item.serialize()));
+            if(item != null && !item.isEmpty()) {
+                slotNode.put("Item", JsonHelper.serializeItemStack(item));
             }
         }
         saveTileState(blockState, node);

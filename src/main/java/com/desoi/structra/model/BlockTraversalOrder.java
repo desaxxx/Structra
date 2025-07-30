@@ -2,8 +2,7 @@ package com.desoi.structra.model;
 
 import com.desoi.structra.util.Validate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 
 public class BlockTraversalOrder {
 
@@ -14,23 +13,8 @@ public class BlockTraversalOrder {
     }
 
 
-    public List<Position> getPositions(Position minPosition, Position maxPosition) {
-        Validate.validate(minPosition != null, "Minimum position cannot be null.");
-        Validate.validate(maxPosition != null, "Maximum position cannot be null.");
-
-        int xSize = maxPosition.getX() - minPosition.getX();
-        int ySize = maxPosition.getY() - minPosition.getY();
-        int zSize = maxPosition.getZ() - minPosition.getZ();
-
-        List<Position> positions = new ArrayList<>(xSize * ySize * zSize);
-        for(int z = 0; z < zSize; z++) {
-            for(int y = 0; y < ySize; y++) {
-                for(int x = 0; x < xSize; x++) {
-                    Position pos = minPosition.clone().add(new Position(x, y, z));
-                    positions.add(pos);
-                }
-            }
-        }
-        return positions;
+    public LinkedHashSet<Position> getPositions(Position minPosition, Position maxPosition) {
+        Validate.validate(minPosition != null && maxPosition != null, "Positions cannot be null!");
+        return Position.getPositions(minPosition, maxPosition);
     }
 }

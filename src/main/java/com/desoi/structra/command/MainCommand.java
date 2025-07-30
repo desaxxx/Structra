@@ -10,6 +10,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * @since 1.0-SNAPSHOT
+ */
 public class MainCommand implements CommandExecutor, TabCompleter {
 
     @Override

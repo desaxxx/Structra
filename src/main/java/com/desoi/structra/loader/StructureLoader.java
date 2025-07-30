@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Getter
@@ -30,7 +30,7 @@ public class StructureLoader implements IInform {
     private final int periodTicks;
     private final int batchSize;
 
-    private final @NotNull Location originBlockLocation;
+    private final @NotNull Location originLocation;
     private final @NotNull World originWorld;
     private final @NotNull Position minPosition;
     private final @NotNull Position maxPosition;
@@ -40,7 +40,7 @@ public class StructureLoader implements IInform {
     private long startNanoTime;
 
     public StructureLoader(StructureFile structureFile, CommandSender executor, int delayTicks, int periodTicks, int batchSize, Location originLocation) {
-        Validate.validate(structureFile != null, "StructureFile cannot be null");
+        Validate.validate(structureFile != null, "StructureFile cannot be null.");
         Validate.validate(executor != null, "Executor cannot be null.");
         Validate.validate(delayTicks >= 0, "Delay ticks cannot be negative.");
         Validate.validate(periodTicks >= 0, "Period ticks cannot be negative.");
@@ -54,11 +54,11 @@ public class StructureLoader implements IInform {
         this.periodTicks = periodTicks;
         this.batchSize = batchSize;
 
-        this.originBlockLocation = originLocation.getBlock().getLocation().clone();
+        this.originLocation = originLocation.clone();
         this.originWorld = originLocation.getWorld();
-        this.minPosition = structureFile.getRelative().clone().add(Position.fromLocation(originBlockLocation, false));
-        this.maxPosition = minPosition.clone().add(new Position(structureFile.getXSize(), structureFile.getYSize(), structureFile.getZSize()));
-        this.positions = new ArrayList<>(structureFile.getBlockTraversalOrder().getPositions(minPosition, maxPosition));
+        this.minPosition = structureFile.getRelative().clone().add(Position.fromLocation(this.originLocation, false));
+        this.maxPosition = minPosition.clone().add(new Position(structureFile.getXSize()-1, structureFile.getYSize()-1, structureFile.getZSize()-1));
+        this.positions = new LinkedList<>(structureFile.getBlockTraversalOrder().getPositions(minPosition, maxPosition));
     }
 
     public StructureLoader(HistoryFile historyFile, CommandSender executor, int delayTicks, int periodTicks, int batchSize) {
@@ -96,7 +96,7 @@ public class StructureLoader implements IInform {
     public void saveHistory(Runnable completeTask) {
         Validate.validate(pasteTask == null || !pasteTask.isRunning(), "You cannot save history while loader is running.");
         File file = new File(Structra.getHistoryFolder(), String.format("history_%s" + Structra.FILE_EXTENSION, new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date())));
-        StructureWriter writer = new StructureWriter(file, executor, minPosition, maxPosition, originBlockLocation, delayTicks, periodTicks, batchSize, true);
+        StructureWriter writer = new StructureWriter(file, executor, minPosition, maxPosition, originLocation, delayTicks, periodTicks, batchSize, true);
         StructureWriteTask writerTask = writer.getTask();
         writerTask.setSilent(true);
         writerTask.execute(completeTask);

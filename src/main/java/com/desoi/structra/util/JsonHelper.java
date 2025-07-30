@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Base64;
 import java.util.Map;
 
 public class JsonHelper {
@@ -39,12 +40,12 @@ public class JsonHelper {
         }
     }
 
-    @NotNull
+    @Nullable
     static public String findPath(@NotNull JsonNode root, @NotNull JsonNode target) {
         return findPath(root, target, "", 0);
     }
 
-    @NotNull
+    @Nullable
     static private String findPath(@NotNull JsonNode root, @NotNull JsonNode target, @NotNull String currentPath, int attempt) {
         if (root.equals(target)) {
             return currentPath;
@@ -62,7 +63,7 @@ public class JsonHelper {
                 if(result != null) return result;
             }
         }
-        return currentPath + "/- (Reached to an element that is neither Object nor Array)";
+        return null;
     }
 
     @NotNull
@@ -100,12 +101,18 @@ public class JsonHelper {
         return objectMapper.convertValue(node, new TypeReference<>() {});
     }
 
+    // Serialize Bukkit Objects
+
+    @NotNull
+    static public String serializeItemStack(@NotNull ItemStack itemStack) {
+        return Base64.getEncoder().encodeToString(itemStack.serializeAsBytes());
+    }
 
     // Deserialize Bukkit Objects
 
     @NotNull
     static public ItemStack deserializeItemStack(@NotNull JsonNode node) {
-        return ItemStack.deserialize(nodeToMap(node));
+        return ItemStack.deserializeBytes(Base64.getDecoder().decode(node.asText()));
     }
 
     @Nullable

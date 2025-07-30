@@ -26,8 +26,12 @@ public class VaultState implements IStateHandler<Vault> {
             NonState.saveLootTable(blockState.getDisplayedLootTable(), JsonHelper.getOrCreate(node, "DisplayedLootTable"));
         }
 
-        node.set("KeyItem", objectMapper.valueToTree(blockState.getKeyItem().serialize()));
-        node.set("DisplayedItem", objectMapper.valueToTree(blockState.getDisplayedItem().serialize()));
+        if(!blockState.getKeyItem().isEmpty()) {
+            node.put("KeyItem", JsonHelper.serializeItemStack(blockState.getKeyItem()));
+        }
+        if(!blockState.getDisplayedItem().isEmpty()) {
+            node.put("DisplayedItem", JsonHelper.serializeItemStack(blockState.getDisplayedItem()));
+        }
 
         node.put("NextStateUpdateTime", blockState.getNextStateUpdateTime());
 

@@ -35,8 +35,8 @@ public class NonState {
         ObjectNode itemsNode = JsonNodeFactory.instance.objectNode();
         for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack item = inventory.getItem(i);
-            if (item != null) {
-                itemsNode.set(String.valueOf(i), objectMapper.valueToTree(item.serialize()));
+            if (item != null && !item.isEmpty()) {
+                itemsNode.put(String.valueOf(i), JsonHelper.serializeItemStack(item));
             }
         }
         parentNode.set("Items", itemsNode);
@@ -49,7 +49,7 @@ public class NonState {
         for (int i = 0; i < inventory.getSize(); i++) {
             JsonNode itemNode = itemsNode.get(String.valueOf(i));
             if (itemNode != null) {
-                ItemStack item = ItemStack.deserialize(JsonHelper.nodeToMap(itemNode));
+                ItemStack item = JsonHelper.deserializeItemStack(itemNode);
                 inventory.setItem(i, item);
             }
         }
@@ -58,7 +58,6 @@ public class NonState {
     static public <T extends Lootable> void saveLootable(@NotNull T lootable, @NotNull ObjectNode parentNode) {
         LootTable lootTable = lootable.getLootTable();
         if (lootTable != null) {
-            lootTable.getKey();
             parentNode.put("LootTable", lootTable.getKey().toString());
         }
         parentNode.put("Seed", lootable.getSeed());
@@ -109,7 +108,6 @@ public class NonState {
             nameable.setCustomName(customNameNode.asText());
         }
     }
-
 
     static public <T extends TileState> void saveTileState(@NotNull T tileState, @NotNull ObjectNode parentNode) {
         /*
@@ -170,5 +168,4 @@ public class NonState {
             return PotionEffectType.getByName(name);
         }
     }
-
 }

@@ -20,7 +20,7 @@ public class ToolCommand implements BaseCommand {
             Util.tell(sender, "&cYou can't use this command on console.");
             return true;
         }
-        player.give(Structra.SELECTOR_TOOL);
+        player.getInventory().addItem(Structra.SELECTOR_TOOL);
         Util.tell(player, "&eHere your tool!");
         return true;
     }

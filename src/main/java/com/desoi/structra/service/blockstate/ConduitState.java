@@ -1,6 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Conduit;
@@ -14,9 +15,11 @@ public class ConduitState implements IStateHandler<Conduit> {
 
     @Override
     public void save(@NotNull Conduit blockState, @NotNull ObjectNode node) {
-        LivingEntity target = blockState.getTarget();
-        if (target != null) {
-            node.put("TargetUUID", target.getUniqueId().toString());
+        if(Wrapper.getInstance().getVersion() >= 204) {
+            LivingEntity target = blockState.getTarget();
+            if (target != null) {
+                node.put("TargetUUID", target.getUniqueId().toString());
+            }
         }
 
         saveTileState(blockState, node);
@@ -24,8 +27,7 @@ public class ConduitState implements IStateHandler<Conduit> {
 
     @Override
     public void loadTo(@NotNull Conduit blockState, ObjectNode node) {
-
-        if(node.has("TargetUUID")) {
+        if(Wrapper.getInstance().getVersion() >= 204 && node.has("TargetUUID")) {
             String uuidStr = node.get("TargetUUID").asText();
             try {
                 UUID uuid = UUID.fromString(uuidStr);

@@ -12,8 +12,6 @@ import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
 public class SignState implements IStateHandler<Sign> {
 
     @Override
@@ -45,9 +43,9 @@ public class SignState implements IStateHandler<Sign> {
             node.set("Lines", linesNode);
         }
 
-        if (blockState.getAllowedEditorUniqueId() != null) {
-            node.put("AllowedEditorUniqueId", blockState.getAllowedEditorUniqueId().toString());
-        }
+//        if (blockState.getAllowedEditorUniqueId() != null) {
+//            node.put("AllowedEditorUniqueId", blockState.getAllowedEditorUniqueId().toString());
+//        }
 
         saveTileState(blockState, node);
     }
@@ -102,9 +100,9 @@ public class SignState implements IStateHandler<Sign> {
             }
         }
 
-        if (node.get("AllowedEditorUniqueId") instanceof TextNode allowedEditorUniqueIdNode) {
-            blockState.setAllowedEditorUniqueId(UUID.fromString(allowedEditorUniqueIdNode.asText()));
-        }
+//        if (node.get("AllowedEditorUniqueId") instanceof TextNode allowedEditorUniqueIdNode) {
+//            blockState.setAllowedEditorUniqueId(UUID.fromString(allowedEditorUniqueIdNode.asText()));
+//        }
 
         loadToTileState(blockState, node);
 

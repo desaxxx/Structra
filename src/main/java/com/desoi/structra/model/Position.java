@@ -9,6 +9,8 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedHashSet;
+
 /**
  * @since 1.0-SNAPSHOT
  */
@@ -80,11 +82,10 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public static Position getMinimum(Position pos1, Position pos2) {
-        Position position = pos1.clone();
-        position.x = Math.min(pos1.x, pos2.x);
-        position.y = Math.min(pos1.y, pos2.y);
-        position.z = Math.min(pos1.z, pos2.z);
-        return position;
+        int x = Math.min(pos1.x, pos2.x);
+        int y = Math.min(pos1.y, pos2.y);
+        int z = Math.min(pos1.z, pos2.z);
+        return new Position(x, y, z, pos1.worldName);
     }
 
     /**
@@ -94,11 +95,10 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public static Position getMaximum(Position pos1, Position pos2) {
-        Position position = pos1.clone();
-        position.x = Math.max(pos1.x, pos2.x);
-        position.y = Math.max(pos1.y, pos2.y);
-        position.z = Math.max(pos1.z, pos2.z);
-        return position;
+        int x = Math.max(pos1.x, pos2.x);
+        int y = Math.max(pos1.y, pos2.y);
+        int z = Math.max(pos1.z, pos2.z);
+        return new Position(x, y, z, pos1.worldName);
     }
 
     /**
@@ -113,6 +113,40 @@ public class Position implements Cloneable {
         return pos;
     }
 
+    /**
+     * Get positions between given positions.
+     * @param pos1 Position 1
+     * @param pos2 Position 2
+     * @return LinkedHashSet of Positions
+     * @since 1.0-SNAPSHOT
+     */
+    public static LinkedHashSet<Position> getPositions(Position pos1, Position pos2) {
+        Validate.validate(pos1 != null && pos2 != null, "Positions cannot be null.");
+        Position minPosition = getMinimum(pos1, pos2);
+        Position maxPosition = getMaximum(pos1, pos2);
+
+        int width = maxPosition.width(minPosition);
+        int height = maxPosition.height(minPosition);
+        int length = maxPosition.length(minPosition);
+
+        LinkedHashSet<Position> positions = new LinkedHashSet<>();
+        for(int z = 0; z < length + 1; z++) {
+            for(int y = 0; y < height + 1; y++) {
+                for(int x = 0; x < width + 1; x++) {
+                    Position pos = minPosition.clone().add(new Position(x, y, z));
+                    positions.add(pos);
+                }
+            }
+        }
+        return positions;
+    }
+
+    @NotNull
+    public String stringify() {
+        String wn = worldName == null ? "null" : worldName;
+        return "[" + x + "," + y + "," + z + "," + wn + "]";
+    }
+
 
     /**
      * Convert to {@link Location} with an external {@link World}.
@@ -121,7 +155,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public Location toLocation(World world) {
-        return new Location(world, x, y, z);
+        return new Location(world, x + 0.5, y + 0.5, z + 0.5);
     }
 
     /**
@@ -133,6 +167,81 @@ public class Position implements Cloneable {
     public Location toLocation() {
         return toLocation(getWorld());
     }
+
+
+    /**
+     * Calculate the x size between positions.
+     * @param other Other Position
+     * @return X size
+     * @since 1.0-SNAPSHOT
+     */
+    public int sizeX(Position other) {
+        Validate.validate(other != null, "Position cannot be null.");
+        return Math.abs(this.x - other.x);
+    }
+
+    /**
+     * Calculate the width between positions.
+     * @param other Other Position
+     * @return Width
+     * @since 1.0-SNAPSHOT
+     */
+    public int width(Position other) {
+        return sizeX(other);
+    }
+
+    /**
+     * Calculate the y size between positions.
+     * @param other Other Position
+     * @return Y size
+     * @since 1.0-SNAPSHOT
+     */
+    public int sizeY(Position other) {
+        Validate.validate(other != null, "Position cannot be null.");
+        return Math.abs(this.y - other.y);
+    }
+
+    /**
+     * Calculate the height between positions.
+     * @param other Other Position
+     * @return Height
+     * @since 1.0-SNAPSHOT
+     */
+    public int height(Position other) {
+        return sizeY(other);
+    }
+
+    /**
+     * Calculate the z size between positions.
+     * @param other Other Position
+     * @return Z size
+     * @since 1.0-SNAPSHOT
+     */
+    public int sizeZ(Position other) {
+        Validate.validate(other != null, "Position cannot be null.");
+        return Math.abs(this.z - other.z);
+    }
+
+    /**
+     * Calculate the length between positions.
+     * @param other Other Position
+     * @return Length
+     * @since 1.0-SNAPSHOT
+     */
+    public int length(Position other) {
+        return sizeZ(other);
+    }
+
+    /**
+     * Calculate the size between the positions.
+     * @param other Other Position
+     * @return Size
+     * @since 1.0-SNAPSHOT
+     */
+    public int size(Position other) {
+        return sizeX(other) * sizeY(other) * sizeZ(other);
+    }
+
 
 
     /**

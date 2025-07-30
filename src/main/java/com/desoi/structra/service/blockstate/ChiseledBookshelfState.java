@@ -11,6 +11,11 @@ import org.jetbrains.annotations.NotNull;
 public class ChiseledBookshelfState implements IStateHandler<ChiseledBookshelf> {
 
     @Override
+    public int minSupportedVersion() {
+        return 193;
+    }
+
+    @Override
     public void save(@NotNull ChiseledBookshelf blockState, @NotNull ObjectNode node) {
         node.put("LastInteractedSlot", blockState.getLastInteractedSlot());
 

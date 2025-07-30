@@ -79,7 +79,7 @@ public class StructureWriteTask implements IInform {
                         ratio = 1.0f;
                         long elapsedMS = (System.nanoTime() - structureWriter.getStartNanoTime()) / 1_000_000;
                         inform(String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
-                        informIgnoreSilent(String.format("&aSaved '%d blocks' to file '%s' in %d ms", size, structureWriter.getFile().getName(), elapsedMS));
+                        inform(String.format("&aSaved '%d blocks' to file '%s' in %d ms", size, structureWriter.getFile().getName(), elapsedMS));
                         completeTask.run();
                         return;
                     }
@@ -102,7 +102,6 @@ public class StructureWriteTask implements IInform {
                     ObjectNode tileEntity = StructureWriter.getObjectMapper().createObjectNode();
                     if(handler != null) {
                         tileEntity.put("Type", handler.name());
-                        //tileEntity.set("Offset", getOffsetNode(blockLocation, tileEntity));
                         handler.save(state, tileEntity);
                         structureWriter.getTileEntitiesNode().set(String.valueOf(index), tileEntity);
                     }

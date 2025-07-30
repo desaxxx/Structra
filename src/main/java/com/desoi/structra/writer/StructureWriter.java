@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.List;
+import java.util.LinkedList;
 
 @Getter
 public class StructureWriter implements IInform {
@@ -32,7 +32,7 @@ public class StructureWriter implements IInform {
     private final @NotNull BlockTraversalOrder blockTraversalOrder = BlockTraversalOrder.DEFAULT;
 
     private final @NotNull CommandSender executor;
-    private final @NotNull Location originBlockLocation;
+    private final @NotNull Location originLocation;
     private final @NotNull World originWorld;
     private final @NotNull Position minPosition;
     private final @NotNull Position maxPosition;
@@ -50,7 +50,7 @@ public class StructureWriter implements IInform {
     private final int periodTicks;
     private final int batchSize;
 
-    private final @NotNull List<Position> positions;
+    private final @NotNull LinkedList<Position> positions;
     @Setter
     private long startNanoTime;
 
@@ -71,27 +71,28 @@ public class StructureWriter implements IInform {
         root.put("Version", version);
 
         this.executor = executor;
-        this.originBlockLocation = originLocation.getBlock().getLocation().clone();
+        this.originLocation = originLocation.clone();
         this.originWorld = originLocation.getWorld();
         Position min = Position.getMinimum(position1, position2);
         this.minPosition = new Position(min.getX(), min.getY(), min.getZ());
         Position max = Position.getMaximum(position1, position2);
         this.maxPosition = new Position(max.getX(), max.getY(), max.getZ());
-        this.xSize = maxPosition.getX() - minPosition.getX();
-        this.ySize = maxPosition.getY() - minPosition.getY();
-        this.zSize = maxPosition.getZ() - minPosition.getZ();
+        this.xSize = maxPosition.width(minPosition) + 1;
+        this.ySize = maxPosition.height(minPosition) + 1;
+        this.zSize = maxPosition.length(minPosition) + 1;
         ObjectNode sizeNode = JsonHelper.getOrCreate(root, "Size");
         sizeNode.put("x", xSize);
         sizeNode.put("y", ySize);
         sizeNode.put("z", zSize);
         sizeNode.put("Total", getSize());
-        this.relative = minPosition.clone().subtract(Position.fromLocation(originBlockLocation, false));
+        // Relative = Min - Origin -> Min = Relative + Origin
+        this.relative = minPosition.clone().subtract(Position.fromLocation(this.originLocation, false));
         ObjectNode relativeNode = JsonHelper.getOrCreate(root, "Relative");
         relativeNode.put("x", relative.getX());
         relativeNode.put("y", relative.getY());
         relativeNode.put("z", relative.getZ());
         if(historyWriter) {
-            this.origin = Position.fromLocation(originBlockLocation, true);
+            this.origin = Position.fromLocation(this.originLocation, true);
             ObjectNode originNode = JsonHelper.getOrCreate(root, "Origin");
             originNode.put("x", origin.getX());
             originNode.put("y", origin.getY());
@@ -106,7 +107,7 @@ public class StructureWriter implements IInform {
         this.delayTicks = delayTicks;
         this.periodTicks = periodTicks;
         this.batchSize = batchSize;
-        this.positions = blockTraversalOrder.getPositions(minPosition, maxPosition);
+        this.positions = new LinkedList<>(blockTraversalOrder.getPositions(minPosition, maxPosition));
     }
     public StructureWriter(File file, CommandSender executor, Position position1, Position position2, Location originLocation, int delayTicks, int periodTicks, int batchSize) {
         this(file, executor, position1, position2, originLocation, delayTicks, periodTicks, batchSize, false);

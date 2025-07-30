@@ -15,8 +15,8 @@
 
 > ## Usage
 > - `/structra tool`: Gives you the Structra tool item.
->  - **Left-click** with the tool: Sets **Position 1** at the clicked block.
->  - **Right-click** with the tool: Sets **Position 2** at the clicked block.
+>   - **Left-click** with the tool: Sets **Position 1** at the clicked block.
+>   - **Right-click** with the tool: Sets **Position 2** at the clicked block.
 >
 > - `/structra pos1 [<x> <y> <z> <world>]`: Sets **Position 1**.
 >   - **As a player**: If no coordinates are given, selects your current target block or location.
@@ -28,11 +28,15 @@
 >
 > - `/structra write <fileName> [<batchSize>] [<x> <y> <z> <world>]`: Saves (writes) the selected region as a structure file.
 >   - **As a player**: Coordinates are optional (defaults to your current location).
+> - `/structra write <fileName> <x> <y> <z> <world> [<batchSize>]`: Saved (writes) the selected region as a structure file.
 >   - **As console**: Coordinates and world are required.
 >
 > - `/structra paste <fileName> [<batchSize>] [<x> <y> <z> <world>]`: Loads (pastes) a structure at the given location.
 >   - **As a player**: Coordinates are optional (defaults to your current location).
+> - `/structra paste <fileName> <x> <y> <z> <world> [<batchSize>]`: Loads (pastes) a structure at the given location.
 >   - **As console**: Coordinates and world are required.
+> 
+> - `/structra pasteHistory <fileName> [<batchSize>]`: Loads (pastes) the history file with given file name.
 >   
 > - `/structra delete <fileName>`: Deletes the specified structra file.
 > 
@@ -46,6 +50,7 @@
 > ## Support / Donate
 > Your support helps keep this project active. You can donate using these platforms:
 >
+> ### Not configured yet.
 > [![Buy Me a Coffee](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/donate/buymeacoffee-plural_vector.svg)]() <br>
 > [![Patreon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/donate/patreon-plural_vector.svg)]() <br>
 > [![Ko-fi](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/donate/kofi-plural_vector.svg)]()
