@@ -6,10 +6,12 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 
 /**
  * @since 1.0-SNAPSHOT
@@ -147,6 +149,29 @@ public class Position implements Cloneable {
         return "[" + x + "," + y + "," + z + "," + wn + "]";
     }
 
+    /**
+     * Check if the Position equals to given Object.
+     * @param o Object
+     * @return whether equals or not
+     * @since 1.0.0
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return x == position.x && y == position.y && z == position.z && Objects.equals(worldName, position.worldName);
+    }
+
+    /**
+     * Hash code
+     * @return int
+     * @since 1.0.0
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z, worldName);
+    }
+
 
     /**
      * Convert to {@link Location} with an external {@link World}.
@@ -166,6 +191,16 @@ public class Position implements Cloneable {
     @NotNull
     public Location toLocation() {
         return toLocation(getWorld());
+    }
+
+    /**
+     * Convert to {@link Vector}.
+     * @return Vector
+     * @since 1.0.0
+     */
+    @NotNull
+    public Vector toVector() {
+        return new Vector(x,y,z);
     }
 
 
