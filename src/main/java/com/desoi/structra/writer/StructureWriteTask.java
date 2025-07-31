@@ -43,6 +43,13 @@ public class StructureWriteTask implements IInform {
         structureWriter.setSilent(silent);
     }
 
+    public int estimatedRemainingTime() {
+        int size = structureWriter.getPositions().size();
+        int batchSize = structureWriter.getBatchSize();
+        int period = structureWriter.getPeriodTicks() / 20;
+        return (size-1) / batchSize * period;
+    }
+
 
     /**
      * Execute with a complete task.
