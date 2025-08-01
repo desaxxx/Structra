@@ -44,6 +44,18 @@ public class StructurePasteTask implements IInform {
         structureLoader.setSilent(silent);
     }
 
+    /**
+     * Calculate the estimated remaining time.
+     * @return Seconds remained
+     * @since 1.0.0
+     */
+    public int estimatedRemainingTime() {
+        int size = structureLoader.getPositions().size();
+        int batchSize = structureLoader.getBatchSize();
+        int period = structureLoader.getPeriodTicks() / 20;
+        return (int) Math.floor((double) (size-1) / batchSize * period);
+    }
+
     @Getter
     private boolean running = false;
 

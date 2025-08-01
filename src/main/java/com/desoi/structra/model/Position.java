@@ -163,13 +163,45 @@ public class Position implements Cloneable {
     }
 
     /**
-     * Hash code
+     * Hash code.
      * @return int
      * @since 1.0.0
      */
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z, worldName);
+    }
+
+    /**
+     * Check whether the Position is between given positions.
+     * @param pos1 Position 1
+     * @param pos2 Position 2
+     * @return whether between or not.
+     * @since 1.0.0
+     */
+    public boolean isBetween(Position pos1, Position pos2) {
+        Validate.validate(pos1 != null && pos2 != null, "Positions cannot be null.");
+        Position min = getMinimum(pos1, pos2);
+        Position max = getMaximum(pos1, pos2);
+        return isBetween(min.x, max.x, x) && isBetween(min.y, max.y, y) && isBetween(min.z, max.z, z);
+    }
+
+    /**
+     * @since 1.0.0
+     */
+    private boolean isBetween(int min, int max, int i) {
+        return i >= min && i <= max;
+    }
+
+    /**
+     * Check whether {@link #worldName} matches with given Positions's {@link #worldName}.
+     * @param other Position
+     * @return whether matches or not
+     * @since 1.0.0
+     */
+    public boolean worldsMatch(Position other) {
+        Validate.validate(other != null, "Position cannot be null.");
+        return (worldName == null && other.worldName == null) || Objects.equals(worldName, other.worldName);
     }
 
 
