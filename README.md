@@ -28,7 +28,7 @@
 >
 > - `/structra write <fileName> [<batchSize>] [<x> <y> <z> <world>]`: Saves (writes) the selected region as a structure file.
 >   - **As a player**: Coordinates are optional (defaults to your current location).
-> - `/structra write <fileName> <x> <y> <z> <world> [<batchSize>]`: Saved (writes) the selected region as a structure file.
+> - `/structra write <fileName> <x> <y> <z> <world> [<batchSize>]`: Saves (writes) the selected region as a structure file.
 >   - **As console**: Coordinates and world are required.
 >
 > - `/structra paste <fileName> [<batchSize>] [<x> <y> <z> <world>]`: Loads (pastes) a structure at the given location.
