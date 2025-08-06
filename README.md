@@ -1,5 +1,6 @@
 > # Structra
-> Time-based schematic loader and writer plugin.
+> Time-based schematic loader and writer plugin.\
+> [![modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/available/modrinth_vector.svg)](https://modrinth.com/plugin/structra)
 
 > [!IMPORTANT]
 > This is not an addon for WorldEdit. It uses entirely different system.
