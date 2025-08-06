@@ -61,9 +61,13 @@ public class Util {
 
     @NotNull
     static public List<String> savesFileNames() {
-        File[] saveFiles = Structra.getSavesFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
-        if(saveFiles == null) return new ArrayList<>();
-        return Arrays.stream(saveFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
+        try {
+            File[] saveFiles = Structra.getSavesFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
+            if(saveFiles == null) return new ArrayList<>();
+            return Arrays.stream(saveFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
+        } catch (SecurityException e) {
+            return new ArrayList<>();
+        }
     }
 
     @NotNull

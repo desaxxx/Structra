@@ -3,8 +3,11 @@ package com.desoi.structra;
 import com.desoi.structra.command.MainCommand;
 import com.desoi.structra.listener.BukkitListener;
 import com.desoi.structra.util.ItemCreator;
+import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Wrapper;
 import lombok.Getter;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -37,6 +40,18 @@ public final class Structra extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new BukkitListener(), this);
 
+        initFolders();
+
+        wrapper = new Wrapper(this);
+        initMetrics();
+    }
+
+    @Override
+    public void onDisable() {
+        instance = null;
+    }
+
+    private void initFolders() {
         if(!getDataFolder().exists()) //noinspection ResultOfMethodCallIgnored
             getDataFolder().mkdirs();
         savesFolder = new File(Structra.instance.getDataFolder(), "saves");
@@ -45,12 +60,10 @@ public final class Structra extends JavaPlugin {
         historyFolder = new File(Structra.instance.getDataFolder(), "history");
         if(!historyFolder.exists()) //noinspection ResultOfMethodCallIgnored
             historyFolder.mkdirs();
-
-        wrapper = new Wrapper(this);
     }
 
-    @Override
-    public void onDisable() {
-        instance = null;
+    private void initMetrics() {
+        Metrics metrics = new Metrics(this,26802);
+        metrics.addCustomChart(new SingleLineChart("saves", () -> Util.savesFileNames().size()));
     }
 }
