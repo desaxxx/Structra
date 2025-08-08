@@ -15,6 +15,7 @@ public class BukkitListener implements Listener {
         Action action = event.getAction();
         if(!(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK)) return;
         if(event.getItem() == null || !event.getItem().equals(Structra.SELECTOR_TOOL)) return;
+        if(!event.getPlayer().hasPermission("structra.select")) return;
         if(event.getClickedBlock() == null) return;
 
         event.setCancelled(true);
