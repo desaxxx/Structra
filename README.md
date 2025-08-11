@@ -69,3 +69,11 @@
 
 > ## License
 > This plugin is licensed under __[GNU GENERAL PUBLIC LICENSE](LICENSE)__ (GPLv3)
+
+> ## Showcase
+> [Youtube Link #1](https://www.youtube.com/watch?v=BegPo-EezSs)
+>
+> ![](https://i.imgur.com/dXgtOyu.png)
+> ![](https://i.imgur.com/rhnjH0B.png)
+> ![](https://i.imgur.com/veMBV2e.png)
+> ![](https://i.imgur.com/JhknzdU.png)
