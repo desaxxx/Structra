@@ -29,9 +29,9 @@ import java.util.Base64;
 
 public class NonState {
 
-    static private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    static public void saveInventory(@NotNull Inventory inventory, @NotNull ObjectNode parentNode) {
+    public static void saveInventory(@NotNull Inventory inventory, @NotNull ObjectNode parentNode) {
         ObjectNode itemsNode = JsonNodeFactory.instance.objectNode();
         for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack item = inventory.getItem(i);
@@ -42,7 +42,7 @@ public class NonState {
         parentNode.set("Items", itemsNode);
     }
 
-    static public void loadToInventory(@NotNull Inventory inventory, ObjectNode parentNode) {
+    public static void loadToInventory(@NotNull Inventory inventory, ObjectNode parentNode) {
         if (parentNode == null) return;
         if (!(parentNode.get("Items") instanceof ObjectNode itemsNode)) return;
 
@@ -55,7 +55,7 @@ public class NonState {
         }
     }
 
-    static public <T extends Lootable> void saveLootable(@NotNull T lootable, @NotNull ObjectNode parentNode) {
+    public static <T extends Lootable> void saveLootable(@NotNull T lootable, @NotNull ObjectNode parentNode) {
         LootTable lootTable = lootable.getLootTable();
         if (lootTable != null) {
             parentNode.put("LootTable", lootTable.getKey().toString());
@@ -63,18 +63,18 @@ public class NonState {
         parentNode.put("Seed", lootable.getSeed());
     }
 
-    static public <T extends Lootable> void loadToLootable(@NotNull T lootable, ObjectNode parentNode) {
+    public static <T extends Lootable> void loadToLootable(@NotNull T lootable, ObjectNode parentNode) {
         if (parentNode == null) return;
         lootable.setLootTable(getLootTable(parentNode));
         if (parentNode.has("Seed")) lootable.setSeed(parentNode.get("Seed").asLong());
     }
 
-    static public <T extends LootTable> void saveLootTable(@NotNull T lootTable, @NotNull ObjectNode parentNode) {
+    public static <T extends LootTable> void saveLootTable(@NotNull T lootTable, @NotNull ObjectNode parentNode) {
         parentNode.put("LootTable", lootTable.getKey().toString());
     }
 
     @Nullable
-    static public LootTable getLootTable(ObjectNode parentNode) {
+    public static LootTable getLootTable(ObjectNode parentNode) {
         if (parentNode == null) return null;
         if(parentNode.get("LootTable") instanceof TextNode lootTableNode) {
             NamespacedKey key = NamespacedKey.fromString(lootTableNode.asText());
@@ -85,11 +85,11 @@ public class NonState {
         return null;
     }
 
-    static public <T extends Entity> void saveEntityBlockStorage(@NotNull EntityBlockStorage<T> entityBlockStorage, @NotNull ObjectNode parentNode) {
+    public static <T extends Entity> void saveEntityBlockStorage(@NotNull EntityBlockStorage<T> entityBlockStorage, @NotNull ObjectNode parentNode) {
         parentNode.put("MaxEntities", entityBlockStorage.getMaxEntities());
     }
 
-    static public <T extends Entity> void loadToEntityBlockStorage(@NotNull EntityBlockStorage<T> entityBlockStorage, ObjectNode parentNode) {
+    public static <T extends Entity> void loadToEntityBlockStorage(@NotNull EntityBlockStorage<T> entityBlockStorage, ObjectNode parentNode) {
         if(parentNode.has("MaxEntities") && parentNode.get("MaxEntities").isInt()) {
             entityBlockStorage.setMaxEntities(parentNode.get("MaxEntities").asInt());
         }
@@ -97,19 +97,19 @@ public class NonState {
 
     // NAMEABLE
     @SuppressWarnings("deprecation")
-    static public <N extends Nameable> void saveNameable(@NotNull N nameable, @NotNull ObjectNode parentNode) {
+    public static <N extends Nameable> void saveNameable(@NotNull N nameable, @NotNull ObjectNode parentNode) {
         if(nameable.getCustomName() == null) return;
         parentNode.put("CustomName", nameable.getCustomName());
     }
 
     @SuppressWarnings("deprecation")
-    static public <N extends Nameable> void loadToNameable(@NotNull N nameable, ObjectNode parentNode) {
+    public static <N extends Nameable> void loadToNameable(@NotNull N nameable, ObjectNode parentNode) {
         if(parentNode.get("CustomName") instanceof TextNode customNameNode) {
             nameable.setCustomName(customNameNode.asText());
         }
     }
 
-    static public <T extends TileState> void saveTileState(@NotNull T tileState, @NotNull ObjectNode parentNode) {
+    public static <T extends TileState> void saveTileState(@NotNull T tileState, @NotNull ObjectNode parentNode) {
         /*
          * Serialization is added on Paper 1.19.2
          * I don't know how to store data without serialization since primitive or complex type can be of any object.
@@ -124,7 +124,7 @@ public class NonState {
         }
     }
 
-    static public <T extends TileState> void loadToTileState(@NotNull T tileState, ObjectNode parentNode) {
+    public static <T extends TileState> void loadToTileState(@NotNull T tileState, ObjectNode parentNode) {
         /*
          * Deserialization is added on Paper 1.19.2
          * I don't know how to store data without deserialization since primitive or complex type can be of any object.
@@ -142,7 +142,7 @@ public class NonState {
 
 
     @SuppressWarnings("deprecation")
-    static public void savePotionEffectType(@NotNull PotionEffect potionEffect, @NotNull ObjectNode parentNode, final int MINECRAFT_VERSION) {
+    public static void savePotionEffectType(@NotNull PotionEffect potionEffect, @NotNull ObjectNode parentNode, final int MINECRAFT_VERSION) {
         if (MINECRAFT_VERSION >= 205) {
             NamespacedKey key = potionEffect.getType().getKey();
             parentNode.put("PotionEffectType", key.toString());
@@ -155,7 +155,7 @@ public class NonState {
 
     @SuppressWarnings("deprecation")
     @Nullable
-    static public PotionEffectType getPotionEffectType(ObjectNode parentNode) {
+    public static PotionEffectType getPotionEffectType(ObjectNode parentNode) {
         if (parentNode == null) return null;
         final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
         if (MINECRAFT_VERSION >= 205) {

@@ -10,18 +10,17 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.*;
 
-@SuppressWarnings("unused")
 public class Util {
 
-    static public final String PREFIX = "[Structra] ";
+    public static final String PREFIX = "[Structra] ";
 
-    static public void log(String... msg) {
+    public static void log(String... msg) {
         for (String s : msg) {
             Bukkit.getConsoleSender().sendMessage(HexUtil.parse(PREFIX + s));
         }
     }
 
-    static public void tell(@NotNull CommandSender receiver, @NotNull String... msg) {
+    public static void tell(@NotNull CommandSender receiver, @NotNull String... msg) {
         for (String s : msg) {
             receiver.sendMessage(HexUtil.parse(PREFIX + s));
         }
@@ -29,8 +28,8 @@ public class Util {
 
 
 
-    static private final boolean DEBUG = true;
-    static public void debug(String... msg) {
+    private static final boolean DEBUG = true;
+    public static void debug(String... msg) {
         if (DEBUG) {
             for (String s : msg) {
                 log("[Debug] " + s);
@@ -39,7 +38,7 @@ public class Util {
     }
 
 
-    static public void selectPosition(@NotNull CommandSender sender, @NotNull Position position, int pos) {
+    public static void selectPosition(@NotNull CommandSender sender, @NotNull Position position, int pos) {
         if(!(pos == 1 || pos == 2)) return;
 
         if(pos == 1) {
@@ -51,7 +50,7 @@ public class Util {
     }
 
 
-    static public int parseInt(@NotNull String str, int def) {
+    public static int parseInt(@NotNull String str, int def) {
         try {
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
@@ -60,7 +59,7 @@ public class Util {
     }
 
     @NotNull
-    static public List<String> savesFileNames() {
+    public static List<String> savesFileNames() {
         try {
             File[] saveFiles = Structra.getSavesFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
             if(saveFiles == null) return new ArrayList<>();
@@ -71,7 +70,7 @@ public class Util {
     }
 
     @NotNull
-    static public List<String> historyFileNames() {
+    public static List<String> historyFileNames() {
         File[] historyFiles = Structra.getHistoryFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
         if (historyFiles == null) return new ArrayList<>();
         return Arrays.stream(historyFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();

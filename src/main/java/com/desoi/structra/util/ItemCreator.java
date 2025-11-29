@@ -27,7 +27,7 @@ public class ItemCreator {
      * @param itemStack ItemStack
      * @return new ItemCreator
      */
-    static public ItemCreator of(@NotNull ItemStack itemStack) {
+    public static ItemCreator of(@NotNull ItemStack itemStack) {
         return new ItemCreator(itemStack);
     }
 
@@ -36,7 +36,7 @@ public class ItemCreator {
      * @param material Material
      * @return new ItemCreator
      */
-    static public ItemCreator of(@NotNull Material material) {
+    public static ItemCreator of(@NotNull Material material) {
         return new ItemCreator(new ItemStack(material));
     }
 

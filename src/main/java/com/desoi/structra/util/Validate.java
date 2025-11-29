@@ -5,13 +5,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class Validate {
 
-    static public void validate(boolean b, @NotNull String errorMessage) {
+    public static void validate(boolean b, @NotNull String errorMessage) {
         if(!b) {
             throw new StructraException(errorMessage);
         }
     }
 
-    static public void validate(@NotNull ThrowingSupplier<Boolean> supplier, @NotNull String errorMessage, boolean log) {
+    public static void validate(@NotNull ThrowingSupplier<Boolean> supplier, @NotNull String errorMessage, boolean log) {
         try {
             if(!supplier.get()) {
                 throw new StructraException(errorMessage);
@@ -22,12 +22,12 @@ public class Validate {
         }
     }
 
-    static public void validate(@NotNull ThrowingSupplier<Boolean> supplier, @NotNull String errorMessage) {
+    public static void validate(@NotNull ThrowingSupplier<Boolean> supplier, @NotNull String errorMessage) {
         validate(supplier, errorMessage, false);
     }
 
     @NotNull
-    static public <T> T validateException(@NotNull ThrowingSupplier<T> supplier, @NotNull String errorMessage, boolean log) {
+    public static <T> T validateException(@NotNull ThrowingSupplier<T> supplier, @NotNull String errorMessage, boolean log) {
         try {
             return supplier.get();
         }catch (Exception e) {
@@ -37,7 +37,26 @@ public class Validate {
     }
 
     @NotNull
-    static public <T> T validateException(@NotNull ThrowingSupplier<T> supplier, @NotNull String errorMessage) {
+    public static <T> T validateException(@NotNull ThrowingSupplier<T> supplier, @NotNull String errorMessage) {
         return validateException(supplier, errorMessage, false);
+    }
+
+    @NotNull
+    public static <T> T notNull(T object, @NotNull String errorMessage) {
+        if(object == null) {
+            throw new StructraException(errorMessage);
+        }
+        return object;
+    }
+
+    public static void notNull(Object object1, Object object2, @NotNull String errorMessage) {
+        if(object1 == null || object2 == null) {
+            throw new StructraException(errorMessage);
+        }
+    }
+    public static void notNull(Object object1, Object object2, Object object3, @NotNull String errorMessage) {
+        if(object1 == null || object2 == null || object3 == null) {
+            throw new StructraException(errorMessage);
+        }
     }
 }

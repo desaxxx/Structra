@@ -18,17 +18,17 @@ import java.util.Objects;
 
 public final class Structra extends JavaPlugin {
 
-    static public final String FILE_EXTENSION = ".structra";
-    static public final ItemStack SELECTOR_TOOL = ItemCreator.of(Material.STICK).name("<#e4e471>Structra Tool").get();
+    public static final String FILE_EXTENSION = ".structra";
+    public static final ItemStack SELECTOR_TOOL = ItemCreator.of(Material.STICK).name("<#e4e471>Structra Tool").get();
 
     @Getter
-    static private File savesFolder;
+    private static File savesFolder;
     @Getter
-    static private File historyFolder;
+    private static File historyFolder;
     @Getter
     private Wrapper wrapper;
     @Getter
-    static private Structra instance;
+    private static Structra instance;
 
 
     @Override

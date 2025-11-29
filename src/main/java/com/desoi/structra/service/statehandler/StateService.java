@@ -56,7 +56,7 @@ public class StateService {
         tryPutting("org.bukkit.block.Vault", new VaultState());
     }
 
-    static private void tryPutting(@NotNull String className, @NotNull IStateHandler<?> handler) {
+    private static void tryPutting(@NotNull String className, @NotNull IStateHandler<?> handler) {
         try {
             Class<?> clazz = Class.forName(className);
             handlers.put(clazz, handler);

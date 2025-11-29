@@ -10,13 +10,13 @@ import java.util.Map;
 
 public class Cache {
 
-    static private final Map<@NotNull CommandSender, @NotNull Selections> SELECTIONS_MAP = new HashMap<>();
+    private static final Map<@NotNull CommandSender, @NotNull Selections> SELECTIONS_MAP = new HashMap<>();
 
     /**
      * Copy of the selections map.
      * @return Map of key:CommandSender, value:Selections
      */
-    static public Map<CommandSender, Selections> getSelections() {
+    public static Map<CommandSender, Selections> getSelections() {
         return new HashMap<>(SELECTIONS_MAP);
     }
 
@@ -26,8 +26,8 @@ public class Cache {
      * @return Selections if found, else returns a new created value.
      */
     @NotNull
-    static public Selections getSelections(CommandSender key) {
-        Validate.validate(key != null, "Selection key cannot be null.");
+    public static Selections getSelections(CommandSender key) {
+        Validate.notNull(key, "Selection key cannot be null.");
         return SELECTIONS_MAP.computeIfAbsent(key, k -> new Selections());
     }
 }

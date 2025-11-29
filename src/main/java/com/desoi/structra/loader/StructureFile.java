@@ -1,7 +1,6 @@
 package com.desoi.structra.loader;
 
 import com.desoi.structra.Structra;
-import com.desoi.structra.model.BlockTraversalOrder;
 import com.desoi.structra.model.Position;
 import com.desoi.structra.util.Validate;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +16,7 @@ import java.io.File;
 @Getter
 public class StructureFile {
     @Getter
-    static private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     protected final @NotNull File file;
     protected final @NotNull ObjectNode root;
@@ -27,14 +26,13 @@ public class StructureFile {
     protected final int ySize;
     protected final int zSize;
     protected final @NotNull Position relative;
-    protected final @NotNull BlockTraversalOrder blockTraversalOrder = BlockTraversalOrder.DEFAULT;
 
     protected final @NotNull ObjectNode paletteNode;
     protected final @NotNull ArrayNode blockDataNode;
     protected final @NotNull ObjectNode tileEntitiesNode;
 
     public StructureFile(File file) {
-        Validate.validate(file != null, "File cannot be null.");
+        Validate.notNull(file, "File cannot be null.");
         Validate.validate(file.exists(), "File doesn't exist.");
         Validate.validate(file.getName().endsWith(Structra.FILE_EXTENSION), String.format("File extension must be '%s'.", Structra.FILE_EXTENSION));
         this.root = Validate.validateException(() -> (ObjectNode) objectMapper.readTree(file), "Failed to read root node of the file.", true);

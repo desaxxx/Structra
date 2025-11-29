@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class PosCommand implements BaseCommand {
-    static public final PosCommand INSTANCE = new PosCommand();
+    public static final PosCommand INSTANCE = new PosCommand();
 
     private PosCommand() {}
 

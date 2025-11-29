@@ -18,10 +18,10 @@ import java.util.Map;
 
 public class JsonHelper {
 
-    static private final @NotNull ObjectMapper objectMapper = new ObjectMapper();
+    private static final @NotNull ObjectMapper objectMapper = new ObjectMapper();
 
     @NotNull
-    static public ObjectNode getOrCreate(@NotNull ObjectNode parent, @NotNull String key) {
+    public static ObjectNode getOrCreate(@NotNull ObjectNode parent, @NotNull String key) {
         JsonNode existing  = parent.get(key);
         if(existing instanceof ObjectNode) {
             return (ObjectNode) existing;
@@ -31,7 +31,7 @@ public class JsonHelper {
     }
 
     @NotNull
-    static public ArrayNode getOrCreateArray(@NotNull ObjectNode parent, @NotNull String key) {
+    public static ArrayNode getOrCreateArray(@NotNull ObjectNode parent, @NotNull String key) {
         JsonNode existing  = parent.get(key);
         if(existing instanceof ArrayNode) {
             return (ArrayNode) existing;
@@ -41,12 +41,12 @@ public class JsonHelper {
     }
 
     @Nullable
-    static public String findPath(@NotNull JsonNode root, @NotNull JsonNode target) {
+    public static String findPath(@NotNull JsonNode root, @NotNull JsonNode target) {
         return findPath(root, target, "", 0);
     }
 
     @Nullable
-    static private String findPath(@NotNull JsonNode root, @NotNull JsonNode target, @NotNull String currentPath, int attempt) {
+    private static String findPath(@NotNull JsonNode root, @NotNull JsonNode target, @NotNull String currentPath, int attempt) {
         if (root.equals(target)) {
             return currentPath;
         }
@@ -67,7 +67,7 @@ public class JsonHelper {
     }
 
     @NotNull
-    static public String getPropertyMatching(@NotNull JsonNode parentNode, @NotNull Object compare, @NotNull String def) {
+    public static String getPropertyMatching(@NotNull JsonNode parentNode, @NotNull Object compare, @NotNull String def) {
         return parentNode.properties().stream()
                 .filter(entry -> {
                     JsonNode value = entry.getValue();
@@ -88,7 +88,7 @@ public class JsonHelper {
     }
 
     @NotNull
-    static public <T> T treeToValue(@NotNull TreeNode treeNode, @NotNull Class<T> valueType) {
+    public static <T> T treeToValue(@NotNull TreeNode treeNode, @NotNull Class<T> valueType) {
         try {
             return objectMapper.treeToValue(treeNode, valueType);
         } catch (JsonProcessingException e) {
@@ -97,26 +97,26 @@ public class JsonHelper {
     }
 
     @NotNull
-    static public Map<String, Object> nodeToMap(@NotNull JsonNode node) {
+    public static Map<String, Object> nodeToMap(@NotNull JsonNode node) {
         return objectMapper.convertValue(node, new TypeReference<>() {});
     }
 
     // Serialize Bukkit Objects
 
     @NotNull
-    static public String serializeItemStack(@NotNull ItemStack itemStack) {
+    public static String serializeItemStack(@NotNull ItemStack itemStack) {
         return Base64.getEncoder().encodeToString(itemStack.serializeAsBytes());
     }
 
     // Deserialize Bukkit Objects
 
     @NotNull
-    static public ItemStack deserializeItemStack(@NotNull JsonNode node) {
+    public static ItemStack deserializeItemStack(@NotNull JsonNode node) {
         return ItemStack.deserializeBytes(Base64.getDecoder().decode(node.asText()));
     }
 
     @Nullable
-    static public Location deserializeLocation(@NotNull JsonNode node) {
+    public static Location deserializeLocation(@NotNull JsonNode node) {
         try {
             return Location.deserialize(nodeToMap(node));
         } catch (IllegalArgumentException e) {

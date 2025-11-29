@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ToolCommand implements BaseCommand {
-    static public final ToolCommand INSTANCE = new ToolCommand();
+    public static final ToolCommand INSTANCE = new ToolCommand();
 
     private ToolCommand() {}
 

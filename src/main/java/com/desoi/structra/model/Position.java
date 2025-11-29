@@ -109,7 +109,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public static Position fromLocation(Location location, boolean includeWorld) {
-        Validate.validate(location != null, "Location cannot be null to parse Position.");
+        Validate.notNull(location, "Location cannot be null to parse Position.");
         Position pos = new Position(location.getBlockX(), location.getBlockY(), location.getBlockZ());
         if(includeWorld) pos.setWorldName(location.getWorld().getName());
         return pos;
@@ -123,7 +123,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public static LinkedHashSet<Position> getPositions(Position pos1, Position pos2) {
-        Validate.validate(pos1 != null && pos2 != null, "Positions cannot be null.");
+        Validate.notNull(pos1, pos2, "Positions cannot be null.");
         Position minPosition = getMinimum(pos1, pos2);
         Position maxPosition = getMaximum(pos1, pos2);
 
@@ -180,7 +180,7 @@ public class Position implements Cloneable {
      * @since 1.0.0
      */
     public boolean isBetween(Position pos1, Position pos2) {
-        Validate.validate(pos1 != null && pos2 != null, "Positions cannot be null.");
+        Validate.notNull(pos1, pos2, "Positions cannot be null.");
         Position min = getMinimum(pos1, pos2);
         Position max = getMaximum(pos1, pos2);
         return isBetween(min.x, max.x, x) && isBetween(min.y, max.y, y) && isBetween(min.z, max.z, z);
@@ -200,7 +200,7 @@ public class Position implements Cloneable {
      * @since 1.0.0
      */
     public boolean worldsMatch(Position other) {
-        Validate.validate(other != null, "Position cannot be null.");
+        Validate.notNull(other, "Position cannot be null.");
         return (worldName == null && other.worldName == null) || Objects.equals(worldName, other.worldName);
     }
 
@@ -243,7 +243,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public int sizeX(Position other) {
-        Validate.validate(other != null, "Position cannot be null.");
+        Validate.notNull(other, "Position cannot be null.");
         return Math.abs(this.x - other.x);
     }
 
@@ -264,7 +264,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public int sizeY(Position other) {
-        Validate.validate(other != null, "Position cannot be null.");
+        Validate.notNull(other, "Position cannot be null.");
         return Math.abs(this.y - other.y);
     }
 
@@ -285,7 +285,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public int sizeZ(Position other) {
-        Validate.validate(other != null, "Position cannot be null.");
+        Validate.notNull(other, "Position cannot be null.");
         return Math.abs(this.z - other.z);
     }
 
@@ -330,7 +330,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public Position add(Position other) {
-        Validate.validate(other != null, "Position is null in addition.");
+        Validate.notNull(other, "Position is null in addition.");
         this.x += other.x;
         this.y += other.y;
         this.z += other.z;
@@ -344,7 +344,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public Position subtract(Position other) {
-        Validate.validate(other != null, "Position is null in subtraction.");
+        Validate.notNull(other, "Position is null in subtraction.");
         this.x -= other.x;
         this.y -= other.y;
         this.z -= other.z;
@@ -358,7 +358,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public Position multiply(Position other) {
-        Validate.validate(other != null, "Position is null in multiplication.");
+        Validate.notNull(other, "Position is null in multiplication.");
         this.x *= other.x;
         this.y *= other.y;
         this.z *= other.z;
@@ -372,7 +372,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public Position divide(Position other) {
-        Validate.validate(other != null, "Position is null in division.");
+        Validate.notNull(other, "Position is null in division.");
         this.x /= other.x;
         this.y /= other.y;
         this.z /= other.z;
@@ -386,7 +386,7 @@ public class Position implements Cloneable {
      * @since 1.0-SNAPSHOT
      */
     public Position copy(Position other) {
-        Validate.validate(other != null, "Position is null in copying.");
+        Validate.notNull(other, "Position is null in copying.");
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;

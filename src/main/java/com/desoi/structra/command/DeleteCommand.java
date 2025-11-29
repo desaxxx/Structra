@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import java.io.File;
 
 public class DeleteCommand implements BaseCommand {
-    static public final DeleteCommand INSTANCE = new DeleteCommand();
+    public static final DeleteCommand INSTANCE = new DeleteCommand();
 
     private DeleteCommand() {}
 
