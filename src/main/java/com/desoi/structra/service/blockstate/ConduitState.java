@@ -15,7 +15,7 @@ public class ConduitState implements IStateHandler<Conduit> {
 
     @Override
     public void save(@NotNull Conduit blockState, @NotNull ObjectNode node) {
-        if(Wrapper.getInstance().getVersion() >= 204) {
+        if(Wrapper.getInstance().getVersion() >= 2004) {
             LivingEntity target = blockState.getTarget();
             if (target != null) {
                 node.put("TargetUUID", target.getUniqueId().toString());
@@ -27,7 +27,7 @@ public class ConduitState implements IStateHandler<Conduit> {
 
     @Override
     public void loadTo(@NotNull Conduit blockState, ObjectNode node) {
-        if(Wrapper.getInstance().getVersion() >= 204 && node.has("TargetUUID")) {
+        if(Wrapper.getInstance().getVersion() >= 2004 && node.has("TargetUUID")) {
             String uuidStr = node.get("TargetUUID").asText();
             try {
                 UUID uuid = UUID.fromString(uuidStr);

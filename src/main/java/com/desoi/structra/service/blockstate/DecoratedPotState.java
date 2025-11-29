@@ -28,7 +28,7 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
         /*
          * DecoratedPot had only getShards() method, rest of the methods was added on Paper 1.20.1
          */
-        if(Wrapper.getInstance().getVersion() >= 201) {
+        if(Wrapper.getInstance().getVersion() >= 2001) {
             ObjectNode sherdsNode = JsonHelper.getOrCreate(node, "Sherds");
             for(Map.Entry<DecoratedPot.Side, Material> entry : blockState.getSherds().entrySet()) {
                 sherdsNode.put(entry.getKey().name(), entry.getValue().name());
@@ -39,7 +39,7 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
 
     @Override
     public void loadTo(@NotNull DecoratedPot blockState, ObjectNode node) {
-        if(Wrapper.getInstance().getVersion() >= 201 && node.get("Sherds") instanceof ObjectNode sherdsNode) {
+        if(Wrapper.getInstance().getVersion() >= 2001 && node.get("Sherds") instanceof ObjectNode sherdsNode) {
             Iterator<String> sideKeys = sherdsNode.fieldNames();
             while(sideKeys.hasNext()) {
                 String sideString = sideKeys.next();

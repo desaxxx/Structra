@@ -16,7 +16,7 @@ public class HopperState implements IStateHandler<Hopper> {
         NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
         NonState.saveNameable(blockState, node);
         NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
-        if(Wrapper.getInstance().getVersion() >= 204) {
+        if(Wrapper.getInstance().getVersion() >= 2004) {
             node.put("TransferCooldown", blockState.getTransferCooldown());
         }
         saveTileState(blockState, node);
@@ -30,7 +30,7 @@ public class HopperState implements IStateHandler<Hopper> {
         NonState.loadToNameable(blockState, node);
         loadToTileState(blockState, node);
 
-        if (Wrapper.getInstance().getVersion() >= 204 && node.get("TransferCooldown") instanceof IntNode transferCooldownNode) {
+        if (Wrapper.getInstance().getVersion() >= 2004 && node.get("TransferCooldown") instanceof IntNode transferCooldownNode) {
             blockState.setTransferCooldown(transferCooldownNode.asInt());
         }
 

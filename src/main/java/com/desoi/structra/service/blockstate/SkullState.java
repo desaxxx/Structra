@@ -16,10 +16,10 @@ public class SkullState implements IStateHandler<Skull> {
     @Override
     public void save(@NotNull Skull blockState, @NotNull ObjectNode node) {
         final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
-        if(MINECRAFT_VERSION >= 193) {
+        if(MINECRAFT_VERSION >= 1903) {
             node.put("NoteBlockSound", blockState.getNoteBlockSound() == null ? "" : blockState.getNoteBlockSound().toString());
         }
-        if(MINECRAFT_VERSION >= 181) {
+        if(MINECRAFT_VERSION >= 1801) {
             if(blockState.getPlayerProfile() != null) {
                 node.set("PlayerProfile", objectMapper.valueToTree(blockState.getPlayerProfile()));
             }
@@ -33,14 +33,14 @@ public class SkullState implements IStateHandler<Skull> {
     @Override
     public void loadTo(@NotNull Skull blockState, @NotNull ObjectNode node) {
         final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
-        if(MINECRAFT_VERSION >= 193 && node.get("NoteBlockSound") instanceof TextNode noteBlockSoundNode) {
+        if(MINECRAFT_VERSION >= 1903 && node.get("NoteBlockSound") instanceof TextNode noteBlockSoundNode) {
             NamespacedKey key = NamespacedKey.fromString(noteBlockSoundNode.asText(""));
             if(key != null) {
                 blockState.setNoteBlockSound(key);
             }
         }
 
-        if(MINECRAFT_VERSION >= 181) {
+        if(MINECRAFT_VERSION >= 1801) {
             if(node.has("PlayerProfile")) {
                 blockState.setPlayerProfile(JsonHelper.treeToValue(node.get("PlayerProfile"), PlayerProfile.class));
             }

@@ -18,10 +18,10 @@ public class SignState implements IStateHandler<Sign> {
     public void save(@NotNull Sign blockState, @NotNull ObjectNode node) {
         final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
 
-        if (MINECRAFT_VERSION >= 200) {
+        if (MINECRAFT_VERSION >= 2000) {
             node.put("Waxed", blockState.isWaxed());
         }
-        if (MINECRAFT_VERSION >= 194) {
+        if (MINECRAFT_VERSION >= 1904) {
             for (Side side : Side.values()) {
                 SignSide signSide = blockState.getSide(side);
                 ObjectNode sideNode = JsonHelper.getOrCreate(node, side.name());
@@ -53,11 +53,11 @@ public class SignState implements IStateHandler<Sign> {
     @Override
     public void loadTo(@NotNull Sign blockState, ObjectNode node) {
         final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
-        if (MINECRAFT_VERSION >= 200 && node.get("Waxed") instanceof BooleanNode waxedNode) {
+        if (MINECRAFT_VERSION >= 2000 && node.get("Waxed") instanceof BooleanNode waxedNode) {
             blockState.setWaxed(waxedNode.asBoolean());
         }
 
-        if (MINECRAFT_VERSION >= 194) {
+        if (MINECRAFT_VERSION >= 1904) {
             for (Side side: Side.values()) {
                 if (!(node.get(side.name()) instanceof ObjectNode sideNode)) continue;
                 SignSide signSide = blockState.getSide(side);
