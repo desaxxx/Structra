@@ -3,6 +3,7 @@ package com.desoi.structra.command;
 import com.desoi.structra.Structra;
 import com.desoi.structra.loader.StructureFile;
 import com.desoi.structra.loader.StructureLoader;
+import com.desoi.structra.model.BlockTraversalOrder;
 import com.desoi.structra.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 
 public class PasteCommand implements BaseCommand {
-    static public final PasteCommand INSTANCE = new PasteCommand();
+    public static final PasteCommand INSTANCE = new PasteCommand();
 
     private PasteCommand() {}
 
@@ -66,9 +67,10 @@ public class PasteCommand implements BaseCommand {
         }
         Location originLocation = new Location(world, x, y, z);
 
+        BlockTraversalOrder traversalOrder = BlockTraversalOrder.DEFAULT;
         StructureFile structureFile = new StructureFile(file);
-        StructureLoader structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation);
-        structureLoader.saveHistory(() -> structureLoader.getTask().execute());
+        StructureLoader structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation, traversalOrder);
+        structureLoader.saveHistory(() -> structureLoader.createPasteTask().execute());
         Util.tell(sender, "&aLoading Structure...");
         return true;
     }

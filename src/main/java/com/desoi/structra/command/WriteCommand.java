@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 
 public class WriteCommand implements BaseCommand {
-    static public final WriteCommand INSTANCE = new WriteCommand();
+    public static final WriteCommand INSTANCE = new WriteCommand();
 
     private WriteCommand() {}
 
@@ -75,7 +75,7 @@ public class WriteCommand implements BaseCommand {
         Location originLocation = new Location(world, x, y, z);
 
         StructureWriter structureWriter = new StructureWriter(file, sender, position1, position2, originLocation, 0, 20, batchSize);
-        structureWriter.getTask().execute();
+        structureWriter.createWriteTask().execute();
         Util.tell(sender, "&aWriting Structure...");
         return true;
     }

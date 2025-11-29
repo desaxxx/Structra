@@ -3,13 +3,14 @@ package com.desoi.structra.command;
 import com.desoi.structra.Structra;
 import com.desoi.structra.history.HistoryFile;
 import com.desoi.structra.loader.StructureLoader;
+import com.desoi.structra.model.BlockTraversalOrder;
 import com.desoi.structra.util.Util;
 import org.bukkit.command.CommandSender;
 
 import java.io.File;
 
 public class PasteHistoryCommand implements BaseCommand {
-    static public final PasteHistoryCommand INSTANCE = new PasteHistoryCommand();
+    public static final PasteHistoryCommand INSTANCE = new PasteHistoryCommand();
 
     private PasteHistoryCommand() {}
 
@@ -36,8 +37,8 @@ public class PasteHistoryCommand implements BaseCommand {
         }
 
         HistoryFile historyFile = new HistoryFile(file);
-        StructureLoader structureLoader = new StructureLoader(historyFile, sender, 0, 20, batchSize);
-        structureLoader.getTask().execute();
+        StructureLoader structureLoader = new StructureLoader(historyFile, sender, 0, 20, batchSize, BlockTraversalOrder.DEFAULT);
+        structureLoader.createPasteTask().execute();
         Util.tell(sender, "&aLoading History Structure...");
         return true;
     }

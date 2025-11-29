@@ -23,19 +23,20 @@ import java.util.LinkedList;
 @Getter
 public class StructureWriter implements IInform {
     @Getter
-    static private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final @NotNull BlockTraversalOrder BLOCK_TRAVERSAL_ORDER = BlockTraversalOrder.DEFAULT;
 
     private final @NotNull File file;
     private final @NotNull ObjectNode root;
 
     private final @NotNull String version;
-    private final @NotNull BlockTraversalOrder blockTraversalOrder = BlockTraversalOrder.DEFAULT;
 
     private final @NotNull CommandSender executor;
     private final @NotNull Location originLocation;
     private final @NotNull World originWorld;
     private final @NotNull Position minPosition;
     private final @NotNull Position maxPosition;
+
     private final int xSize;
     private final int ySize;
     private final int zSize;
@@ -54,19 +55,20 @@ public class StructureWriter implements IInform {
     @Setter
     private long startNanoTime;
 
-    public StructureWriter(File file, CommandSender executor, Position position1, Position position2, Location originLocation, int delayTicks, int periodTicks, int batchSize, boolean historyWriter) {
-        Validate.validate(file != null, "File cannot be null.");
+    public StructureWriter(File file, CommandSender executor, Position position1, Position position2, Location originLocation,
+                           int delayTicks, int periodTicks, int batchSize, boolean historyWriter) {
+        Validate.notNull(file, "File cannot be null.");
         Validate.validate(file.getName().endsWith(Structra.FILE_EXTENSION), String.format("File extension must be '%s'.", Structra.FILE_EXTENSION));
-        Validate.validate(executor != null, "Executor cannot be null.");
-        Validate.validate(position1 != null && position2 != null, "Positions cannot be null.");
-        Validate.validate(originLocation != null, "Origin location cannot be null.");
-        Validate.validate(originLocation.getWorld() != null, "Origin world cannot be null.");
+        Validate.notNull(executor, "Executor cannot be null.");
+        Validate.notNull(position1, position2, "Positions cannot be null.");
+        Validate.notNull(originLocation, "Origin location cannot be null.");
+        Validate.notNull(originLocation.getWorld(), "Origin world cannot be null.");
         Validate.validate(delayTicks >= 0, "Delay ticks cannot be negative.");
         Validate.validate(periodTicks >= 0, "Period ticks cannot be negative.");
-        Validate.validate(batchSize > 0, "Batch size must be positive.");
+        Validate.validate(batchSize > 0, "Batch size cannot be non-positive.");
 
         this.file = file;
-        this.root = objectMapper.createObjectNode();
+        this.root = OBJECT_MAPPER.createObjectNode();
         this.version = Structra.getInstance().getDescription().getVersion();
         root.put("Version", version);
 
@@ -107,9 +109,10 @@ public class StructureWriter implements IInform {
         this.delayTicks = delayTicks;
         this.periodTicks = periodTicks;
         this.batchSize = batchSize;
-        this.positions = new LinkedList<>(blockTraversalOrder.getPositions(minPosition, maxPosition));
+        this.positions = new LinkedList<>(BLOCK_TRAVERSAL_ORDER.getPositions(minPosition, maxPosition));
     }
-    public StructureWriter(File file, CommandSender executor, Position position1, Position position2, Location originLocation, int delayTicks, int periodTicks, int batchSize) {
+    public StructureWriter(File file, CommandSender executor, Position position1, Position position2, Location originLocation,
+                           int delayTicks, int periodTicks, int batchSize) {
         this(file, executor, position1, position2, originLocation, delayTicks, periodTicks, batchSize, false);
     }
 
@@ -118,23 +121,49 @@ public class StructureWriter implements IInform {
         return executor;
     }
 
-    @Setter
     private boolean silent = false;
     @Override
     public boolean isSilent() {
         return silent;
     }
 
+    @Override
+    public void setSilent(boolean silent) {
+        this.silent = silent;
+    }
 
-    private StructureWriteTask writeTask;
-
+    /**
+     * Create a {@link StructureWriteTask} for the writer.
+     * @return Write task object
+     * @since 1.0.1
+     */
     @NotNull
-    public StructureWriteTask getTask() {
-        if(writeTask == null) writeTask = new StructureWriteTask(this);
-        return writeTask;
+    public StructureWriteTask createWriteTask() {
+        return new StructureWriteTask(this);
     }
 
     public int getSize() {
         return xSize * ySize * zSize;
+    }
+
+
+    // ==================
+    // Deprecated
+    // ==================
+
+    @Deprecated(since = "1.0.1")
+    private StructureWriteTask task;
+
+    /**
+     * Get the single {@link StructureWriteTask} created for the writer.
+     * @return Write task object
+     * @since 1.0-SNAPSHOT
+     * @deprecated Use {@link #createWriteTask()} since this method generates single task and reuses it.
+     */
+    @Deprecated(since = "1.0.1")
+    @NotNull
+    public StructureWriteTask getTask() {
+        if(task == null) task = new StructureWriteTask(this);
+        return task;
     }
 }
