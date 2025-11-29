@@ -9,7 +9,7 @@ public class SculkShriekerState implements IStateHandler<SculkShrieker> {
 
     @Override
     public int minSupportedVersion() {
-        return 190;
+        return 1900;
     }
 
     @Override

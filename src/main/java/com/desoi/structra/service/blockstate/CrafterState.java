@@ -12,7 +12,7 @@ public class CrafterState implements IStateHandler<Crafter> {
 
     @Override
     public int minSupportedVersion() {
-        return 210;
+        return 2100;
     }
 
     @Override

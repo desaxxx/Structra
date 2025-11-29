@@ -11,7 +11,7 @@ public class BrushableBlockState implements IStateHandler<BrushableBlock> {
 
     @Override
     public int minSupportedVersion() {
-        return 200;
+        return 2000;
     }
 
     @Override

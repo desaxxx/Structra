@@ -20,7 +20,7 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
      */
     @Override
     public int minSupportedVersion() {
-        return 200;
+        return 2000;
     }
 
     @Override

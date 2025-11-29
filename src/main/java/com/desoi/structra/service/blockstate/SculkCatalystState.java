@@ -9,7 +9,7 @@ public class SculkCatalystState implements IStateHandler<SculkCatalyst> {
 
     @Override
     public int minSupportedVersion() {
-        return 190;
+        return 1900;
     }
 
     @Override

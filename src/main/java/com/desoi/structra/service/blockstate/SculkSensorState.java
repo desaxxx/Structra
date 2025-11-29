@@ -9,7 +9,7 @@ public class SculkSensorState implements IStateHandler<SculkSensor> {
 
     @Override
     public int minSupportedVersion() {
-        return 170;
+        return 1700;
     }
 
     @Override

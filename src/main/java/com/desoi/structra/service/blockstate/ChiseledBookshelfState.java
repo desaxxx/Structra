@@ -12,7 +12,7 @@ public class ChiseledBookshelfState implements IStateHandler<ChiseledBookshelf> 
 
     @Override
     public int minSupportedVersion() {
-        return 193;
+        return 1903;
     }
 
     @Override

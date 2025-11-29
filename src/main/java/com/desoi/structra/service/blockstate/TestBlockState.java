@@ -9,7 +9,7 @@ public class TestBlockState implements IStateHandler<TestBlock> {
 
     @Override
     public int minSupportedVersion() {
-        return 215;
+        return 2105;
     }
 
     @Override

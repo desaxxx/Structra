@@ -9,7 +9,7 @@ public class MovingPistonState implements IStateHandler<MovingPiston> {
 
     @Override
     public int minSupportedVersion() {
-        return 180;
+        return 1800;
     }
 
     @Override
