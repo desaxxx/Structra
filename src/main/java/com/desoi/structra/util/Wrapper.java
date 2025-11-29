@@ -14,7 +14,7 @@ public class Wrapper {
         version = fetchVersion();
     }
 
-    static public Wrapper getInstance() {
+    public static Wrapper getInstance() {
         return Structra.getInstance().getWrapper();
     }
 
@@ -39,8 +39,8 @@ public class Wrapper {
             }
         }
 
-        int version = major * 10 + minor;
-        if(version < 165) {
+        int version = major * 100 + minor;
+        if(version < 1605) {
             Util.log(String.format("&cYou are using an unsupported server version '%s'!", String.join(".", ver)),
                     "&cPlease use v1.16.5 or newer.");
             Bukkit.getPluginManager().disablePlugin(plugin);
