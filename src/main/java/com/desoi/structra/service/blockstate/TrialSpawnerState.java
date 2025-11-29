@@ -1,6 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.LongNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -9,13 +10,25 @@ import org.jetbrains.annotations.NotNull;
 
 public class TrialSpawnerState implements IStateHandler<TrialSpawner> {
 
+    /*
+     * Unmarked the class experimental at 1.21
+     * 1.21.4 -> add #getCooldownEnd() and #getNextSpawnAttempt()
+     */
+    @Override
+    public int minSupportedVersion() {
+        return 2100;
+    }
+
     @Override
     public void save(@NotNull TrialSpawner blockState, @NotNull ObjectNode node) {
         node.put("Ominous", blockState.isOminous());
         node.put("CooldownLength", blockState.getCooldownLength());
         node.put("RequiredPlayerRange", blockState.getRequiredPlayerRange());
-        node.put("CooldownEnd", blockState.getCooldownEnd());
-        node.put("NextSpawnAttempt", blockState.getNextSpawnAttempt());
+
+        if(Wrapper.getInstance().getVersion() >= 2004) {
+            node.put("CooldownEnd", blockState.getCooldownEnd());
+            node.put("NextSpawnAttempt", blockState.getNextSpawnAttempt());
+        }
         saveTileState(blockState, node);
     }
 
@@ -31,12 +44,14 @@ public class TrialSpawnerState implements IStateHandler<TrialSpawner> {
             blockState.setRequiredPlayerRange(requiredPlayerRangeNode.asInt());
         }
 
-        if (node.get("CooldownEnd") instanceof LongNode cooldownEndNode) {
-            blockState.setCooldownEnd(cooldownEndNode.asLong());
-        }
+        if(Wrapper.getInstance().getVersion() >= 2004) {
+            if (node.get("CooldownEnd") instanceof LongNode cooldownEndNode) {
+                blockState.setCooldownEnd(cooldownEndNode.asLong());
+            }
 
-        if (node.get("NextSpawnAttempt") instanceof LongNode nextSpawnAttemptNode) {
-            blockState.setNextSpawnAttempt(nextSpawnAttemptNode.asLong());
+            if (node.get("NextSpawnAttempt") instanceof LongNode nextSpawnAttemptNode) {
+                blockState.setNextSpawnAttempt(nextSpawnAttemptNode.asLong());
+            }
         }
 
         loadToTileState(blockState, node);
