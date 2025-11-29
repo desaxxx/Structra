@@ -27,8 +27,10 @@ public class StructurePasteTask implements IInform {
 
     private final @NotNull StructureLoader structureLoader;
 
+    private long startNanoTime;
+
     public StructurePasteTask(StructureLoader structureLoader) {
-        Validate.validate(structureLoader != null, "StructureLoader cannot be null");
+        Validate.notNull(structureLoader, "StructureLoader cannot be null");
         this.structureLoader = structureLoader;
     }
 
@@ -36,12 +38,16 @@ public class StructurePasteTask implements IInform {
     public @NotNull CommandSender informer() {
         return structureLoader.informer();
     }
+
+    private boolean silent = false;
     @Override
     public boolean isSilent() {
-        return structureLoader.isSilent();
+        return silent;
     }
+
+    @Override
     public void setSilent(boolean silent) {
-        structureLoader.setSilent(silent);
+        this.silent = silent;
     }
 
     /**
@@ -65,13 +71,13 @@ public class StructurePasteTask implements IInform {
      * @since 1.0-SNAPSHOT
      */
     public void execute(Runnable completeTask) {
-        Validate.validate(completeTask != null, "Complete task cannot be null.");
+        Validate.notNull(completeTask, "Complete task cannot be null.");
         if(running) {
             Util.tell(structureLoader.getExecutor(), "&cStructure loader is already running!");
             return;
         }
         running = true;
-        structureLoader.setStartNanoTime(System.nanoTime());
+        startNanoTime = System.nanoTime();
         final int size = structureLoader.getPositions().size();
         new BukkitRunnable() {
             int looped = 0;
@@ -90,7 +96,7 @@ public class StructurePasteTask implements IInform {
                     if(index >= size) {
                         cancel();
                         ratio = 1.0f;
-                        long elapsedMS = (System.nanoTime() - structureLoader.getStartNanoTime()) / 1_000_000;
+                        long elapsedMS = (System.nanoTime() - startNanoTime) / 1_000_000;
                         inform(String.format("&ePasting Structra to world '%s'... (%.1f%%)", structureLoader.getOriginWorld().getName(), ratio*100));
                         inform(String.format("&aPasted '%d blocks' to world '%s' in %d ms", size, structureLoader.getOriginWorld().getName(), elapsedMS));
                         completeTask.run();
@@ -103,7 +109,7 @@ public class StructurePasteTask implements IInform {
                     }
                     Block block = blockLocation.getBlock();
 
-                    short id = structureLoader.getStructureFile().getBlockDataNode().get(index) instanceof NumericNode idNode ? idNode.shortValue() : -1;
+                    short id = structureLoader.getReorderedBlockDataNode().get(index) instanceof NumericNode idNode ? idNode.shortValue() : -1;
                     if(id == -1) {
                         Util.tell(structureLoader.getExecutor(), String.format("There was an error reading BlockData id for index '%s'", index));
                         continue;

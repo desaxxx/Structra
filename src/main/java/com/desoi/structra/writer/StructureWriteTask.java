@@ -24,7 +24,7 @@ public class StructureWriteTask implements IInform {
     private final @NotNull StructureWriter structureWriter;
 
     public StructureWriteTask(StructureWriter structureWriter) {
-        Validate.validate(structureWriter != null, "StructureWriter cannot be null");
+        Validate.notNull(structureWriter, "StructureWriter cannot be null");
         this.structureWriter = structureWriter;
     }
 
@@ -35,12 +35,15 @@ public class StructureWriteTask implements IInform {
     public @NotNull CommandSender informer() {
         return structureWriter.informer();
     }
+
+    private boolean silent = false;
     @Override
     public boolean isSilent() {
-        return structureWriter.isSilent();
+        return silent;
     }
+    @Override
     public void setSilent(boolean silent) {
-        structureWriter.setSilent(silent);
+        this.silent = silent;
     }
 
     /**
@@ -62,7 +65,7 @@ public class StructureWriteTask implements IInform {
      * @since 1.0-SNAPSHOT
      */
     public void execute(Runnable completeTask) {
-        Validate.validate(completeTask != null, "Complete task cannot be null.");
+        Validate.notNull(completeTask, "Complete task cannot be null.");
         if(running) {
             Util.tell(structureWriter.getExecutor(), "&cStructure writer is already running!");
             return;
@@ -111,7 +114,7 @@ public class StructureWriteTask implements IInform {
 
                     BlockState state = block.getState();
                     IStateHandler<BlockState> handler = StateService.getHandler(state);
-                    ObjectNode tileEntity = StructureWriter.getObjectMapper().createObjectNode();
+                    ObjectNode tileEntity = StructureWriter.getOBJECT_MAPPER().createObjectNode();
                     if(handler != null) {
                         tileEntity.put("Type", handler.name());
                         handler.save(state, tileEntity);
@@ -126,7 +129,7 @@ public class StructureWriteTask implements IInform {
 
     private void saveToFile() {
         try {
-            StructureWriter.getObjectMapper().writerWithDefaultPrettyPrinter().writeValue(structureWriter.getFile(), structureWriter.getRoot());
+            StructureWriter.getOBJECT_MAPPER().writerWithDefaultPrettyPrinter().writeValue(structureWriter.getFile(), structureWriter.getRoot());
         } catch (IOException e) {
             throw new StructraException(String.format("Couldn't save to file '%s'", structureWriter.getFile().getName()) + e);
         }

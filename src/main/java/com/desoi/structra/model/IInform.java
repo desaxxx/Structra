@@ -23,9 +23,15 @@ public interface IInform {
      * @return whether silent or not.
      * @since 1.0-SNAPSHOT
      */
-    default boolean isSilent() {
-        return false;
-    }
+    boolean isSilent();
+
+    /**
+     * Set silent state of informing.
+     * @param silent New state
+     * @since 1.0.1
+     */
+    void setSilent(boolean silent);
+
 
     /**
      * Inform the executor.<br>
