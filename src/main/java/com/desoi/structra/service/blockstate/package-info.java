@@ -5,5 +5,6 @@
  * <p>Latest supported version <b>Paper 1.21.10</b></p>
  * <p>Spigot and Bukkit is not supported as the plugin handles Paper specific classes.</p>
  *
+ * @since 1.1
  */
 package com.desoi.structra.service.blockstate;

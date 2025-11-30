@@ -6,7 +6,6 @@ import com.desoi.structra.model.IInform;
 import com.desoi.structra.model.Position;
 import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Validate;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
@@ -134,7 +133,7 @@ public class StructureWriter implements IInform {
     /**
      * Create a {@link StructureWriteTask} for the writer.
      * @return Write task object
-     * @since 1.0.1
+     * @since 1.1
      */
     @NotNull
     public StructureWriteTask createWriteTask() {
@@ -150,7 +149,7 @@ public class StructureWriter implements IInform {
     // Deprecated
     // ==================
 
-    @Deprecated(since = "1.0.1")
+    @Deprecated(since = "1.1")
     private StructureWriteTask task;
 
     /**
@@ -159,7 +158,7 @@ public class StructureWriter implements IInform {
      * @since 1.0-SNAPSHOT
      * @deprecated Use {@link #createWriteTask()} since this method generates single task and reuses it.
      */
-    @Deprecated(since = "1.0.1")
+    @Deprecated(since = "1.1")
     @NotNull
     public StructureWriteTask getTask() {
         if(task == null) task = new StructureWriteTask(this);

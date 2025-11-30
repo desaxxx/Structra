@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /**
  * @see Direction
- * @since 1.0.1
+ * @since 1.1
  */
 @Getter
 public class Direction3D {
@@ -27,7 +27,7 @@ public class Direction3D {
 
     /**
      * @return First direction
-     * @since 1.0.1
+     * @since 1.1
      */
     public Direction first() {
         return Direction.of((byte) ((encoded >> 8) & 7));
@@ -35,7 +35,7 @@ public class Direction3D {
 
     /**
      * @return Second direction
-     * @since 1.0.1
+     * @since 1.1
      */
     public Direction second() {
         return Direction.of((byte) ((encoded >> 4) & 7));
@@ -43,7 +43,7 @@ public class Direction3D {
 
     /**
      * @return Third direction
-     * @since 1.0.1
+     * @since 1.1
      */
     public Direction third() {
         return Direction.of((byte) (encoded & 7));

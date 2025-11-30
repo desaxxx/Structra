@@ -28,7 +28,7 @@ public interface IInform {
     /**
      * Set silent state of informing.
      * @param silent New state
-     * @since 1.0.1
+     * @since 1.1
      */
     void setSilent(boolean silent);
 

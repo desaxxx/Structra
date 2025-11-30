@@ -151,7 +151,7 @@ public class Position implements Cloneable {
 
     /**
      * Return position string separated by comma.
-     * @since 1.0.1
+     * @since 1.1
      */
     @NotNull
     public String separatedByComma() {

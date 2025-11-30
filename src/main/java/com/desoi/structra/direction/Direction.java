@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * @since 1.0.1
+ * @since 1.1
  */
 @Getter
 public class Direction {

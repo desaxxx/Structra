@@ -86,7 +86,7 @@ public class StructureLoader implements IInform {
 
     /**
      * Validates file version.
-     * @since 1.0.1
+     * @since 1.1
      */
     public void validateVersion() {
         String fileVersion = structureFile.getVersion();
@@ -103,7 +103,7 @@ public class StructureLoader implements IInform {
     /**
      * Create a {@link StructurePasteTask} for the loader.
      * @return Paste task object
-     * @since 1.0.1
+     * @since 1.1
      */
     @NotNull
     public StructurePasteTask createPasteTask() {
@@ -129,7 +129,7 @@ public class StructureLoader implements IInform {
     // Deprecated
     // ==================
 
-    @Deprecated(since = "1.0.1")
+    @Deprecated(since = "1.1")
     private StructurePasteTask task;
     /**
      * Get the single {@link StructurePasteTask} created for the loader.
@@ -137,7 +137,7 @@ public class StructureLoader implements IInform {
      * @since 1.0-SNAPSHOT
      * @deprecated Use {@link #createPasteTask()} since this method generates single task and reuses it.
      */
-    @Deprecated(since = "1.0.1")
+    @Deprecated(since = "1.1")
     @NotNull
     public StructurePasteTask getTask() {
         if(task == null) {

@@ -6,7 +6,7 @@ import org.bukkit.block.CopperGolemStatue;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @since 1.0.1
+ * @since 1.1
  */
 public class CopperGolemStatueState implements IStateHandler<CopperGolemStatue> {
 

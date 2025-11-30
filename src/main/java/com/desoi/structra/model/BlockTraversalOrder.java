@@ -17,7 +17,7 @@ public class BlockTraversalOrder {
 
     private final @NotNull Direction3D direction3D;
     /**
-     * @since 1.0.1
+     * @since 1.1
      */
     private BlockTraversalOrder(@NotNull Direction3D direction3D) {
         Validate.notNull(direction3D, "Direction3D cannot be null.");
@@ -27,7 +27,7 @@ public class BlockTraversalOrder {
 
     /**
      * @return Direction3D
-     * @since 1.0.1
+     * @since 1.1
      */
     @NotNull
     public Direction3D getDirection3D() {
@@ -88,7 +88,7 @@ public class BlockTraversalOrder {
      *         if direction is on axis Y, returns {@code height},
      *         if direction is on axis Z, returns {@code length}.
      *         else {@code 0}.
-     * @since 1.0.1
+     * @since 1.1
      */
     private int getDistance(Direction direction, int width, int height, int length) {
         if (direction.isX()) return width;
@@ -105,7 +105,7 @@ public class BlockTraversalOrder {
      * @param min Minimum position
      * @param max Maximum position
      * @return new Position similar to a vector
-     * @since 1.0.1
+     * @since 1.1
      */
     private Position applyAxis(Direction direction, int step, Position min, Position max) {
         if (direction.isX()) {
@@ -131,7 +131,7 @@ public class BlockTraversalOrder {
      * @param pos2 Position 2
      * @param sourceOrder Source traversal order to convert from
      * @return Reordered block data as ArrayNode
-     * @since 1.0.1
+     * @since 1.1
      */
     @NotNull
     public ArrayNode reorderBlockData(@NotNull ArrayNode blockData,
@@ -178,7 +178,7 @@ public class BlockTraversalOrder {
     /**
      * Creates an index mapping from target order to source order.
      * For each position in target order, finds its corresponding index in source order.
-     * @since 1.0.1
+     * @since 1.1
      */
     private int[] createIndexMapping(int width, int height, int length,
                                             Direction3D sourceDir, Direction3D targetDir,
@@ -222,7 +222,7 @@ public class BlockTraversalOrder {
     /**
      * Get the coordinate value for a specific axis (X/Y/Z).
      * Checks which of the three directions controls this axis and returns the appropriate coordinate.
-     * @since 1.0.1
+     * @since 1.1
      */
     private int getCoordinateForAxis(Direction first, int stepFirst,
                                             Direction second, int stepSecond,
@@ -253,7 +253,7 @@ public class BlockTraversalOrder {
 
     /**
      * Calculate the index in source order for a given absolute position.
-     * @since 1.0.1
+     * @since 1.1
      */
     private int calculateSourceIndex(int x, int y, int z,
                                             int width, int height, int length,
@@ -278,7 +278,7 @@ public class BlockTraversalOrder {
 
     /**
      * Calculate the step value for a direction given absolute coordinates.
-     * @since 1.0.1
+     * @since 1.1
      */
     private int calculateStep(Direction dir, int x, int y, int z, Position min, Position max) {
         if (dir.isX()) {
