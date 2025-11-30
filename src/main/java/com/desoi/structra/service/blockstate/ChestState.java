@@ -26,7 +26,7 @@ public class ChestState implements IStateHandler<Chest> {
         }
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
 
         // Live object
         if(node.get("Inventory") instanceof ObjectNode inventoryNode) {

@@ -25,7 +25,7 @@ public class BarrelState implements IStateHandler<Barrel> {
         NonState.loadToNameable(blockState, node);
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
 
         // [*] Live objects like inventory should be modified after blockState#update();
         if(node.get("Inventory") instanceof ObjectNode inventoryNode) {

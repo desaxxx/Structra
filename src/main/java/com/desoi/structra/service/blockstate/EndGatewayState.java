@@ -29,6 +29,6 @@ public class EndGatewayState implements IStateHandler<EndGateway> {
         }
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

@@ -25,6 +25,6 @@ public class BeehiveState implements IStateHandler<Beehive> {
         }
         NonState.loadToEntityBlockStorage(blockState, JsonHelper.getOrCreate(node, "EntityBlockStorage"));
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

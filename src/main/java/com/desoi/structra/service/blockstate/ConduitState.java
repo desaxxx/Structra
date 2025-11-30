@@ -53,6 +53,6 @@ public class ConduitState implements IStateHandler<Conduit> {
         }
 
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

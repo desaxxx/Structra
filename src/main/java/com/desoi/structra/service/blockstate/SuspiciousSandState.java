@@ -35,6 +35,6 @@ public class SuspiciousSandState implements IStateHandler<SuspiciousSand> {
         }
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

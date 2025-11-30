@@ -25,7 +25,7 @@ public class DropperState implements IStateHandler<Dropper> {
         NonState.loadToNameable(blockState, node);
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
 
         // Live object
         if(node.get("Inventory") instanceof ObjectNode inventoryNode) {

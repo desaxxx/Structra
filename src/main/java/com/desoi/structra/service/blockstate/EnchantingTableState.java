@@ -19,6 +19,6 @@ public class EnchantingTableState implements IStateHandler<EnchantingTable> {
         NonState.loadToNameable(blockState, node);
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

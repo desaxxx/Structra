@@ -55,6 +55,6 @@ public class TrialSpawnerState implements IStateHandler<TrialSpawner> {
         }
 
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

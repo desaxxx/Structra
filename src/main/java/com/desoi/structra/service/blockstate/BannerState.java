@@ -40,6 +40,6 @@ public class BannerState implements IStateHandler<Banner> {
         blockState.setPatterns(patterns);
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

@@ -25,7 +25,7 @@ public class DispenserState implements IStateHandler<Dispenser> {
         NonState.loadToNameable(blockState, node);
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
 
         // Live object
         if(node.get("Inventory") instanceof ObjectNode inventoryNode) {

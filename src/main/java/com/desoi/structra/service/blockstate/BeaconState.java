@@ -47,6 +47,6 @@ public class BeaconState implements IStateHandler<Beacon> {
         NonState.loadToNameable(blockState, node);
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

@@ -23,6 +23,6 @@ public class CopperGolemStatueState implements IStateHandler<CopperGolemStatue> 
     @Override
     public void loadTo(@NotNull CopperGolemStatue blockState, ObjectNode node) {
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

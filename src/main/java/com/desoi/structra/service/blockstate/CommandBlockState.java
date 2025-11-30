@@ -27,6 +27,6 @@ public class CommandBlockState implements IStateHandler<CommandBlock> {
         }
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

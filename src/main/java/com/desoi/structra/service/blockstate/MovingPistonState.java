@@ -20,6 +20,6 @@ public class MovingPistonState implements IStateHandler<MovingPiston> {
     @Override
     public void loadTo(@NotNull MovingPiston blockState, ObjectNode node) {
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

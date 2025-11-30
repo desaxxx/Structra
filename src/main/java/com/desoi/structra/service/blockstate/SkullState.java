@@ -49,6 +49,6 @@ public class SkullState implements IStateHandler<Skull> {
             blockState.setOwningPlayer(JsonHelper.treeToValue(node.get("OwningPlayer"), OfflinePlayer.class));
         }
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

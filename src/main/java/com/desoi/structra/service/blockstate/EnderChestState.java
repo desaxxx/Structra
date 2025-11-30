@@ -18,6 +18,6 @@ public class EnderChestState implements IStateHandler<EnderChest> {
     @Override
     public void loadTo(@NotNull EnderChest blockState, ObjectNode node) {
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

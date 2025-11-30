@@ -38,6 +38,6 @@ public class CreatureSpawnerState implements IStateHandler<CreatureSpawner> {
         blockState.setSpawnRange(node.has("SpawnRange") ? node.get("SpawnRange").asInt() : 4); // IDK why 4 for necessary
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

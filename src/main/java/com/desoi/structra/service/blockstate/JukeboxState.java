@@ -28,6 +28,6 @@ public class JukeboxState implements IStateHandler<Jukebox> {
             blockState.setRecord(JsonHelper.deserializeItemStack(recordNode));
         }
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

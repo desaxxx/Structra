@@ -20,6 +20,6 @@ public class TestInstanceBlockState implements IStateHandler<TestInstanceBlock> 
     @Override
     public void loadTo(@NotNull TestInstanceBlock blockState, ObjectNode node) {
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

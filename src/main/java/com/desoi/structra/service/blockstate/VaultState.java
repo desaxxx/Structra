@@ -70,6 +70,6 @@ public class VaultState implements IStateHandler<Vault> {
 
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

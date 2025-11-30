@@ -35,6 +35,6 @@ public class BrushableBlockState implements IStateHandler<BrushableBlock> {
         }
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

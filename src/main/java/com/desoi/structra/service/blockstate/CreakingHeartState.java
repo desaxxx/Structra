@@ -20,6 +20,6 @@ public class CreakingHeartState implements IStateHandler<CreakingHeart> {
     @Override
     public void loadTo(@NotNull CreakingHeart blockState, ObjectNode node) {
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

@@ -60,6 +60,6 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
         }
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

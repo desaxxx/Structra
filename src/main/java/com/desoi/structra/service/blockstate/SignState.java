@@ -106,6 +106,6 @@ public class SignState implements IStateHandler<Sign> {
 
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
     }
 }

@@ -22,6 +22,6 @@ public class SculkShriekerState implements IStateHandler<SculkShrieker> {
     public void loadTo(@NotNull SculkShrieker blockState, @NotNull ObjectNode node) {
         blockState.setWarningLevel(node.has("WarningLevel") ? node.get("WarningLevel").asInt() : 0);
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

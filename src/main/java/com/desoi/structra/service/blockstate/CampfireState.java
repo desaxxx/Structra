@@ -36,6 +36,6 @@ public class CampfireState implements IStateHandler<Campfire> {
             }
         }
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

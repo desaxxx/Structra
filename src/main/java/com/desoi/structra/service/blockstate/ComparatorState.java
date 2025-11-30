@@ -15,6 +15,6 @@ public class ComparatorState implements IStateHandler<Comparator> {
     @Override
     public void loadTo(@NotNull Comparator blockState, ObjectNode node) {
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

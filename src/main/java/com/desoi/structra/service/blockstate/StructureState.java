@@ -89,6 +89,6 @@ public class StructureState implements IStateHandler<Structure> {
         }
 
         loadToTileState(blockState, node);
-        blockState.update();
+        blockState.update(true, false);
     }
 }

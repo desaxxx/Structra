@@ -22,7 +22,7 @@ public class LecternState implements IStateHandler<Lectern> {
         blockState.setPage(node.has("Page") ? node.get("Page").asInt() : 0);
         loadToTileState(blockState, node);
 
-        blockState.update();
+        blockState.update(true, false);
 
         // Live object
         if (node.get("Inventory") instanceof ObjectNode inventoryNode) {

@@ -34,7 +34,7 @@ public class HopperState implements IStateHandler<Hopper> {
             blockState.setTransferCooldown(transferCooldownNode.asInt());
         }
 
-        blockState.update();
+        blockState.update(true, false);
 
         // Live object
         if(node.get("Inventory") instanceof ObjectNode inventoryNode) {
