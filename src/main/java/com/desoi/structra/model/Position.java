@@ -150,6 +150,16 @@ public class Position implements Cloneable {
     }
 
     /**
+     * Return position string separated by comma.
+     * @since 1.0.1
+     */
+    @NotNull
+    public String separatedByComma() {
+        return x + "," + y + "," + z;
+    }
+
+
+    /**
      * Check if the Position equals to given Object.
      * @param o Object
      * @return whether equals or not

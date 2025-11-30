@@ -1,5 +1,5 @@
 {
-  "Version": "1.0.0",
+  "Version": "2",
   "Size": {
     "x": 5,
     "y": 5,
@@ -16,7 +16,7 @@
   },
   "BlockData": [ 1, 0, 0, 0 ],
   "TileEntities": {
-    "0": {
+    "0,0,0": {
       "Type": "ChestState",
       "Inventory": {
         "Items": {

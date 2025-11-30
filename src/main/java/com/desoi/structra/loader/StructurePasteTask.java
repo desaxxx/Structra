@@ -2,6 +2,7 @@ package com.desoi.structra.loader;
 
 import com.desoi.structra.Structra;
 import com.desoi.structra.model.IInform;
+import com.desoi.structra.model.Position;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.StateService;
 import com.desoi.structra.util.JsonHelper;
@@ -29,9 +30,11 @@ public class StructurePasteTask implements IInform {
 
     private long startNanoTime;
 
-    public StructurePasteTask(StructureLoader structureLoader) {
+    public StructurePasteTask(@NotNull StructureLoader structureLoader) {
         Validate.notNull(structureLoader, "StructureLoader cannot be null");
         this.structureLoader = structureLoader;
+
+        structureLoader.validateVersion();
     }
 
     @Override
@@ -103,7 +106,8 @@ public class StructurePasteTask implements IInform {
                         return;
                     }
 
-                    Location blockLocation = structureLoader.getPositions().get(index).toLocation(structureLoader.getOriginWorld());
+                    Position blockPosition = structureLoader.getPositions().get(index);
+                    Location blockLocation = blockPosition.toLocation(structureLoader.getOriginWorld());
                     if(!blockLocation.getChunk().isLoaded()) {
                         blockLocation.getChunk().load(true);
                     }
@@ -125,7 +129,9 @@ public class StructurePasteTask implements IInform {
                         block.setType(Material.AIR, false);
                     }
 
-                    if(structureLoader.getStructureFile().getTileEntitiesNode().get(String.valueOf(index)) instanceof ObjectNode tileEntity) {
+                    // Block pos - Min Pos
+                    String tileEntityRelativeness = blockPosition.clone().subtract(structureLoader.getMinPosition()).separatedByComma();
+                    if(structureLoader.getStructureFile().getTileEntitiesNode().get(tileEntityRelativeness) instanceof ObjectNode tileEntity) {
                         BlockState blockState = block.getState();
                         IStateHandler<BlockState> handler = StateService.getHandler(blockState);
                         if(handler != null) {

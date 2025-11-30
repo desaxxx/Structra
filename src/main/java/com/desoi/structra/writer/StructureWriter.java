@@ -22,8 +22,7 @@ import java.util.LinkedList;
 
 @Getter
 public class StructureWriter implements IInform {
-    @Getter
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    public static final @NotNull String WRITER_VERSION = "2";
     private static final @NotNull BlockTraversalOrder BLOCK_TRAVERSAL_ORDER = BlockTraversalOrder.DEFAULT;
 
     private final @NotNull File file;
@@ -68,8 +67,8 @@ public class StructureWriter implements IInform {
         Validate.validate(batchSize > 0, "Batch size cannot be non-positive.");
 
         this.file = file;
-        this.root = OBJECT_MAPPER.createObjectNode();
-        this.version = Structra.getInstance().getDescription().getVersion();
+        this.root = JsonHelper.OBJECT_MAPPER.createObjectNode();
+        this.version = WRITER_VERSION;
         root.put("Version", version);
 
         this.executor = executor;

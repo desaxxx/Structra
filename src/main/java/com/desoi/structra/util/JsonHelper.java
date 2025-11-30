@@ -17,7 +17,7 @@ import java.util.Base64;
 import java.util.Map;
 
 public class JsonHelper {
-    private static final @NotNull ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    public static final @NotNull ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @NotNull
     public static ObjectNode getOrCreate(@NotNull ObjectNode parent, @NotNull String key) {

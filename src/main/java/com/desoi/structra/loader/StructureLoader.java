@@ -85,6 +85,22 @@ public class StructureLoader implements IInform {
     }
 
     /**
+     * Validates file version.
+     * @since 1.0.1
+     */
+    public void validateVersion() {
+        String fileVersion = structureFile.getVersion();
+        String pluginVersion = StructureWriter.WRITER_VERSION;
+        Validate.validate(fileVersion.equals(pluginVersion),
+                String.format("Structra file version mismatch! " +
+                        "File version: %s, Plugin version: %s. " +
+                        "This structure file cannot be loaded with the current plugin version. " +
+                        "Please downgrade your plugin or regenerate the structra file."
+                ,fileVersion, pluginVersion)
+        );
+    }
+
+    /**
      * Create a {@link StructurePasteTask} for the loader.
      * @return Paste task object
      * @since 1.0.1
@@ -124,7 +140,9 @@ public class StructureLoader implements IInform {
     @Deprecated(since = "1.0.1")
     @NotNull
     public StructurePasteTask getTask() {
-        if(task == null) task = createPasteTask();
+        if(task == null) {
+            task = createPasteTask();
+        }
         return task;
     }
 }

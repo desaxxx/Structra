@@ -1,10 +1,12 @@
 package com.desoi.structra.writer;
 
 import com.desoi.structra.Structra;
+import com.desoi.structra.model.Position;
 import com.desoi.structra.model.StructraException;
 import com.desoi.structra.model.IInform;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.StateService;
+import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Validate;
 import com.fasterxml.jackson.databind.node.NumericNode;
@@ -23,7 +25,7 @@ public class StructureWriteTask implements IInform {
 
     private final @NotNull StructureWriter structureWriter;
 
-    public StructureWriteTask(StructureWriter structureWriter) {
+    public StructureWriteTask(@NotNull StructureWriter structureWriter) {
         Validate.notNull(structureWriter, "StructureWriter cannot be null");
         this.structureWriter = structureWriter;
     }
@@ -99,7 +101,8 @@ public class StructureWriteTask implements IInform {
                         return;
                     }
 
-                    Location blockLocation = structureWriter.getPositions().get(index).toLocation(structureWriter.getOriginWorld());
+                    Position blockPosition = structureWriter.getPositions().get(index);
+                    Location blockLocation = blockPosition.toLocation(structureWriter.getOriginWorld());
                     Block block = blockLocation.getBlock();
 
                     String data = block.getBlockData().getAsString();
@@ -114,11 +117,12 @@ public class StructureWriteTask implements IInform {
 
                     BlockState state = block.getState();
                     IStateHandler<BlockState> handler = StateService.getHandler(state);
-                    ObjectNode tileEntity = StructureWriter.getOBJECT_MAPPER().createObjectNode();
+                    ObjectNode tileEntity = JsonHelper.OBJECT_MAPPER.createObjectNode();
                     if(handler != null) {
                         tileEntity.put("Type", handler.name());
                         handler.save(state, tileEntity);
-                        structureWriter.getTileEntitiesNode().set(String.valueOf(index), tileEntity);
+                        String tileEntityRelativeness = blockPosition.clone().subtract(structureWriter.getMinPosition()).separatedByComma();
+                        structureWriter.getTileEntitiesNode().set(tileEntityRelativeness, tileEntity);
                     }
                 }
 
@@ -129,7 +133,7 @@ public class StructureWriteTask implements IInform {
 
     private void saveToFile() {
         try {
-            StructureWriter.getOBJECT_MAPPER().writerWithDefaultPrettyPrinter().writeValue(structureWriter.getFile(), structureWriter.getRoot());
+            JsonHelper.OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(structureWriter.getFile(), structureWriter.getRoot());
         } catch (IOException e) {
             throw new StructraException(String.format("Couldn't save to file '%s'", structureWriter.getFile().getName()) + e);
         }
