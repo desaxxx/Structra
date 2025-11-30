@@ -25,7 +25,7 @@ public class TrialSpawnerState implements IStateHandler<TrialSpawner> {
         node.put("CooldownLength", blockState.getCooldownLength());
         node.put("RequiredPlayerRange", blockState.getRequiredPlayerRange());
 
-        if(Wrapper.getInstance().getVersion() >= 2004) {
+        if(Wrapper.getInstance().getVersion() >= 2104) {
             node.put("CooldownEnd", blockState.getCooldownEnd());
             node.put("NextSpawnAttempt", blockState.getNextSpawnAttempt());
         }
@@ -44,7 +44,7 @@ public class TrialSpawnerState implements IStateHandler<TrialSpawner> {
             blockState.setRequiredPlayerRange(requiredPlayerRangeNode.asInt());
         }
 
-        if(Wrapper.getInstance().getVersion() >= 2004) {
+        if(Wrapper.getInstance().getVersion() >= 2104) {
             if (node.get("CooldownEnd") instanceof LongNode cooldownEndNode) {
                 blockState.setCooldownEnd(cooldownEndNode.asLong());
             }
