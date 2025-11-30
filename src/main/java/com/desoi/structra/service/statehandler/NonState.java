@@ -4,7 +4,6 @@ import com.desoi.structra.model.StructraException;
 import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -28,8 +27,6 @@ import java.io.IOException;
 import java.util.Base64;
 
 public class NonState {
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void saveInventory(@NotNull Inventory inventory, @NotNull ObjectNode parentNode) {
         ObjectNode itemsNode = JsonNodeFactory.instance.objectNode();
@@ -66,7 +63,9 @@ public class NonState {
     public static <T extends Lootable> void loadToLootable(@NotNull T lootable, ObjectNode parentNode) {
         if (parentNode == null) return;
         lootable.setLootTable(getLootTable(parentNode));
-        if (parentNode.has("Seed")) lootable.setSeed(parentNode.get("Seed").asLong());
+        if (parentNode.has("Seed")) {
+            lootable.setSeed(parentNode.get("Seed").asLong());
+        }
     }
 
     public static <T extends LootTable> void saveLootTable(@NotNull T lootTable, @NotNull ObjectNode parentNode) {

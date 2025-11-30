@@ -26,6 +26,7 @@ public class StateService {
         handlers.put(CommandBlock.class, new CommandBlockState());
         handlers.put(Comparator.class, new ComparatorState());
         handlers.put(Conduit.class, new ConduitState());
+        tryPutting("org.bukkit.block.CopperGolemStatue", new CopperGolemStatueState());
         tryPutting("org.bukkit.block.Crafter", new CrafterState());
         tryPutting("org.bukkit.block.CreakingHeart", new CreakingHeartState());
         handlers.put(CreatureSpawner.class, new CreatureSpawnerState());
@@ -45,6 +46,7 @@ public class StateService {
         tryPutting("org.bukkit.block.SculkCatalyst", new SculkCatalystState());
         handlers.put(SculkSensor.class, new SculkSensorState());
         tryPutting("org.bukkit.block.SculkShrieker", new SculkShriekerState());
+        tryPutting("org.bukkit.block.Shelf", new ShelfState());
         handlers.put(ShulkerBox.class, new ShulkerBoxState());
         handlers.put(Sign.class, new SignState());
         handlers.put(Skull.class, new SkullState());

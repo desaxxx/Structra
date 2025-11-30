@@ -17,8 +17,7 @@ import java.util.Base64;
 import java.util.Map;
 
 public class JsonHelper {
-
-    private static final @NotNull ObjectMapper objectMapper = new ObjectMapper();
+    private static final @NotNull ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @NotNull
     public static ObjectNode getOrCreate(@NotNull ObjectNode parent, @NotNull String key) {
@@ -90,7 +89,7 @@ public class JsonHelper {
     @NotNull
     public static <T> T treeToValue(@NotNull TreeNode treeNode, @NotNull Class<T> valueType) {
         try {
-            return objectMapper.treeToValue(treeNode, valueType);
+            return OBJECT_MAPPER.treeToValue(treeNode, valueType);
         } catch (JsonProcessingException e) {
             throw new StructraException("Failed to parse tree to value: " + e);
         }
@@ -98,7 +97,7 @@ public class JsonHelper {
 
     @NotNull
     public static Map<String, Object> nodeToMap(@NotNull JsonNode node) {
-        return objectMapper.convertValue(node, new TypeReference<>() {});
+        return OBJECT_MAPPER.convertValue(node, new TypeReference<>() {});
     }
 
     // Serialize Bukkit Objects
