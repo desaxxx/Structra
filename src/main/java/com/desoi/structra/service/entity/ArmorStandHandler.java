@@ -23,6 +23,9 @@ public class ArmorStandHandler implements IEntityHandler<ArmorStand> {
         node.put("BasePlate", entity.hasBasePlate());
         node.put("Gravity", entity.hasGravity());
         node.put("Invulnerable", entity.isInvulnerable());
+        node.put("Marker", entity.isMarker());
+        node.put("CanMove", entity.canMove());
+        node.put("CanTick", entity.canTick());
 
         if (entity.getCustomName() != null) {
             node.put("CustomName", entity.getCustomName());
@@ -83,6 +86,9 @@ public class ArmorStandHandler implements IEntityHandler<ArmorStand> {
         if (node.has("BasePlate")) armorStand.setBasePlate(node.get("BasePlate").asBoolean());
         if (node.has("Gravity")) armorStand.setGravity(node.get("Gravity").asBoolean());
         if (node.has("Invulnerable")) armorStand.setInvulnerable(node.get("Invulnerable").asBoolean());
+        if (node.has("Marker")) armorStand.setMarker(node.get("Marker").asBoolean());
+        if (node.has("CanMove")) armorStand.setCanMove(node.get("CanMove").asBoolean());
+        if (node.has("CanTick")) armorStand.setCanTick(node.get("CanTick").asBoolean());
 
         if (node.has("CustomName")) armorStand.setCustomName(node.get("CustomName").asText());
 
