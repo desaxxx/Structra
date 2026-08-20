@@ -29,5 +29,66 @@
         }
       }
     }
+  },
+  "Entities": {
+    "0,0,0": {
+      "Type": "ArmorStand",
+      "Visible": true,
+      "Small": false,
+      "Arms": true,
+      "BasePlate": true,
+      "Gravity": true,
+      "Invulnerable": false,
+      "Marker": false,
+      "CanMove": true,
+      "CanTick": true,
+      "CustomName": "Hello, World!",
+      "Helmet": {
+        "DataVersion" : 4435,
+        "id" : "minecraft:diamond_helmet",
+        "count" : 1,
+        "schema_version" : 1
+      },
+      "Chestplate": {
+        "DataVersion" : 4435,
+        "id" : "minecraft:diamond_chestplate",
+        "count" : 1,
+        "schema_version" : 1
+      },
+      "Leggings": {},
+      "Boots": {},
+      "MainHand": {},
+      "OffHand": {},
+      "HeadPose": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "BodyPose": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "LeftArmPose": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "RightArmPose": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "LeftLegPose": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "RightLegPose": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    }
   }
 }
