@@ -68,7 +68,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             return Util.savesFileNames();
         } else if(args.length == 2 && "pasteHistory".equals(args[0])) {
             return Util.historyFileNames();
-        } else if(args.length >= 3 && args[0].equals("paste")) {
+        } else if(args.length >= 3 && args[0].equals("paste") && args[args.length-1].startsWith("--")) {
             return List.of("--skipHistory");
         }
         return List.of();
