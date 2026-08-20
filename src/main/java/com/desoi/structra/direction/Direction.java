@@ -1,6 +1,5 @@
 package com.desoi.structra.direction;
 
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -8,7 +7,6 @@ import java.util.Objects;
 /**
  * @since 1.1
  */
-@Getter
 public class Direction {
     public static final Direction P_X = new Direction((byte) 0); // 000
     public static final Direction N_X = new Direction((byte) 4); // 100
@@ -21,6 +19,11 @@ public class Direction {
     private final byte encoded;
     private Direction(byte encoded) {
         this.encoded = (byte) (encoded & 7);
+    }
+
+    @NotNull
+    public static Direction of(byte encoded) {
+        return new Direction(encoded);
     }
 
     public boolean isX() {
@@ -52,6 +55,9 @@ public class Direction {
         return (encoded & 3) == (other.encoded & 3);
     }
 
+    public byte getEncoded() {
+        return encoded;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -68,10 +74,5 @@ public class Direction {
     @Override
     public String toString() {
         return String.format("Direction[%d]", encoded);
-    }
-
-    @NotNull
-    public static Direction of(byte encoded) {
-        return new Direction(encoded);
     }
 }

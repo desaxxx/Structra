@@ -25,7 +25,7 @@ public class PasteHistoryCommand implements BaseCommand {
             Util.tell(sender, "&cYou don't have permission to paste this Structra.");
             return true;
         }
-        File file = new File(Structra.getHistoryFolder(), fileName + Structra.FILE_EXTENSION);
+        File file = new File(Structra.getInstance().getHistoryFolder(), fileName + Structra.FILE_EXTENSION);
         if(!file.exists()) {
             Util.tell(sender, "&cFile doesn't exist.");
             return true;

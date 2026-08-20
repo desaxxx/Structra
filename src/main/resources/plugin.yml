@@ -1,7 +1,7 @@
 name: Structra
-version: '${project.version}'
+version: '${version}'
 main: com.desoi.structra.Structra
-api-version: '1.17'
+api-version: '26.1'
 authors: [ desaxx, aysihuniks ]
 commands:
   structra:

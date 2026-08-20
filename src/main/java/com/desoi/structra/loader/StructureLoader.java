@@ -9,7 +9,6 @@ import com.desoi.structra.util.Validate;
 import com.desoi.structra.writer.StructureWriteTask;
 import com.desoi.structra.writer.StructureWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -20,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@Getter
 public class StructureLoader implements IInform {
 
     private final @NotNull StructureFile structureFile;
@@ -117,32 +115,58 @@ public class StructureLoader implements IInform {
      */
     public void saveHistory(Runnable completeTask) {
         //Validate.validate(pasteTask == null || !pasteTask.isRunning(), "You cannot save history while loader is running.");
-        File file = new File(Structra.getHistoryFolder(), String.format("history_%s" + Structra.FILE_EXTENSION, new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date())));
+        File file = new File(Structra.getInstance().getHistoryFolder(), String.format("history_%s" + Structra.FILE_EXTENSION, new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date())));
         StructureWriter writer = new StructureWriter(file, executor, minPosition, maxPosition, originLocation, delayTicks, periodTicks, batchSize, true);
         StructureWriteTask writerTask = writer.createWriteTask();
         writerTask.setSilent(true);
         writerTask.execute(completeTask);
     }
 
+    public @NotNull StructureFile getStructureFile() {
+        return structureFile;
+    }
 
-    // ==================
-    // Deprecated
-    // ==================
+    public @NotNull CommandSender getExecutor() {
+        return executor;
+    }
 
-    @Deprecated(since = "1.1")
-    private StructurePasteTask task;
-    /**
-     * Get the single {@link StructurePasteTask} created for the loader.
-     * @return Paste task object
-     * @since 1.0-SNAPSHOT
-     * @deprecated Use {@link #createPasteTask()} since this method generates single task and reuses it.
-     */
-    @Deprecated(since = "1.1")
-    @NotNull
-    public StructurePasteTask getTask() {
-        if(task == null) {
-            task = createPasteTask();
-        }
-        return task;
+    public int getDelayTicks() {
+        return delayTicks;
+    }
+
+    public int getPeriodTicks() {
+        return periodTicks;
+    }
+
+    public int getBatchSize() {
+        return batchSize;
+    }
+
+    public @NotNull Location getOriginLocation() {
+        return originLocation;
+    }
+
+    public @NotNull World getOriginWorld() {
+        return originWorld;
+    }
+
+    public @NotNull Position getMinPosition() {
+        return minPosition;
+    }
+
+    public @NotNull Position getMaxPosition() {
+        return maxPosition;
+    }
+
+    public @NotNull BlockTraversalOrder getBlockTraversalOrder() {
+        return blockTraversalOrder;
+    }
+
+    public @NotNull ArrayNode getReorderedBlockDataNode() {
+        return reorderedBlockDataNode;
+    }
+
+    public @NotNull List<Position> getPositions() {
+        return positions;
     }
 }

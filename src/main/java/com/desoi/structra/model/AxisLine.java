@@ -1,6 +1,5 @@
 package com.desoi.structra.model;
 
-import lombok.Getter;
 import org.bukkit.Axis;
 
 @SuppressWarnings("unused")
@@ -12,14 +11,9 @@ public enum AxisLine {
     Z(Axis.Z),
     NEGATIVE_Z(Axis.Z),;
 
-    @Getter
     private final Axis axis;
     AxisLine(Axis axis) {
         this.axis = axis;
-    }
-
-    public boolean equals(AxisLine other) {
-        return this == other;
     }
 
     public boolean isSameAxis(AxisLine other) {
@@ -50,5 +44,9 @@ public enum AxisLine {
 
     public <T> T compareAxis(T xCase, T yCase, T zCase) {
         return getAxis() == Axis.X ? xCase : (getAxis() == Axis.Y ? yCase : zCase);
+    }
+
+    public Axis getAxis() {
+        return axis;
     }
 }

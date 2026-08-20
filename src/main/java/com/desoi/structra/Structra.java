@@ -5,7 +5,6 @@ import com.desoi.structra.listener.BukkitListener;
 import com.desoi.structra.util.ItemCreator;
 import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Wrapper;
-import lombok.Getter;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
@@ -17,19 +16,18 @@ import java.io.File;
 import java.util.Objects;
 
 public final class Structra extends JavaPlugin {
-
     public static final String FILE_EXTENSION = ".structra";
     public static final ItemStack SELECTOR_TOOL = ItemCreator.of(Material.STICK).name("<#e4e471>Structra Tool").get();
 
-    @Getter
-    private static File savesFolder;
-    @Getter
-    private static File historyFolder;
-    @Getter
-    private Wrapper wrapper;
-    @Getter
     private static Structra instance;
 
+    public static Structra getInstance() {
+        return instance;
+    }
+
+    private File savesFolder;
+    private File historyFolder;
+    private Wrapper wrapper;
 
     @Override
     public void onEnable() {
@@ -54,10 +52,10 @@ public final class Structra extends JavaPlugin {
     private void initFolders() {
         if(!getDataFolder().exists()) //noinspection ResultOfMethodCallIgnored
             getDataFolder().mkdirs();
-        savesFolder = new File(Structra.instance.getDataFolder(), "saves");
+        savesFolder = new File(getDataFolder(), "saves");
         if(!savesFolder.exists()) //noinspection ResultOfMethodCallIgnored
             savesFolder.mkdirs();
-        historyFolder = new File(Structra.instance.getDataFolder(), "history");
+        historyFolder = new File(getDataFolder(), "history");
         if(!historyFolder.exists()) //noinspection ResultOfMethodCallIgnored
             historyFolder.mkdirs();
     }
@@ -65,5 +63,17 @@ public final class Structra extends JavaPlugin {
     private void initMetrics() {
         Metrics metrics = new Metrics(this,26802);
         metrics.addCustomChart(new SingleLineChart("saves", () -> Util.savesFileNames().size()));
+    }
+
+    public File getSavesFolder() {
+        return savesFolder;
+    }
+
+    public File getHistoryFolder() {
+        return historyFolder;
+    }
+
+    public Wrapper getWrapper() {
+        return wrapper;
     }
 }

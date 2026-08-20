@@ -2,7 +2,6 @@ package com.desoi.structra.model;
 
 import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Validate;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -16,7 +15,6 @@ import java.util.Objects;
 /**
  * @since 1.0-SNAPSHOT
  */
-@Getter
 public class Position implements Cloneable {
 
     private int x;
@@ -29,6 +27,22 @@ public class Position implements Cloneable {
         this.y = y;
         this.z = z;
         this.worldName = worldName;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
+    public String getWorldName() {
+        return worldName;
     }
 
     // WORLD CONSTRUCTORS

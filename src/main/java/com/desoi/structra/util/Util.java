@@ -61,7 +61,7 @@ public class Util {
     @NotNull
     public static List<String> savesFileNames() {
         try {
-            File[] saveFiles = Structra.getSavesFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
+            File[] saveFiles = Structra.getInstance().getSavesFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
             if(saveFiles == null) return new ArrayList<>();
             return Arrays.stream(saveFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
         } catch (SecurityException e) {
@@ -71,7 +71,7 @@ public class Util {
 
     @NotNull
     public static List<String> historyFileNames() {
-        File[] historyFiles = Structra.getHistoryFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
+        File[] historyFiles = Structra.getInstance().getHistoryFolder().listFiles(l -> l.getName().endsWith(Structra.FILE_EXTENSION));
         if (historyFiles == null) return new ArrayList<>();
         return Arrays.stream(historyFiles).map(f -> f.getName().substring(0, f.getName().length() - Structra.FILE_EXTENSION.length())).toList();
     }

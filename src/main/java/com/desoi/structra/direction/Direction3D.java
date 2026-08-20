@@ -1,7 +1,6 @@
 package com.desoi.structra.direction;
 
 import com.desoi.structra.util.Validate;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -10,7 +9,6 @@ import java.util.Objects;
  * @see Direction
  * @since 1.1
  */
-@Getter
 public class Direction3D {
 
     /*
@@ -23,6 +21,20 @@ public class Direction3D {
 
     private Direction3D(int encoded) {
         this.encoded = (byte) (encoded & 4095);
+    }
+
+    @NotNull
+    public static Direction3D of(@NotNull Direction first, @NotNull Direction second, @NotNull Direction third) {
+        Validate.notNull(first, "First direction cannot be null.");
+        Validate.notNull(second, "Second direction cannot be null.");
+        Validate.notNull(third, "Third direction cannot be null.");
+        Validate.validate(!first.isSameAxis(second) && !first.isSameAxis(third) && !second.isSameAxis(third), "Directions cannot be on same axis.");
+
+        byte value = 0;
+        value |= (byte) (first.getEncoded() << 8);
+        value |= (byte) (second.getEncoded() << 4);
+        value |= third.getEncoded();
+        return new Direction3D(value);
     }
 
     /**
@@ -49,6 +61,9 @@ public class Direction3D {
         return Direction.of((byte) (encoded & 7));
     }
 
+    public int getEncoded() {
+        return encoded;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -60,19 +75,5 @@ public class Direction3D {
     @Override
     public int hashCode() {
         return Objects.hashCode(encoded);
-    }
-
-    @NotNull
-    public static Direction3D of(@NotNull Direction first, @NotNull Direction second, @NotNull Direction third) {
-        Validate.notNull(first, "First direction cannot be null.");
-        Validate.notNull(second, "Second direction cannot be null.");
-        Validate.notNull(third, "Third direction cannot be null.");
-        Validate.validate(!first.isSameAxis(second) && !first.isSameAxis(third) && !second.isSameAxis(third), "Directions cannot be on same axis.");
-
-        byte value = 0;
-        value |= (byte) (first.getEncoded() << 8);
-        value |= (byte) (second.getEncoded() << 4);
-        value |= third.getEncoded();
-        return new Direction3D(value);
     }
 }

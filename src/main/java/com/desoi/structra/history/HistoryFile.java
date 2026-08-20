@@ -5,7 +5,6 @@ import com.desoi.structra.util.Validate;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-@Getter
 public class HistoryFile extends StructureFile {
 
     protected final @NotNull Location originLocation;
@@ -35,5 +33,13 @@ public class HistoryFile extends StructureFile {
     @Override
     public boolean isHistoryFile() {
         return true;
+    }
+
+    public @NotNull Location getOriginLocation() {
+        return originLocation;
+    }
+
+    public @NotNull World getOriginWorld() {
+        return originWorld;
     }
 }

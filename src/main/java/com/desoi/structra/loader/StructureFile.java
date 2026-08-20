@@ -8,14 +8,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-@Getter
 public class StructureFile {
-    @Getter
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     protected final @NotNull File file;
@@ -64,5 +61,45 @@ public class StructureFile {
 
     public boolean isHistoryFile() {
         return false;
+    }
+
+    public @NotNull File getFile() {
+        return file;
+    }
+
+    public @NotNull ObjectNode getRoot() {
+        return root;
+    }
+
+    public @NotNull String getVersion() {
+        return version;
+    }
+
+    public int getXSize() {
+        return xSize;
+    }
+
+    public int getYSize() {
+        return ySize;
+    }
+
+    public int getZSize() {
+        return zSize;
+    }
+
+    public @NotNull Position getRelative() {
+        return relative;
+    }
+
+    public @NotNull ObjectNode getPaletteNode() {
+        return paletteNode;
+    }
+
+    public @NotNull ArrayNode getBlockDataNode() {
+        return blockDataNode;
+    }
+
+    public @NotNull ObjectNode getTileEntitiesNode() {
+        return tileEntitiesNode;
     }
 }

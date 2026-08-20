@@ -11,7 +11,6 @@ import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Validate;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -30,7 +29,6 @@ public class StructureWriteTask implements IInform {
         this.structureWriter = structureWriter;
     }
 
-    @Getter
     private boolean running = false;
 
     @Override
@@ -145,5 +143,9 @@ public class StructureWriteTask implements IInform {
      */
     public void execute() {
         execute(() -> {});
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }

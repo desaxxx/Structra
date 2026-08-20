@@ -10,7 +10,6 @@ import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Validate;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -65,7 +64,6 @@ public class StructurePasteTask implements IInform {
         return (int) Math.floor((double) (size-1) / batchSize * period);
     }
 
-    @Getter
     private boolean running = false;
 
     /**
@@ -151,5 +149,9 @@ public class StructurePasteTask implements IInform {
      */
     public void execute() {
         execute(() -> {});
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }

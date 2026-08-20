@@ -1,10 +1,8 @@
 package com.desoi.structra.model;
 
 import com.desoi.structra.util.Validate;
-import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
-@Getter
 public class Selections {
 
     private Position position1;

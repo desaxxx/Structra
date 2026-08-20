@@ -1,5 +1,5 @@
 jdk:
-  - openjdk21
+  - openjdk25
 before_install:
-  - sdk install maven 3.8.1
-  - sdk use maven 3.8.1
+  - sdk install gradle 9.7.0
+  - sdk use gradle 9.7.0

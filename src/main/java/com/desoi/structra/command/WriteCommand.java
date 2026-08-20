@@ -35,7 +35,7 @@ public class WriteCommand implements BaseCommand {
             return true;
         }
         String fileName = args[1];
-        File file = new File(Structra.getSavesFolder(), fileName + Structra.FILE_EXTENSION);
+        File file = new File(Structra.getInstance().getSavesFolder(), fileName + Structra.FILE_EXTENSION);
         if(file.exists()) {
             Util.tell(sender, "&cFile already exists, you can't overwrite it.");
             return true;

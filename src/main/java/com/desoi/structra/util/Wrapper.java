@@ -1,25 +1,22 @@
 package com.desoi.structra.util;
 
 import com.desoi.structra.Structra;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public class Wrapper {
 
     private final Structra plugin;
+    private final int version;
 
     public Wrapper(@NotNull Structra plugin) {
         this.plugin = plugin;
-        version = fetchVersion();
+        this.version = fetchVersion();
     }
 
     public static Wrapper getInstance() {
         return Structra.getInstance().getWrapper();
     }
-
-    @Getter
-    private final int version;
 
     private int fetchVersion() {
         String[] ver = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
@@ -45,6 +42,10 @@ public class Wrapper {
                     "&cPlease use v1.16.5 or newer.");
             Bukkit.getPluginManager().disablePlugin(plugin);
         }
+        return version;
+    }
+
+    public int getVersion() {
         return version;
     }
 }

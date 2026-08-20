@@ -8,8 +8,6 @@ import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Validate;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -19,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.LinkedList;
 
-@Getter
 public class StructureWriter implements IInform {
     public static final @NotNull String WRITER_VERSION = "2";
     private static final @NotNull BlockTraversalOrder BLOCK_TRAVERSAL_ORDER = BlockTraversalOrder.DEFAULT;
@@ -50,7 +47,6 @@ public class StructureWriter implements IInform {
     private final int batchSize;
 
     private final @NotNull LinkedList<Position> positions;
-    @Setter
     private long startNanoTime;
 
     public StructureWriter(File file, CommandSender executor, Position position1, Position position2, Location originLocation,
@@ -144,24 +140,91 @@ public class StructureWriter implements IInform {
         return xSize * ySize * zSize;
     }
 
+    public @NotNull File getFile() {
+        return file;
+    }
 
-    // ==================
-    // Deprecated
-    // ==================
+    public @NotNull ObjectNode getRoot() {
+        return root;
+    }
 
-    @Deprecated(since = "1.1")
-    private StructureWriteTask task;
+    public @NotNull String getVersion() {
+        return version;
+    }
 
-    /**
-     * Get the single {@link StructureWriteTask} created for the writer.
-     * @return Write task object
-     * @since 1.0-SNAPSHOT
-     * @deprecated Use {@link #createWriteTask()} since this method generates single task and reuses it.
-     */
-    @Deprecated(since = "1.1")
-    @NotNull
-    public StructureWriteTask getTask() {
-        if(task == null) task = new StructureWriteTask(this);
-        return task;
+    public @NotNull CommandSender getExecutor() {
+        return executor;
+    }
+
+    public @NotNull Location getOriginLocation() {
+        return originLocation;
+    }
+
+    public @NotNull World getOriginWorld() {
+        return originWorld;
+    }
+
+    public @NotNull Position getMinPosition() {
+        return minPosition;
+    }
+
+    public @NotNull Position getMaxPosition() {
+        return maxPosition;
+    }
+
+    public int getXSize() {
+        return xSize;
+    }
+
+    public int getYSize() {
+        return ySize;
+    }
+
+    public int getZSize() {
+        return zSize;
+    }
+
+    public @NotNull Position getRelative() {
+        return relative;
+    }
+
+    public @Nullable Position getOrigin() {
+        return origin;
+    }
+
+    public @NotNull ObjectNode getPaletteNode() {
+        return paletteNode;
+    }
+
+    public @NotNull ArrayNode getBlockDataNode() {
+        return blockDataNode;
+    }
+
+    public @NotNull ObjectNode getTileEntitiesNode() {
+        return tileEntitiesNode;
+    }
+
+    public int getDelayTicks() {
+        return delayTicks;
+    }
+
+    public int getPeriodTicks() {
+        return periodTicks;
+    }
+
+    public int getBatchSize() {
+        return batchSize;
+    }
+
+    public @NotNull LinkedList<Position> getPositions() {
+        return positions;
+    }
+
+    public long getStartNanoTime() {
+        return startNanoTime;
+    }
+
+    public void setStartNanoTime(long startNanoTime) {
+        this.startNanoTime = startNanoTime;
     }
 }

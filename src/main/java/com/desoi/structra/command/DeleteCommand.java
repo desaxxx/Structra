@@ -19,7 +19,7 @@ public class DeleteCommand implements BaseCommand {
             Util.tell(sender, "&cYou don't have permission to delete this Structra.");
             return true;
         }
-        File file = new File(Structra.getSavesFolder(), fileName + Structra.FILE_EXTENSION);
+        File file = new File(Structra.getInstance().getSavesFolder(), fileName + Structra.FILE_EXTENSION);
         if(!file.exists()) {
             Util.tell(sender, "&cFile doesn't exist.");
             return true;
