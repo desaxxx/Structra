@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class PasteCommand implements BaseCommand {
     public static final PasteCommand INSTANCE = new PasteCommand();
@@ -34,6 +35,8 @@ public class PasteCommand implements BaseCommand {
             Util.tell(sender, "&cFile doesn't exist.");
             return true;
         }
+
+        boolean skipHistory = Arrays.asList(args).contains("--skipHistory");
 
         int batchSize = 50;
         int x, y, z;
@@ -70,7 +73,12 @@ public class PasteCommand implements BaseCommand {
         BlockTraversalOrder traversalOrder = BlockTraversalOrder.DEFAULT;
         StructureFile structureFile = new StructureFile(file);
         StructureLoader structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation, traversalOrder);
-        structureLoader.saveHistory(() -> structureLoader.createPasteTask().execute());
+
+        if(skipHistory) {
+            structureLoader.createPasteTask().execute();
+        }else {
+            structureLoader.saveHistory(() -> structureLoader.createPasteTask().execute());
+        }
         Util.tell(sender, "&aLoading Structure...");
         return true;
     }
