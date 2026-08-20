@@ -19,7 +19,7 @@ public class ChestState implements IStateHandler<Chest> {
 
     @Override
     public void loadTo(@NotNull Chest blockState, ObjectNode node) {
-        NonState.saveNameable(blockState, node);
+        NonState.loadToNameable(blockState, node);
 
         if(node.get("Lootable") instanceof ObjectNode lootableNode) {
             NonState.loadToLootable(blockState, lootableNode);
