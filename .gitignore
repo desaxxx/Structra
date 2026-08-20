@@ -5,6 +5,11 @@
 # Build output folders
 **/out/
 **/target/
+build/
+
+# Gradle
+.gradle/
+gradle/wrapper/gradle-wrapper.jar
 
 # Maven generated files
 **/dependency-reduced-pom.xml
