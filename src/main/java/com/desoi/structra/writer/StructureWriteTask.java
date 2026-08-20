@@ -4,6 +4,8 @@ import com.desoi.structra.Structra;
 import com.desoi.structra.model.Position;
 import com.desoi.structra.model.StructraException;
 import com.desoi.structra.model.IInform;
+import com.desoi.structra.service.entityhandler.EntityService;
+import com.desoi.structra.service.entityhandler.IEntityHandler;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.StateService;
 import com.desoi.structra.util.JsonHelper;
@@ -15,10 +17,13 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Collection;
 
 public class StructureWriteTask implements IInform {
 
@@ -75,7 +80,7 @@ public class StructureWriteTask implements IInform {
         final int size = structureWriter.getPositions().size();
         new BukkitRunnable() {
             int looped = 0;
-            byte nextId = 0;
+            short nextId = 0;
             int index = 0;
             float ratio = 0.0f;
 
@@ -90,6 +95,27 @@ public class StructureWriteTask implements IInform {
                     index = i + looped;
                     if(index >= size) {
                         cancel();
+
+                        BoundingBox box = BoundingBox.of(
+                                structureWriter.getMinPosition().toLocation(structureWriter.getOriginWorld()),
+                                structureWriter.getMaxPosition().toLocation(structureWriter.getOriginWorld())
+                        );
+                        Collection<Entity> entities = structureWriter.getOriginWorld().getNearbyEntities(box);
+
+                        for (Entity entity : entities) {
+                            IEntityHandler<Entity> handler = EntityService.getHandler(entity.getType());
+                            if (handler == null) continue;
+
+                            ObjectNode entityNode = JsonHelper.OBJECT_MAPPER.createObjectNode();
+                            entityNode.put("Type", entity.getType().name());
+                            handler.save(entity, entityNode);
+
+                            Position entityPos = Position.fromLocation(entity.getLocation(), false);
+                            String key = entityPos.clone().subtract(structureWriter.getMinPosition()).separatedByComma();
+
+                            structureWriter.getEntitiesNode().set(key, entityNode);
+                        }
+
                         saveToFile();
                         ratio = 1.0f;
                         long elapsedMS = (System.nanoTime() - structureWriter.getStartNanoTime()) / 1_000_000;
