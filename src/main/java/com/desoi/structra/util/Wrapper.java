@@ -19,21 +19,25 @@ public class Wrapper {
     }
 
     private int fetchVersion() {
-        String[] ver = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
+        String[] ver = Bukkit.getMinecraftVersion().split("\\.");
         if(ver.length < 2) {
             Util.log("{WARN}Could not fetch server version!");
             Bukkit.getPluginManager().disablePlugin(plugin);
+            return 0;
         }
+
+        int first = 0;
+        try { first = Integer.parseInt(ver[0]); } catch (NumberFormatException ignored) {}
+
+        if(first >= 25) {
+            return Integer.MAX_VALUE;
+        }
+
         int major = 0;
-        try {
-            major = Integer.parseInt(ver[1]);
-        } catch (NumberFormatException ignored) {}
+        try { major = Integer.parseInt(ver[1]); } catch (NumberFormatException ignored) {}
         int minor = 0;
         if(ver.length > 2) {
-            try {
-                minor = Integer.parseInt(ver[2]);
-            } catch (NumberFormatException ignored) {
-            }
+            try { minor = Integer.parseInt(ver[2]); } catch (NumberFormatException ignored) {}
         }
 
         int version = major * 100 + minor;

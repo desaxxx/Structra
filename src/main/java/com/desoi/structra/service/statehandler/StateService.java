@@ -68,10 +68,14 @@ public class StateService {
     @SuppressWarnings("unchecked")
     @Nullable
     public static <B extends BlockState> IStateHandler<B> getHandler(BlockState blockState) {
-        return (IStateHandler<B>) handlers.entrySet().stream()
+        IStateHandler<?> handler = handlers.get(blockState.getClass());
+        if (handler != null) return (IStateHandler<B>) handler;
+        handler = handlers.entrySet().stream()
                 .filter(e -> e.getKey().isInstance(blockState))
                 .findFirst()
                 .map(Map.Entry::getValue)
                 .orElse(null);
+        if (handler != null) handlers.put(blockState.getClass(), handler);
+        return (IStateHandler<B>) handler;
     }
 }
