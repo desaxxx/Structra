@@ -41,6 +41,7 @@ public class StructureWriter implements IInform {
     private final @NotNull ObjectNode paletteNode;
     private final @NotNull ArrayNode blockDataNode;
     private final @NotNull ObjectNode tileEntitiesNode;
+    private final @NotNull ObjectNode entitiesNode;
 
     private final int delayTicks;
     private final int periodTicks;
@@ -99,6 +100,7 @@ public class StructureWriter implements IInform {
         this.paletteNode = JsonHelper.getOrCreate(root, "Palette");
         this.blockDataNode = JsonHelper.getOrCreateArray(root, "BlockData");
         this.tileEntitiesNode = JsonHelper.getOrCreate(root, "TileEntities");
+        this.entitiesNode = JsonHelper.getOrCreate(root, "Entities");
 
         this.delayTicks = delayTicks;
         this.periodTicks = periodTicks;
@@ -202,6 +204,10 @@ public class StructureWriter implements IInform {
 
     public @NotNull ObjectNode getTileEntitiesNode() {
         return tileEntitiesNode;
+    }
+
+    public @NotNull ObjectNode getEntitiesNode() {
+        return entitiesNode;
     }
 
     public int getDelayTicks() {

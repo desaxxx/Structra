@@ -3,11 +3,9 @@ package com.desoi.structra.loader;
 import com.desoi.structra.Structra;
 import com.desoi.structra.model.Position;
 import com.desoi.structra.util.Validate;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import com.fasterxml.jackson.databind.node.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -27,6 +25,7 @@ public class StructureFile {
     protected final @NotNull ObjectNode paletteNode;
     protected final @NotNull ArrayNode blockDataNode;
     protected final @NotNull ObjectNode tileEntitiesNode;
+    protected final @NotNull ObjectNode entitiesNode;
 
     public StructureFile(File file) {
         Validate.notNull(file, "File cannot be null.");
@@ -57,6 +56,8 @@ public class StructureFile {
         this.paletteNode = (ObjectNode) root.get("Palette");
         this.blockDataNode = (ArrayNode) root.get("BlockData");
         this.tileEntitiesNode = (ObjectNode) root.get("TileEntities");
+        JsonNode entitiesRaw = root.get("Entities");
+        this.entitiesNode = entitiesRaw instanceof ObjectNode ? (ObjectNode) entitiesRaw : JsonNodeFactory.instance.objectNode();
     }
 
     public boolean isHistoryFile() {
@@ -101,5 +102,9 @@ public class StructureFile {
 
     public @NotNull ObjectNode getTileEntitiesNode() {
         return tileEntitiesNode;
+    }
+
+    public @NotNull ObjectNode getEntitiesNode() {
+        return entitiesNode;
     }
 }

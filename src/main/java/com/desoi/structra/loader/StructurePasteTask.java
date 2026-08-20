@@ -3,6 +3,8 @@ package com.desoi.structra.loader;
 import com.desoi.structra.Structra;
 import com.desoi.structra.model.IInform;
 import com.desoi.structra.model.Position;
+import com.desoi.structra.service.entityhandler.EntityService;
+import com.desoi.structra.service.entityhandler.IEntityHandler;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.StateService;
 import com.desoi.structra.util.JsonHelper;
@@ -17,6 +19,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -96,10 +100,36 @@ public class StructurePasteTask implements IInform {
                     index = i + looped;
                     if(index >= size) {
                         cancel();
+
+                        // TODO: Entity spawning should be batched like blocks for large entity counts
+                        structureLoader.getStructureFile().getEntitiesNode().properties().forEach(entry -> {
+                            String key = entry.getKey();
+                            ObjectNode entityNode = (ObjectNode) entry.getValue();
+
+                            String[] parts = key.split(",");
+                            Position relative = new Position(
+                                    Integer.parseInt(parts[0]),
+                                    Integer.parseInt(parts[1]),
+                                    Integer.parseInt(parts[2])
+                            );
+
+                            Position absolute = relative.clone().add(structureLoader.getMinPosition());
+                            Location location = absolute.toLocation(structureLoader.getOriginWorld());
+
+                            String typeName = entityNode.get("Type").asText();
+                            EntityType entityType = EntityType.valueOf(typeName);
+                            IEntityHandler<Entity> handler = EntityService.getHandler(entityType);
+                            if(handler != null) {
+                                handler.spawnAndLoad(location, entityNode);
+                            }
+                        });
+
+                        int entityCount = structureLoader.getStructureFile().getEntitiesNode().size();
+
                         ratio = 1.0f;
                         long elapsedMS = (System.nanoTime() - startNanoTime) / 1_000_000;
                         inform(String.format("&ePasting Structra to world '%s'... (%.1f%%)", structureLoader.getOriginWorld().getName(), ratio*100));
-                        inform(String.format("&aPasted '%d blocks' to world '%s' in %d ms", size, structureLoader.getOriginWorld().getName(), elapsedMS));
+                        inform(String.format("&aPasted '%d blocks and %d entities' to world '%s' in %d ms", size, entityCount, structureLoader.getOriginWorld().getName(), elapsedMS));
                         completeTask.run();
                         return;
                     }
