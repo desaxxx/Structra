@@ -1,79 +1,34 @@
-> # Structra
-> Time-based schematic loader and writer plugin.\
-> [![modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/available/modrinth_vector.svg)](https://modrinth.com/plugin/structra)
+# Structra
 
-> [!IMPORTANT]
-> This is not an addon for WorldEdit. It uses entirely different system.
+Async, time-based schematic loader and saver for Paper.
 
-> ## Features
-> - ⚡ Fast and lightweight, more importantly **time-based** schematic loading and writing.
-> - 🧩 Provides easy to use API for developers.
+[![modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/available/modrinth_vector.svg)](https://modrinth.com/plugin/structra)
+[![discord](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/social/discord-plural_vector.svg)](https://discord.gg/dN6RUzZGgJ)
 
-> ## Installation
-> 1. Download the latest release from [Releases](https://github.com/desaxxx/Structra/releases).
-> 2. Place the `Structra-x.x.x` into your server's plugins folder.
-> 3. Restart your server.
+> [!NOTE]
+> Structra is not a WorldEdit addon. It uses a standalone, asynchronous, time-based block queue to prevent server lag.
 
-> ## Usage
-> - `/structra tool`: Gives you the Structra tool item.
->   - **Left-click** with the tool: Sets **Position 1** at the clicked block.
->   - **Right-click** with the tool: Sets **Position 2** at the clicked block.
->
-> - `/structra pos1 [<x> <y> <z> <world>]`: Sets **Position 1**.
->   - **As a player**: If no coordinates are given, selects your current target block or location.
->   - **As console**: Coordinates and world must be provided.
->
-> - `/structra pos2 [<x> <y> <z> <world>]`: Sets **Position 2**.
->   - **As a player**: If no coordinates are given, selects your current target block or location.
->   - **As console**: Coordinates and world must be provided.
->
-> - `/structra write <fileName> [<batchSize>] [<x> <y> <z> <world>]`: Saves (writes) the selected region as a structure file.
->   - **As a player**: Coordinates are optional (defaults to your current location).
-> - `/structra write <fileName> <x> <y> <z> <world> [<batchSize>]`: Saves (writes) the selected region as a structure file.
->   - **As console**: Coordinates and world are required.
->
-> - `/structra paste <fileName> [<batchSize>] [<x> <y> <z> <world>]`: Loads (pastes) a structure at the given location.
->   - **As a player**: Coordinates are optional (defaults to your current location).
-> - `/structra paste <fileName> <x> <y> <z> <world> [<batchSize>]`: Loads (pastes) a structure at the given location.
->   - **As console**: Coordinates and world are required.
-> 
-> - `/structra pasteHistory <fileName> [<batchSize>]`: Loads (pastes) the history file with given file name.
->   
-> - `/structra delete <fileName>`: Deletes the specified structra file.
-> 
-> $\color{lightgreen}{\textsf{ batchSize (optional): Number of blocks processed per period (default: 50). }}$
+### Commands
 
-> ## Compatibility
-> - Paper 1.17 or newer.
-> - Java 16 or higher.
-> - No dependencies required.
+| Command | Description |
+| :--- | :--- |
+| `/structra tool` | Wand item for pos1 (L-click) and pos2 (R-click) |
+| `/structra pos1 [x y z world]` | Sets selection position 1 |
+| `/structra pos2 [x y z world]` | Sets selection position 2 |
+| `/structra write <name> [batchSize] [x y z world]` | Saves the selected region |
+| `/structra paste <name> [batchSize] [x y z world]` | Pastes the structure |
+| `/structra pasteHistory <name> [batchSize]` | Pastes from history |
+| `/structra delete <name>` | Deletes saved structure |
 
-> ## Support / Donate
-> Your support helps keep this project active. You can donate using these platforms:
->
-> ### Not configured yet.
-> [![Buy Me a Coffee](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/donate/buymeacoffee-plural_vector.svg)]() <br>
-> [![Patreon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/donate/patreon-plural_vector.svg)]() <br>
-> [![Ko-fi](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/donate/kofi-plural_vector.svg)]()
+$\color{lightgreen}{\textsf{ batchSize (optional): Number of blocks processed per period (default: 50). }}$
 
-> ## Contributing
-> Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+### Media
+<p align="center">
+  <img src="https://i.imgur.com/dXgtOyu.png" width="48%" />
+  <img src="https://i.imgur.com/rhnjH0B.png" width="48%" />
+  <img src="https://i.imgur.com/veMBV2e.png" width="48%" />
+  <img src="https://i.imgur.com/JhknzdU.png" width="48%" />
+</p>
 
-> ## Contact
-> For support and questions, please join our **Discord servers**.
->
-> |                                                                                                                                                           |                  |
-> |:---------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------|
-> | [![Desa Project](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/social/discord-plural_vector.svg)](https://discord.gg/dN6RUzZGgJ) | **Desa Project** |
-> |    [![Nesoi](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/social/discord-plural_vector.svg)](https://discord.gg/qcW6YrxwqJ)     | **Nesoi**        |
-
-> ## License
-> This plugin is licensed under __[GNU GENERAL PUBLIC LICENSE](LICENSE)__ (GPLv3)
-
-> ## Showcase
-> [Youtube Link #1](https://www.youtube.com/watch?v=BegPo-EezSs)
->
-> ![](https://i.imgur.com/dXgtOyu.png)
-> ![](https://i.imgur.com/rhnjH0B.png)
-> ![](https://i.imgur.com/veMBV2e.png)
-> ![](https://i.imgur.com/JhknzdU.png)
+### License
+[GPL-3.0](LICENSE)
