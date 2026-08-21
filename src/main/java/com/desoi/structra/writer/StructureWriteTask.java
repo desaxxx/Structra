@@ -90,7 +90,6 @@ public class StructureWriteTask implements IInform {
                 ratio = (float) looped / size;
                 inform(String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
 
-                //
                 for(int i = 0; i < structureWriter.getBatchSize(); i++) {
                     index = i + looped;
                     if(index >= size) {
@@ -112,6 +111,12 @@ public class StructureWriteTask implements IInform {
 
                             Position entityPos = Position.fromLocation(entity.getLocation(), false);
                             String key = entityPos.clone().subtract(structureWriter.getMinPosition()).separatedByComma();
+
+                            Location loc = entity.getLocation();
+                            ObjectNode offsetNode = entityNode.putObject("Offset");
+                            offsetNode.put("x", loc.getX() - Math.floor(loc.getX()));
+                            offsetNode.put("y", loc.getY() - Math.floor(loc.getY()));
+                            offsetNode.put("z", loc.getZ() - Math.floor(loc.getZ()));
 
                             structureWriter.getEntitiesNode().set(key, entityNode);
                         }

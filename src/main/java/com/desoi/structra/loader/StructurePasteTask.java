@@ -114,7 +114,15 @@ public class StructurePasteTask implements IInform {
                             );
 
                             Position absolute = relative.clone().add(structureLoader.getMinPosition());
-                            Location location = absolute.toLocation(structureLoader.getOriginWorld());
+                            Location location = new Location(
+                                    structureLoader.getOriginWorld(),
+                                    absolute.getX(),
+                                    absolute.getY(),
+                                    absolute.getZ()
+                            );
+                            if (entityNode.get("Offset") instanceof ObjectNode offset) {
+                                location.add(offset.get("x").asDouble(), offset.get("y").asDouble(), offset.get("z").asDouble());
+                            }
 
                             String typeName = entityNode.get("Type").asText();
                             EntityType entityType = EntityType.valueOf(typeName);
