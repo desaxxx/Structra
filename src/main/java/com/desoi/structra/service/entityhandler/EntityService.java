@@ -2,6 +2,7 @@ package com.desoi.structra.service.entityhandler;
 
 import com.desoi.structra.service.blockstate.*;
 import com.desoi.structra.service.entity.ArmorStandHandler;
+import com.desoi.structra.service.entity.BlockDisplayHandler;
 import org.bukkit.block.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -16,6 +17,7 @@ public class EntityService {
 
     static {
         handlers.put(EntityType.ARMOR_STAND, new ArmorStandHandler());
+        handlers.put(EntityType.BLOCK_DISPLAY, new BlockDisplayHandler());
     }
 
     @SuppressWarnings("unchecked")
