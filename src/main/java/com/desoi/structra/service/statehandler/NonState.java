@@ -113,7 +113,7 @@ public class NonState {
          * Serialization is added on Paper 1.19.2
          * I don't know how to store data without serialization since primitive or complex type can be of any object.
          */
-        if(Wrapper.getInstance().getVersion() >= 1902) {
+        if(Wrapper.getInstance().getVersion() >= 11902) {
             try {
                 byte[] bytes = tileState.getPersistentDataContainer().serializeToBytes();
                 parentNode.put("PersistentDataContainer", Base64.getEncoder().encodeToString(bytes));
@@ -128,7 +128,7 @@ public class NonState {
          * Deserialization is added on Paper 1.19.2
          * I don't know how to store data without deserialization since primitive or complex type can be of any object.
          */
-        if(Wrapper.getInstance().getVersion() >= 1902 && parentNode.get("PersistentDataContainer") instanceof TextNode pdcNode) {
+        if(Wrapper.getInstance().getVersion() >= 11902 && parentNode.get("PersistentDataContainer") instanceof TextNode pdcNode) {
             try {
                 tileState.getPersistentDataContainer().readFromBytes(Base64.getDecoder().decode(pdcNode.asText()));
             } catch (IOException e) {
@@ -141,8 +141,8 @@ public class NonState {
 
 
     @SuppressWarnings("deprecation")
-    public static void savePotionEffectType(@NotNull PotionEffect potionEffect, @NotNull ObjectNode parentNode, final int MINECRAFT_VERSION) {
-        if (MINECRAFT_VERSION >= 2005) {
+    public static void savePotionEffectType(@NotNull PotionEffect potionEffect, @NotNull ObjectNode parentNode) {
+        if (Wrapper.getInstance().getVersion() >= 12005) {
             NamespacedKey key = potionEffect.getType().getKey();
             parentNode.put("PotionEffectType", key.toString());
         } else {
@@ -156,8 +156,7 @@ public class NonState {
     @Nullable
     public static PotionEffectType getPotionEffectType(ObjectNode parentNode) {
         if (parentNode == null) return null;
-        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
-        if (MINECRAFT_VERSION >= 2005) {
+        if (Wrapper.getInstance().getVersion() >= 12005) {
             String keyStr = parentNode.has("PotionEffectType") ? parentNode.get("PotionEffectType").asText() : "";
             NamespacedKey key = NamespacedKey.fromString(keyStr);
             if (key == null) return null;

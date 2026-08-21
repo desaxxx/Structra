@@ -27,14 +27,15 @@ public class SkullState implements IStateHandler<Skull> {
     @SuppressWarnings("deprecation")
     @Override
     public void save(@NotNull Skull blockState, @NotNull ObjectNode node) {
-        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
-        if(MINECRAFT_VERSION >= 1903) {
+        int minecraft = Wrapper.getInstance().getVersion();
+
+        if(minecraft >= 11903) {
             node.put("NoteBlockSound", blockState.getNoteBlockSound() != null ? blockState.getNoteBlockSound().toString() : null);
         }
 
         boolean hasProfile = false;
 
-        if(MINECRAFT_VERSION >= 1801) {
+        if(minecraft >= 11801) {
             if(blockState.getPlayerProfile() != null) {
                 hasProfile = true;
                 node.set("PlayerProfile", playerProfileToJson(blockState.getPlayerProfile()));
@@ -50,8 +51,9 @@ public class SkullState implements IStateHandler<Skull> {
     @SuppressWarnings("deprecation")
     @Override
     public void loadTo(@NotNull Skull blockState, @NotNull ObjectNode node) {
-        final int MINECRAFT_VERSION = Wrapper.getInstance().getVersion();
-        if(MINECRAFT_VERSION >= 1903 && node.get("NoteBlockSound") instanceof TextNode noteBlockSoundNode) {
+        int minecraft = Wrapper.getInstance().getVersion();
+
+        if(minecraft >= 11903 && node.get("NoteBlockSound") instanceof TextNode noteBlockSoundNode) {
             try {
                 blockState.setNoteBlockSound(NamespacedKey.fromString(noteBlockSoundNode.asText()));
             } catch (Exception ignored) {
@@ -60,7 +62,7 @@ public class SkullState implements IStateHandler<Skull> {
 
         boolean hasProfile = false;
 
-        if(MINECRAFT_VERSION >= 1801) {
+        if(minecraft >= 11801) {
             if(node.has("PlayerProfile")) {
                 hasProfile = true;
                 blockState.setPlayerProfile(jsonToPlayerProfile(node.get("PlayerProfile")));
@@ -117,6 +119,7 @@ public class SkullState implements IStateHandler<Skull> {
         return node;
     }
 
+    // TODO: this is not going to work (return type is invalid for lower MC 1.18.1)
     private PlayerProfile jsonToPlayerProfile(JsonNode node) {
         String name = node.get("Name") instanceof TextNode nameNode ? nameNode.asText() : null;
 

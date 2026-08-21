@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public interface IStateHandler<B extends BlockState> {
 
     default int minSupportedVersion() {
-        return 1605;
+        return 11605;
     }
 
     default boolean isSupported() {

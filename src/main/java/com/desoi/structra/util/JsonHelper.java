@@ -46,22 +46,31 @@ public class JsonHelper {
 
     @Nullable
     private static String findPath(@NotNull JsonNode root, @NotNull JsonNode target, @NotNull String currentPath, int attempt) {
+        // found the path
         if (root.equals(target)) {
             return currentPath;
         }
-        if(attempt >= 100) return currentPath + "/... (Keeps on)";
 
+        // path is too long to continue
+        if(attempt >= 100) {
+            return currentPath + "/... (Keeps on)";
+        }
+
+        // target is under another object
         if (root instanceof ObjectNode obj) {
             for(Map.Entry<String, JsonNode> entry : obj.properties()) {
                 String result = findPath(entry.getValue(), target, currentPath + "/" + entry.getKey(), attempt+1);
                 if(result != null) return result;
             }
-        } else if (root instanceof ArrayNode array) {
+        }
+        // target is inside an array
+        else if (root instanceof ArrayNode array) {
             for (int i = 0; i < array.size(); i++) {
                 String result = findPath(array.get(i), target, currentPath + "[" + i + "]", attempt+1);
                 if(result != null) return result;
             }
         }
+
         return null;
     }
 
