@@ -28,13 +28,17 @@ public class Direction3D {
         Validate.notNull(first, "First direction cannot be null.");
         Validate.notNull(second, "Second direction cannot be null.");
         Validate.notNull(third, "Third direction cannot be null.");
-        Validate.validate(!first.isSameAxis(second) && !first.isSameAxis(third) && !second.isSameAxis(third), "Directions cannot be on same axis.");
+        Validate.validate(areDifferentAxis(first, second, third), "Directions cannot be on same axis.");
 
         byte value = 0;
         value |= (byte) (first.getEncoded() << 8);
         value |= (byte) (second.getEncoded() << 4);
         value |= third.getEncoded();
         return new Direction3D(value);
+    }
+
+    private static boolean areDifferentAxis(@NotNull Direction first, @NotNull Direction second, @NotNull Direction third) {
+        return !first.isSameAxis(second) && !first.isSameAxis(third) && !second.isSameAxis(third);
     }
 
     /**
