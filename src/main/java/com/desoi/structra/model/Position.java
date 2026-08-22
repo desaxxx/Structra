@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Represents a block position in a Minecraft world.
+ *
  * @since 1.0-SNAPSHOT
  */
 public class Position {
@@ -229,7 +231,7 @@ public class Position {
 
 
     /**
-     * Calculate the x size between positions.
+     * Calculate the x size (block count) between positions.
      *
      * @param other the other position
      * @return the x size
@@ -241,19 +243,19 @@ public class Position {
     }
 
     /**
-     * Calculate the width between positions.
+     * Calculate the width (block count in x-axis) between positions.
      *
      * @param other the other position
      * @return the width
      * @since 1.0-SNAPSHOT
-     * @see sizeX(Position)
+     * @see #sizeX(Position)
      */
     public int width(Position other) {
         return sizeX(other);
     }
 
     /**
-     * Calculate the y size between positions.
+     * Calculate the y size (block count) between positions.
      *
      * @param other the other position
      * @return the y size
@@ -265,19 +267,19 @@ public class Position {
     }
 
     /**
-     * Calculate the height between positions.
+     * Calculate the height (block count in y-axis) between positions.
      *
      * @param other the other position
      * @return the height
      * @since 1.0-SNAPSHOT
-     * @see sizeY(Position)
+     * @see #sizeY(Position)
      */
     public int height(Position other) {
         return sizeY(other);
     }
 
     /**
-     * Calculate the z size between positions.
+     * Calculate the z size (block count) between positions.
      *
      * @param other the other position
      * @return the z size
@@ -289,22 +291,22 @@ public class Position {
     }
 
     /**
-     * Calculate the length between positions.
+     * Calculate the length (block count in z axis) between positions.
      *
      * @param other the other position
      * @return the length
      * @since 1.0-SNAPSHOT
-     * @see sizeZ(Position)
+     * @see #sizeZ(Position)
      */
     public int length(Position other) {
         return sizeZ(other);
     }
 
     /**
-     * Calculate the size between the positions.
+     * Calculate the total block count (volume) between the positions.
      *
      * @param other the other position
-     * @return the size
+     * @return the volume size
      * @since 1.0-SNAPSHOT
      */
     public int size(Position other) {
@@ -401,7 +403,7 @@ public class Position {
     }
 
     /**
-     * Set x of the Position.
+     * Set x of the Position from a double, flooring it.
      *
      * @param x the x value
      * @return the current position
@@ -424,7 +426,7 @@ public class Position {
     }
 
     /**
-     * Set y of the Position.
+     * Set y of the Position from a double, flooring it.
      *
      * @param y the y value
      * @return the current position
@@ -447,7 +449,7 @@ public class Position {
     }
 
     /**
-     * Set z of the Position.
+     * Set z of the Position from a double, flooring it.
      *
      * @param z the z value
      * @return the current position
