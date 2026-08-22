@@ -25,6 +25,13 @@ public class BlockTraversalOrder {
         this.direction3D = direction3D;
     }
 
+    public static @NotNull BlockTraversalOrder create(Direction first, Direction second, Direction third) {
+        return new BlockTraversalOrder(Direction3D.of(first, second, third));
+    }
+    public static @NotNull BlockTraversalOrder create(Direction3D directions) {
+        return new BlockTraversalOrder(directions);
+    }
+
     /**
      * @return Direction3D
      * @since 1.1
@@ -149,11 +156,11 @@ public class BlockTraversalOrder {
         Position minPosition = Position.getMinimum(pos1, pos2);
         Position maxPosition = Position.getMaximum(pos1, pos2);
 
-        int width = maxPosition.width(minPosition);
-        int height = maxPosition.height(minPosition);
-        int length = maxPosition.length(minPosition);
+        int width = maxPosition.width(minPosition);     // block count -> x diff + 1
+        int height = maxPosition.height(minPosition);   // block count -> y diff + 1
+        int length = maxPosition.length(minPosition);   // block count -> z diff + 1
 
-        int totalBlocks = (width + 1) * (height + 1) * (length + 1);
+        int totalBlocks = width * height * length;
         Validate.validate(blockData.size() == totalBlocks,
                 "Block data size doesn't match region size.");
 
@@ -183,7 +190,7 @@ public class BlockTraversalOrder {
     private int[] createIndexMapping(int width, int height, int length,
                                             Direction3D sourceDir, Direction3D targetDir,
                                             Position min, Position max) {
-        int totalBlocks = (width + 1) * (height + 1) * (length + 1);
+        int totalBlocks = width * height * length;
         int[] mapping = new int[totalBlocks];
 
         Direction targetFirst = targetDir.first();
@@ -195,9 +202,9 @@ public class BlockTraversalOrder {
         int targetThirdSize = getDistance(targetThird, width, height, length);
 
         int targetIndex = 0;
-        for(int k = 0; k <= targetThirdSize; k++) {
-            for(int j = 0; j <= targetSecondSize; j++) {
-                for(int i = 0; i <= targetFirstSize; i++) {
+        for(int k = 0; k < targetThirdSize; k++) {
+            for(int j = 0; j < targetSecondSize; j++) {
+                for(int i = 0; i < targetFirstSize; i++) {
                     // Calculate absolute X, Y, Z position for this target index
                     int x = getCoordinateForAxis(targetFirst, i, targetSecond, j, targetThird, k,
                             min.getX(), max.getX(), 'X');
@@ -270,9 +277,9 @@ public class BlockTraversalOrder {
         int firstSize = getDistance(sourceFirst, width, height, length);
         int secondSize = getDistance(sourceSecond, width, height, length);
 
-        // Calculate linear index: k * (width+1) * (height+1) + j * (width+1) + i
-        return stepThird * (firstSize + 1) * (secondSize + 1)
-                + stepSecond * (firstSize + 1)
+        // Calculate linear index: k * width * height + j * width + i
+        return stepThird * firstSize * secondSize
+                + stepSecond * firstSize
                 + stepFirst;
     }
 
@@ -305,14 +312,5 @@ public class BlockTraversalOrder {
     @Override
     public int hashCode() {
         return Objects.hashCode(direction3D);
-    }
-
-    @NotNull
-    public static BlockTraversalOrder create(Direction first, Direction second, Direction third) {
-        return new BlockTraversalOrder(Direction3D.of(first, second, third));
-    }
-    @NotNull
-    public static BlockTraversalOrder create(Direction3D directions) {
-        return new BlockTraversalOrder(directions);
     }
 }

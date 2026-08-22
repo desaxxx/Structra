@@ -110,7 +110,7 @@ public class StructureWriteTask implements IInform {
                             handler.save(entity, entityNode);
 
                             Position entityPos = Position.fromLocation(entity.getLocation(), false);
-                            String key = entityPos.clone().subtract(structureWriter.getMinPosition()).separatedByComma();
+                            String key = entityPos.copy().subtract(structureWriter.getMinPosition()).separatedByComma();
 
                             Location loc = entity.getLocation();
                             ObjectNode offsetNode = entityNode.putObject("Offset");
@@ -150,7 +150,7 @@ public class StructureWriteTask implements IInform {
                     if(handler != null) {
                         tileEntity.put("Type", handler.name());
                         handler.save(state, tileEntity);
-                        String tileEntityRelativeness = blockPosition.clone().subtract(structureWriter.getMinPosition()).separatedByComma();
+                        String tileEntityRelativeness = blockPosition.copy().subtract(structureWriter.getMinPosition()).separatedByComma();
                         structureWriter.getTileEntitiesNode().set(tileEntityRelativeness, tileEntity);
                     }
                 }

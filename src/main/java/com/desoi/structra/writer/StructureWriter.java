@@ -70,20 +70,18 @@ public class StructureWriter implements IInform {
         this.executor = executor;
         this.originLocation = originLocation.clone();
         this.originWorld = originLocation.getWorld();
-        Position min = Position.getMinimum(position1, position2);
-        this.minPosition = new Position(min.getX(), min.getY(), min.getZ());
-        Position max = Position.getMaximum(position1, position2);
-        this.maxPosition = new Position(max.getX(), max.getY(), max.getZ());
-        this.xSize = maxPosition.width(minPosition) + 1;
-        this.ySize = maxPosition.height(minPosition) + 1;
-        this.zSize = maxPosition.length(minPosition) + 1;
+        this.minPosition = Position.getMinimum(position1, position2);
+        this.maxPosition = Position.getMaximum(position1, position2);
+        this.xSize = maxPosition.width(minPosition);
+        this.ySize = maxPosition.height(minPosition);
+        this.zSize = maxPosition.length(minPosition);
         ObjectNode sizeNode = JsonHelper.getOrCreate(root, "Size");
         sizeNode.put("x", xSize);
         sizeNode.put("y", ySize);
         sizeNode.put("z", zSize);
         sizeNode.put("Total", getSize());
         // Relative = Min - Origin -> Min = Relative + Origin
-        this.relative = minPosition.clone().subtract(Position.fromLocation(this.originLocation, false));
+        this.relative = minPosition.copy().subtract(Position.fromLocation(this.originLocation, false));
         ObjectNode relativeNode = JsonHelper.getOrCreate(root, "Relative");
         relativeNode.put("x", relative.getX());
         relativeNode.put("y", relative.getY());

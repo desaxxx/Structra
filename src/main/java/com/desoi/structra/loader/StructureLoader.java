@@ -56,8 +56,8 @@ public class StructureLoader implements IInform {
 
         this.originLocation = originLocation.clone();
         this.originWorld = originLocation.getWorld();
-        this.minPosition = structureFile.getRelative().clone().add(Position.fromLocation(this.originLocation, false));
-        this.maxPosition = minPosition.clone().add(new Position(structureFile.getXSize()-1, structureFile.getYSize()-1, structureFile.getZSize()-1));
+        this.minPosition = structureFile.getRelative().copy().add(Position.fromLocation(this.originLocation, false));
+        this.maxPosition = minPosition.copy().add(new Position(structureFile.getXSize()-1, structureFile.getYSize()-1, structureFile.getZSize()-1));
         this.blockTraversalOrder = blockTraversalOrder;
         this.positions = blockTraversalOrder.getPositions(minPosition, maxPosition);
         this.reorderedBlockDataNode = blockTraversalOrder.reorderBlockData(structureFile.getBlockDataNode(), minPosition, maxPosition, BlockTraversalOrder.DEFAULT);

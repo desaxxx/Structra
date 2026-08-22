@@ -113,7 +113,7 @@ public class StructurePasteTask implements IInform {
                                     Integer.parseInt(parts[2])
                             );
 
-                            Position absolute = relative.clone().add(structureLoader.getMinPosition());
+                            Position absolute = relative.copy().add(structureLoader.getMinPosition());
                             Location location = new Location(
                                     structureLoader.getOriginWorld(),
                                     absolute.getX(),
@@ -166,7 +166,7 @@ public class StructurePasteTask implements IInform {
                     }
 
                     // Block pos - Min Pos
-                    String tileEntityRelativeness = blockPosition.clone().subtract(structureLoader.getMinPosition()).separatedByComma();
+                    String tileEntityRelativeness = blockPosition.copy().subtract(structureLoader.getMinPosition()).separatedByComma();
                     if(structureLoader.getStructureFile().getTileEntitiesNode().get(tileEntityRelativeness) instanceof ObjectNode tileEntity) {
                         BlockState blockState = block.getState();
                         IStateHandler<BlockState> handler = StateService.getHandler(blockState);
