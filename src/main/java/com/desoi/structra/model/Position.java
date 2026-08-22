@@ -107,9 +107,9 @@ public class Position {
         int length = maxPosition.length(minPosition);
 
         List<Position> positions = new ArrayList<>();
-        for(int z = 0; z < length + 1; z++) {
-            for(int y = 0; y < height + 1; y++) {
-                for(int x = 0; x < width + 1; x++) {
+        for(int z = 0; z < length; z++) {
+            for(int y = 0; y < height; y++) {
+                for(int x = 0; x < width; x++) {
                     Position pos = minPosition.copy().add(new Position(x, y, z));
                     positions.add(pos);
                 }
@@ -237,7 +237,7 @@ public class Position {
      */
     public int sizeX(Position other) {
         Preconditions.checkNotNull(other, "other");
-        return Math.abs(this.x - other.x);
+        return Math.abs(this.x - other.x) + 1;
     }
 
     /**
@@ -261,7 +261,7 @@ public class Position {
      */
     public int sizeY(Position other) {
         Preconditions.checkNotNull(other, "other");
-        return Math.abs(this.y - other.y);
+        return Math.abs(this.y - other.y) + 1;
     }
 
     /**
@@ -285,7 +285,7 @@ public class Position {
      */
     public int sizeZ(Position other) {
         Preconditions.checkNotNull(other, "other");
-        return Math.abs(this.z - other.z);
+        return Math.abs(this.z - other.z) + 1;
     }
 
     /**
