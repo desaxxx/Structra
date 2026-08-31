@@ -1,7 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
-import com.desoi.structra.util.JsonHelper;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -12,6 +12,7 @@ import org.bukkit.block.structure.StructureRotation;
 import org.bukkit.block.structure.UsageMode;
 import org.bukkit.util.BlockVector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class StructureState implements IStateHandler<Structure> {
 
@@ -22,13 +23,13 @@ public class StructureState implements IStateHandler<Structure> {
         node.put("Metadata", blockState.getMetadata());
         node.put("Mirror", blockState.getMirror().name());
 
-        node.set("RelativePosition", objectMapper.valueToTree(blockState.getRelativePosition().serialize()));
+        putBlockVector(node.putObject("RelativePosition"), blockState.getRelativePosition());
 
         node.put("Rotation", blockState.getRotation().name());
         node.put("Seed", blockState.getSeed());
         node.put("StructureName", blockState.getStructureName());
 
-        node.set("StructureSize", objectMapper.valueToTree(blockState.getStructureSize().serialize()));
+        putBlockVector(node.putObject("StructureSize"), blockState.getStructureSize());
 
         node.put("UsageMode", blockState.getUsageMode().name());
         node.put("BoundingBoxVisible", blockState.isBoundingBoxVisible());
@@ -55,7 +56,8 @@ public class StructureState implements IStateHandler<Structure> {
         }
 
         if(node.has("RelativePosition")) {
-            blockState.setRelativePosition(BlockVector.deserialize(JsonHelper.nodeToMap(node.get("RelativePosition"))));
+            BlockVector relative = readBlockVector(node.get("RelativePosition"));
+            if(relative != null) blockState.setRelativePosition(relative);
         }
 
         if(node.get("Rotation") instanceof TextNode rotationNode) {
@@ -71,7 +73,8 @@ public class StructureState implements IStateHandler<Structure> {
         }
 
         if (node.has("StructureSize")) {
-            blockState.setStructureSize(BlockVector.deserialize(JsonHelper.nodeToMap(node.get("StructureSize"))));
+            BlockVector size = readBlockVector(node.get("StructureSize"));
+            if(size != null) blockState.setStructureSize(size);
         }
         if(node.has("UsageMode")) {
             try {
@@ -90,5 +93,20 @@ public class StructureState implements IStateHandler<Structure> {
 
         loadToTileState(blockState, node);
         blockState.update(true, false);
+    }
+
+
+    private void putBlockVector(@NotNull ObjectNode node, @NotNull BlockVector blockVector) {
+        node.put("x", blockVector.getBlockX());
+        node.put("y", blockVector.getBlockY());
+        node.put("z", blockVector.getBlockZ());
+    }
+
+    private @Nullable BlockVector readBlockVector(@NotNull JsonNode node) {
+        if(node instanceof ObjectNode objNode) {
+            return new BlockVector(objNode.get("x").asInt(), objNode.get("y").asInt(), objNode.get("z").asInt());
+        }
+
+        return null;
     }
 }
