@@ -31,4 +31,13 @@ public class EntityService {
     public static <E extends Entity> IEntityHandler<E> getHandler(EntityType type) {
         return (IEntityHandler<E>) handlers.get(type);
     }
+
+    @SuppressWarnings("unchecked")
+    public static @Nullable <E extends Entity> IEntityHandler<E> getHandler(String type) {
+        try {
+            return (IEntityHandler<E>) handlers.get(EntityType.valueOf(type));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 }

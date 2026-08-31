@@ -1,5 +1,6 @@
 package com.desoi.structra.service.entity;
 
+import com.desoi.structra.service.entityhandler.NonEntity;
 import com.desoi.structra.service.entityhandler.IEntityHandler;
 import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -23,63 +24,51 @@ public class BlockDisplayHandler implements IEntityHandler<BlockDisplay> {
         return 11904;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void save(@NotNull BlockDisplay entity, @NotNull ObjectNode node) {
         node.put("Block", entity.getBlock().getAsString());
 
-        var t = entity.getTransformation();
+        Transformation t = entity.getTransformation();
         putVector3f(node.putObject("Translation"), t.getTranslation());
         putQuaternionf(node.putObject("LeftRotation"), t.getLeftRotation());
         putVector3f(node.putObject("Scale"), t.getScale());
         putQuaternionf(node.putObject("RightRotation"), t.getRightRotation());
 
-        node.put("InterpolationDelay", entity.getInterpolationDelay());
         node.put("InterpolationDuration", entity.getInterpolationDuration());
         if(Wrapper.getInstance().getVersion() >= 12002) {
             node.put("TeleportDuration", entity.getTeleportDuration());
         }
-
         node.put("ViewRange", entity.getViewRange());
         node.put("ShadowRadius", entity.getShadowRadius());
         node.put("ShadowStrength", entity.getShadowStrength());
         node.put("DisplayWidth", entity.getDisplayWidth());
         node.put("DisplayHeight", entity.getDisplayHeight());
-
+        node.put("InterpolationDelay", entity.getInterpolationDelay());
         node.put("Billboard", entity.getBillboard().name());
-
-        Display.Brightness brightness = entity.getBrightness();
-        if (brightness != null) {
-            ObjectNode brightnessNode = node.putObject("Brightness");
-            brightnessNode.put("Block", brightness.getBlockLight());
-            brightnessNode.put("Sky", brightness.getSkyLight());
-        }
 
         Color glow = entity.getGlowColorOverride();
         if (glow != null) node.put("GlowColorOverride", glow.asARGB());
 
-        node.put("Glowing", entity.isGlowing());
-        node.put("Invulnerable", entity.isInvulnerable());
-        if(Wrapper.getInstance().getVersion() >= 12004) {
-            node.put("Invisible", entity.isInvisible());
+        Display.Brightness brightness = entity.getBrightness();
+        if (brightness != null) {
+            ObjectNode brightnessNode = node.putObject("Brightness");
+            brightnessNode.put("BlockLight", brightness.getBlockLight());
+            brightnessNode.put("SkyLight", brightness.getSkyLight());
         }
-        node.put("Gravity", entity.hasGravity());
-        node.put("Silent", entity.isSilent());
-        node.put("PersistenceRequired", entity.isPersistent());
 
-        if (entity.getCustomName() != null) {
-            node.put("CustomName", entity.getCustomName());
-            node.put("CustomNameVisible", entity.isCustomNameVisible());
-        }
+        NonEntity.save(entity, node);
     }
 
     @Override
-    public void spawnAndLoad(Location location, ObjectNode node) {
+    public void spawnAndLoad(@NotNull Location location, @NotNull ObjectNode node) {
         BlockDisplay display = (BlockDisplay) location.getWorld().spawnEntity(location, EntityType.BLOCK_DISPLAY);
 
         if (node.has("Block")) {
-            BlockData data = Bukkit.createBlockData(node.get("Block").asText());
-            display.setBlock(data);
+            try {
+                BlockData data = Bukkit.createBlockData(node.get("Block").asText());
+                display.setBlock(data);
+            } catch (IllegalArgumentException ignored) {
+            }
         }
 
         Vector3f translation = readVector3f(node.get("Translation"), new Vector3f(0,0,0));
@@ -88,39 +77,30 @@ public class BlockDisplayHandler implements IEntityHandler<BlockDisplay> {
         Quaternionf rightRotation = readQuaternionf(node.get("RightRotation"));
         display.setTransformation(new Transformation(translation, leftRotation, scale, rightRotation));
 
-        if (node.has("InterpolationDelay")) display.setInterpolationDelay(node.get("InterpolationDelay").asInt());
         if (node.has("InterpolationDuration")) display.setInterpolationDuration(node.get("InterpolationDuration").asInt());
         if (Wrapper.getInstance().getVersion() >= 12002 && node.has("TeleportDuration")) {
             display.setTeleportDuration(node.get("TeleportDuration").asInt());
         }
-
+        if (node.has("InterpolationDelay")) display.setInterpolationDelay(node.get("InterpolationDelay").asInt());
         if (node.has("ViewRange")) display.setViewRange((float) node.get("ViewRange").asDouble());
         if (node.has("ShadowRadius")) display.setShadowRadius((float) node.get("ShadowRadius").asDouble());
         if (node.has("ShadowStrength")) display.setShadowStrength((float) node.get("ShadowStrength").asDouble());
         if (node.has("DisplayWidth")) display.setDisplayWidth((float) node.get("DisplayWidth").asDouble());
         if (node.has("DisplayHeight")) display.setDisplayHeight((float) node.get("DisplayHeight").asDouble());
-
-        if (node.has("Billboard")) display.setBillboard(Display.Billboard.valueOf(node.get("Billboard").asText()));
-
-        if (node.get("Brightness") instanceof ObjectNode brightnessNode) {
-            display.setBrightness(new Display.Brightness(brightnessNode.get("Block").asInt(), brightnessNode.get("Sky").asInt()));
+        if (node.has("Billboard")) {
+            try {
+                display.setBillboard(Display.Billboard.valueOf(node.get("Billboard").asText()));
+            } catch (IllegalArgumentException ignored) {
+            }
         }
 
         if (node.has("GlowColorOverride")) display.setGlowColorOverride(Color.fromARGB(node.get("GlowColorOverride").asInt()));
 
-        if (node.has("Glowing")) display.setGlowing(node.get("Glowing").asBoolean());
-        if (node.has("Invulnerable")) display.setInvulnerable(node.get("Invulnerable").asBoolean());
-        if (Wrapper.getInstance().getVersion() >= 12004 && node.has("Invisible")) {
-            display.setInvisible(node.get("Invisible").asBoolean());
+        if (node.get("Brightness") instanceof ObjectNode brightnessNode) {
+            display.setBrightness(new Display.Brightness(brightnessNode.get("BlockLight").asInt(), brightnessNode.get("SkyLight").asInt()));
         }
-        if (node.has("Gravity")) display.setGravity(node.get("Gravity").asBoolean());
-        if (node.has("Silent")) display.setSilent(node.get("Silent").asBoolean());
-        if (node.has("PersistenceRequired")) display.setPersistent(node.get("PersistenceRequired").asBoolean());
 
-        if (node.has("CustomName")) {
-            display.setCustomName(node.get("CustomName").asText());
-            if (node.has("CustomNameVisible")) display.setCustomNameVisible(node.get("CustomNameVisible").asBoolean());
-        }
+        NonEntity.load(display, node);
     }
 
     private void putVector3f(ObjectNode node, Vector3f v) {
@@ -151,7 +131,7 @@ public class BlockDisplayHandler implements IEntityHandler<BlockDisplay> {
                 (float) objNode.get("x").asDouble(),
                 (float) objNode.get("y").asDouble(),
                 (float) objNode.get("z").asDouble(),
-                (float) objNode.get("w").asDouble()
+                (float) objNode.get("w").asDouble(1.0)
         );
     }
 }
