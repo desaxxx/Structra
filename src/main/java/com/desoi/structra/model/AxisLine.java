@@ -2,9 +2,8 @@ package com.desoi.structra.model;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.Axis;
-import org.jetbrains.annotations.ApiStatus;
 
-@ApiStatus.Obsolete(since = "2.0-beta1")
+@Deprecated(since = "2.0-beta1")
 public enum AxisLine {
     POSITIVE_X(Axis.X),
     NEGATIVE_X(Axis.X),
