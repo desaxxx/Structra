@@ -11,9 +11,13 @@ import com.desoi.structra.service.statehandler.StateService;
 import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Validate;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.CommandSender;
@@ -24,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 public class StructureWriteTask implements IInform {
 
@@ -78,11 +83,15 @@ public class StructureWriteTask implements IInform {
         running = true;
         structureWriter.setStartNanoTime(System.nanoTime());
         final int size = structureWriter.getPositions().size();
+
+        Map<String, Collection<Entity>> positionKeyToEntities = collectEntities();
+
         new BukkitRunnable() {
             int looped = 0;
             short nextId = 0;
             int index = 0;
             float ratio = 0.0f;
+            int entityCount = 0;
 
             @Override
             public void run() {
@@ -95,37 +104,11 @@ public class StructureWriteTask implements IInform {
                     if(index >= size) {
                         cancel();
 
-                        BoundingBox box = BoundingBox.of(
-                                structureWriter.getMinPosition().toLocation(structureWriter.getOriginWorld()),
-                                structureWriter.getMaxPosition().toLocation(structureWriter.getOriginWorld())
-                        );
-                        Collection<Entity> entities = structureWriter.getOriginWorld().getNearbyEntities(box);
-
-                        for (Entity entity : entities) {
-                            IEntityHandler<Entity> handler = EntityService.getHandler(entity.getType());
-                            if (handler == null) continue;
-
-                            ObjectNode entityNode = JsonHelper.OBJECT_MAPPER.createObjectNode();
-                            entityNode.put("Type", entity.getType().name());
-                            handler.save(entity, entityNode);
-
-                            Position entityPos = Position.fromLocation(entity.getLocation(), false);
-                            String key = entityPos.copy().subtract(structureWriter.getMinPosition()).separatedByComma();
-
-                            Location loc = entity.getLocation();
-                            ObjectNode offsetNode = entityNode.putObject("Offset");
-                            offsetNode.put("x", loc.getX() - Math.floor(loc.getX()));
-                            offsetNode.put("y", loc.getY() - Math.floor(loc.getY()));
-                            offsetNode.put("z", loc.getZ() - Math.floor(loc.getZ()));
-
-                            structureWriter.getEntitiesNode().set(key, entityNode);
-                        }
-
                         saveToFile();
                         ratio = 1.0f;
                         long elapsedMS = (System.nanoTime() - structureWriter.getStartNanoTime()) / 1_000_000;
                         inform(String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
-                        inform(String.format("&aSaved '%d blocks' to file '%s' in %d ms", size, structureWriter.getFile().getName(), elapsedMS));
+                        inform(String.format("&aSaved '%d blocks and %d entities' to file '%s' in %d ms", size, entityCount, structureWriter.getFile().getName(), elapsedMS));
                         completeTask.run();
                         return;
                     }
@@ -133,6 +116,7 @@ public class StructureWriteTask implements IInform {
                     Position blockPosition = structureWriter.getPositions().get(index);
                     Location blockLocation = blockPosition.toLocation(structureWriter.getOriginWorld());
                     Block block = blockLocation.getBlock();
+                    String positionKey = blockPosition.copy().subtract(structureWriter.getMinPosition()).separatedByComma(); // "15,5,0"
 
                     String data = block.getBlockData().getAsString();
                     short id;
@@ -145,13 +129,39 @@ public class StructureWriteTask implements IInform {
                     structureWriter.getBlockDataNode().add(id);
 
                     BlockState state = block.getState();
-                    IStateHandler<BlockState> handler = StateService.getHandler(state);
+                    IStateHandler<BlockState> stateHandler = StateService.getHandler(state);
                     ObjectNode tileEntity = JsonHelper.OBJECT_MAPPER.createObjectNode();
-                    if(handler != null) {
-                        tileEntity.put("Type", handler.name());
-                        handler.save(state, tileEntity);
-                        String tileEntityRelativeness = blockPosition.copy().subtract(structureWriter.getMinPosition()).separatedByComma();
-                        structureWriter.getTileEntitiesNode().set(tileEntityRelativeness, tileEntity);
+                    if(stateHandler != null) {
+                        tileEntity.put("Type", stateHandler.name());
+                        stateHandler.save(state, tileEntity);
+                        structureWriter.getTileEntitiesNode().set(positionKey, tileEntity);
+                    }
+
+                    Collection<Entity> entities = positionKeyToEntities.get(positionKey);
+                    if(entities != null && !entities.isEmpty()) {
+                        ArrayNode nearbyNode = JsonHelper.OBJECT_MAPPER.createArrayNode();
+
+                        for (Entity entity : entities) {
+                            IEntityHandler<Entity> entityHandler = EntityService.getHandler(entity.getType());
+                            if (entityHandler == null) continue;
+                            Location loc = entity.getLocation();
+
+                            ObjectNode entityNode = nearbyNode.addObject();
+                            entityNode.put("Type", entity.getType().name());
+                            ObjectNode offsetNode = entityNode.putObject("Offset");
+                            offsetNode.put("x", loc.getX() - blockLocation.getX());
+                            offsetNode.put("y", loc.getY() - blockLocation.getY());
+                            offsetNode.put("z", loc.getZ() - blockLocation.getZ());
+                            entityNode.put("Yaw", loc.getYaw());
+                            entityNode.put("Pitch", loc.getPitch());
+
+                            entityHandler.save(entity, entityNode);
+                            entityCount++;
+                        }
+
+                        if(!nearbyNode.isEmpty()) {
+                            structureWriter.getEntitiesNode().set(positionKey, nearbyNode);
+                        }
                     }
                 }
 
@@ -166,6 +176,27 @@ public class StructureWriteTask implements IInform {
         } catch (IOException e) {
             throw new StructraException(String.format("Couldn't save to file '%s'", structureWriter.getFile().getName()) + e);
         }
+    }
+
+    private @NotNull Map<String, Collection<Entity>> collectEntities() {
+        Multimap<String, Entity> positionKeyToEntities = HashMultimap.create();
+
+        Position minPosition = structureWriter.getMinPosition();
+
+        World world = structureWriter.getOriginWorld();
+        Location minLocation = minPosition.toLocation(world);
+        Location maxLocation = structureWriter.getMaxPosition().copy().add(new Position(1,1,1)).toLocation(world);
+        BoundingBox areaBox = BoundingBox.of(minLocation, maxLocation);
+        Collection<Entity> entities = world.getNearbyEntities(areaBox);
+
+        for(Entity entity : entities) {
+            Position blockPosition = Position.fromLocation(entity.getLocation(), false);
+            String positionKey = blockPosition.copy().subtract(minPosition).separatedByComma();
+
+            positionKeyToEntities.put(positionKey, entity);
+        }
+
+        return positionKeyToEntities.asMap();
     }
 
     /**
