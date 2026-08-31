@@ -43,10 +43,6 @@ public class SignState implements IStateHandler<Sign> {
             node.set("Lines", linesNode);
         }
 
-//        if (blockState.getAllowedEditorUniqueId() != null) {
-//            node.put("AllowedEditorUniqueId", blockState.getAllowedEditorUniqueId().toString());
-//        }
-
         saveTileState(blockState, node);
     }
 
@@ -100,10 +96,6 @@ public class SignState implements IStateHandler<Sign> {
                 }
             }
         }
-
-//        if (node.get("AllowedEditorUniqueId") instanceof TextNode allowedEditorUniqueIdNode) {
-//            blockState.setAllowedEditorUniqueId(UUID.fromString(allowedEditorUniqueIdNode.asText()));
-//        }
 
         loadToTileState(blockState, node);
 
