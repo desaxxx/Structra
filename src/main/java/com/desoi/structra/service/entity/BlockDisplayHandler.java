@@ -1,6 +1,7 @@
 package com.desoi.structra.service.entity;
 
 import com.desoi.structra.service.entityhandler.IEntityHandler;
+import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.Bukkit;
@@ -14,13 +15,17 @@ import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.jspecify.annotations.NonNull;
 
 public class BlockDisplayHandler implements IEntityHandler<BlockDisplay> {
 
+    @Override
+    public int minSupportedVersion() {
+        return 11904;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
-    public void save(@NonNull BlockDisplay entity, @NotNull ObjectNode node) {
+    public void save(@NotNull BlockDisplay entity, @NotNull ObjectNode node) {
         node.put("Block", entity.getBlock().getAsString());
 
         var t = entity.getTransformation();
@@ -31,7 +36,9 @@ public class BlockDisplayHandler implements IEntityHandler<BlockDisplay> {
 
         node.put("InterpolationDelay", entity.getInterpolationDelay());
         node.put("InterpolationDuration", entity.getInterpolationDuration());
-        node.put("TeleportDuration", entity.getTeleportDuration());
+        if(Wrapper.getInstance().getVersion() >= 12002) {
+            node.put("TeleportDuration", entity.getTeleportDuration());
+        }
 
         node.put("ViewRange", entity.getViewRange());
         node.put("ShadowRadius", entity.getShadowRadius());
@@ -53,7 +60,9 @@ public class BlockDisplayHandler implements IEntityHandler<BlockDisplay> {
 
         node.put("Glowing", entity.isGlowing());
         node.put("Invulnerable", entity.isInvulnerable());
-        node.put("Invisible", entity.isInvisible());
+        if(Wrapper.getInstance().getVersion() >= 12004) {
+            node.put("Invisible", entity.isInvisible());
+        }
         node.put("Gravity", entity.hasGravity());
         node.put("Silent", entity.isSilent());
         node.put("PersistenceRequired", entity.isPersistent());
@@ -81,7 +90,9 @@ public class BlockDisplayHandler implements IEntityHandler<BlockDisplay> {
 
         if (node.has("InterpolationDelay")) display.setInterpolationDelay(node.get("InterpolationDelay").asInt());
         if (node.has("InterpolationDuration")) display.setInterpolationDuration(node.get("InterpolationDuration").asInt());
-        if (node.has("TeleportDuration")) display.setTeleportDuration(node.get("TeleportDuration").asInt());
+        if (Wrapper.getInstance().getVersion() >= 12002 && node.has("TeleportDuration")) {
+            display.setTeleportDuration(node.get("TeleportDuration").asInt());
+        }
 
         if (node.has("ViewRange")) display.setViewRange((float) node.get("ViewRange").asDouble());
         if (node.has("ShadowRadius")) display.setShadowRadius((float) node.get("ShadowRadius").asDouble());
@@ -99,7 +110,9 @@ public class BlockDisplayHandler implements IEntityHandler<BlockDisplay> {
 
         if (node.has("Glowing")) display.setGlowing(node.get("Glowing").asBoolean());
         if (node.has("Invulnerable")) display.setInvulnerable(node.get("Invulnerable").asBoolean());
-        if (node.has("Invisible")) display.setInvisible(node.get("Invisible").asBoolean());
+        if (Wrapper.getInstance().getVersion() >= 12004 && node.has("Invisible")) {
+            display.setInvisible(node.get("Invisible").asBoolean());
+        }
         if (node.has("Gravity")) display.setGravity(node.get("Gravity").asBoolean());
         if (node.has("Silent")) display.setSilent(node.get("Silent").asBoolean());
         if (node.has("PersistenceRequired")) display.setPersistent(node.get("PersistenceRequired").asBoolean());

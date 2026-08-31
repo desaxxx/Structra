@@ -10,13 +10,12 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 
 public class ArmorStandHandler implements IEntityHandler<ArmorStand> {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void save(@NonNull ArmorStand entity, @NotNull ObjectNode node) {
+    public void save(@NotNull ArmorStand entity, @NotNull ObjectNode node) {
         node.put("Visible", entity.isVisible());
         node.put("Small", entity.isSmall());
         node.put("Arms", entity.hasArms());
@@ -32,18 +31,20 @@ public class ArmorStandHandler implements IEntityHandler<ArmorStand> {
         }
 
         EntityEquipment eq = entity.getEquipment();
+        // Note: helmet, chest, legs, boots can be null on paper-api 1.17.1.
+        //       Also, the method ItemStack#isEmpty is not yet implemented on that version.
         ItemStack helmet = eq.getHelmet();
-        if (!helmet.isEmpty()) node.put("Helmet", JsonHelper.serializeItemStack(helmet));
+        if (helmet != null && !helmet.getType().isAir()) node.put("Helmet", JsonHelper.serializeItemStack(helmet));
         ItemStack chest = eq.getChestplate();
-        if (!chest.isEmpty()) node.put("Chestplate", JsonHelper.serializeItemStack(chest));
+        if (chest != null && !chest.getType().isAir()) node.put("Chestplate", JsonHelper.serializeItemStack(chest));
         ItemStack legs = eq.getLeggings();
-        if (!legs.isEmpty()) node.put("Leggings", JsonHelper.serializeItemStack(legs));
+        if (legs != null && !legs.getType().isAir()) node.put("Leggings", JsonHelper.serializeItemStack(legs));
         ItemStack boots = eq.getBoots();
-        if (!boots.isEmpty()) node.put("Boots", JsonHelper.serializeItemStack(boots));
+        if (boots != null && !boots.getType().isAir()) node.put("Boots", JsonHelper.serializeItemStack(boots));
         ItemStack mainHand = eq.getItemInMainHand();
-        if (!mainHand.isEmpty()) node.put("MainHand", JsonHelper.serializeItemStack(mainHand));
+        if (!mainHand.getType().isAir()) node.put("MainHand", JsonHelper.serializeItemStack(mainHand));
         ItemStack offHand = eq.getItemInOffHand();
-        if (!offHand.isEmpty()) node.put("OffHand", JsonHelper.serializeItemStack(offHand));
+        if (!offHand.getType().isAir()) node.put("OffHand", JsonHelper.serializeItemStack(offHand));
 
         ObjectNode headNode = JsonHelper.getOrCreate(node, "HeadPose");
         headNode.put("x", entity.getHeadPose().getX());

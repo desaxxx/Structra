@@ -1,11 +1,10 @@
 package com.desoi.structra.service.entityhandler;
 
-import com.desoi.structra.service.blockstate.*;
 import com.desoi.structra.service.entity.ArmorStandHandler;
 import com.desoi.structra.service.entity.BlockDisplayHandler;
-import org.bukkit.block.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -17,7 +16,14 @@ public class EntityService {
 
     static {
         handlers.put(EntityType.ARMOR_STAND, new ArmorStandHandler());
-        handlers.put(EntityType.BLOCK_DISPLAY, new BlockDisplayHandler());
+        tryPutting("BLOCK_DISPLAY", new BlockDisplayHandler());
+    }
+
+    private static void tryPutting(@NotNull String entityType, @NotNull IEntityHandler<?> handler) {
+        try {
+            EntityType enumValue = Enum.valueOf(EntityType.class, entityType);
+            handlers.put(enumValue, handler);
+        } catch (IllegalArgumentException ignored) {}
     }
 
     @SuppressWarnings("unchecked")
