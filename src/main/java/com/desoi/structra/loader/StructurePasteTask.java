@@ -10,6 +10,8 @@ import com.desoi.structra.service.statehandler.StateService;
 import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Validate;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.Bukkit;
@@ -20,7 +22,6 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -88,6 +89,7 @@ public class StructurePasteTask implements IInform {
             int looped = 0;
             int index = 0;
             float ratio = 0f;
+            int entityCount = 0;
 
             @Override
             public void run() {
@@ -100,39 +102,6 @@ public class StructurePasteTask implements IInform {
                     index = i + looped;
                     if(index >= size) {
                         cancel();
-
-                        // TODO: Entity spawning should be batched like blocks for large entity counts
-                        structureLoader.getStructureFile().getEntitiesNode().properties().forEach(entry -> {
-                            String key = entry.getKey();
-                            ObjectNode entityNode = (ObjectNode) entry.getValue();
-
-                            String[] parts = key.split(",");
-                            Position relative = new Position(
-                                    Integer.parseInt(parts[0]),
-                                    Integer.parseInt(parts[1]),
-                                    Integer.parseInt(parts[2])
-                            );
-
-                            Position absolute = relative.copy().add(structureLoader.getMinPosition());
-                            Location location = new Location(
-                                    structureLoader.getOriginWorld(),
-                                    absolute.getX(),
-                                    absolute.getY(),
-                                    absolute.getZ()
-                            );
-                            if (entityNode.get("Offset") instanceof ObjectNode offset) {
-                                location.add(offset.get("x").asDouble(), offset.get("y").asDouble(), offset.get("z").asDouble());
-                            }
-
-                            String typeName = entityNode.get("Type").asText();
-                            EntityType entityType = EntityType.valueOf(typeName);
-                            IEntityHandler<Entity> handler = EntityService.getHandler(entityType);
-                            if(handler != null) {
-                                handler.spawnAndLoad(location, entityNode);
-                            }
-                        });
-
-                        int entityCount = structureLoader.getStructureFile().getEntitiesNode().size();
 
                         ratio = 1.0f;
                         long elapsedMS = (System.nanoTime() - startNanoTime) / 1_000_000;
@@ -148,6 +117,7 @@ public class StructurePasteTask implements IInform {
                         blockLocation.getChunk().load(true);
                     }
                     Block block = blockLocation.getBlock();
+                    String positionKey = blockPosition.copy().subtract(structureLoader.getMinPosition()).separatedByComma();
 
                     short id = structureLoader.getReorderedBlockDataNode().get(index) instanceof NumericNode idNode ? idNode.shortValue() : -1;
                     if(id == -1) {
@@ -166,12 +136,33 @@ public class StructurePasteTask implements IInform {
                     }
 
                     // Block pos - Min Pos
-                    String tileEntityRelativeness = blockPosition.copy().subtract(structureLoader.getMinPosition()).separatedByComma();
-                    if(structureLoader.getStructureFile().getTileEntitiesNode().get(tileEntityRelativeness) instanceof ObjectNode tileEntity) {
+                    if(structureLoader.getStructureFile().getTileEntitiesNode().get(positionKey) instanceof ObjectNode tileEntity) {
                         BlockState blockState = block.getState();
                         IStateHandler<BlockState> handler = StateService.getHandler(blockState);
                         if(handler != null) {
                             handler.loadTo(blockState, tileEntity);
+                        }
+                    }
+
+                    if(structureLoader.getStructureFile().getEntitiesNode().get(positionKey) instanceof ArrayNode nearbyNode) {
+                        for(JsonNode entityJNode : nearbyNode) {
+                            if(!(entityJNode instanceof ObjectNode entityNode)) continue;
+
+                            String type = entityNode.get("Type").asText();
+                            IEntityHandler<Entity> entityHandler = EntityService.getHandler(type);
+                            if(entityHandler == null) {
+                                continue;
+                            }
+
+                            Location location = blockLocation.clone();
+                            if (entityNode.get("Offset") instanceof ObjectNode offsetNode) {
+                                location.add(offsetNode.get("x").asDouble(), offsetNode.get("y").asDouble(), offsetNode.get("z").asDouble());
+                            }
+                            if (entityNode.get("Yaw") instanceof NumericNode yawNode) location.setYaw((float) yawNode.asDouble());
+                            if (entityNode.get("Pitch") instanceof NumericNode pitchNode) location.setPitch((float) pitchNode.asDouble());
+
+                            entityHandler.spawnAndLoad(location, entityNode);
+                            entityCount++;
                         }
                     }
                 }

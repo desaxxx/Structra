@@ -31,64 +31,124 @@
     }
   },
   "Entities": {
-    "0,0,0": {
-      "Type": "ArmorStand",
-      "Visible": true,
-      "Small": false,
-      "Arms": true,
-      "BasePlate": true,
-      "Gravity": true,
-      "Invulnerable": false,
-      "Marker": false,
-      "CanMove": true,
-      "CanTick": true,
-      "CustomName": "Hello, World!",
-      "Helmet": {
-        "DataVersion" : 4435,
-        "id" : "minecraft:diamond_helmet",
-        "count" : 1,
-        "schema_version" : 1
+    "0,0,0": [
+      {
+        "Type": "ARMOR_STAND",
+        "Offset": {
+          "x": 0.568,
+          "y": 0.214,
+          "z": 0.733
+        },
+        "Yaw": -90.0,
+        "Pitch": 0.0,
+        "BodyPose": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "LeftArmPose": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "RightArmPose": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "LeftLegPose": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "RightLegPose": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "HeadPose": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "BasePlate": true,
+        "Visible": true,
+        "Arms": true,
+        "Small": false,
+        "Marker": false,
+        "EquipmentLock": {
+          "hand": ["ADDING_OR_CHANGING"],
+          "off_hand": ["REMOVING_OR_CHANGING"],
+          "feet": ["ADDING"]
+        },
+        "CanMove": true,
+        "Equipment": {
+          "HEAD": {
+            "Item": {
+              "DataVersion": 4435,
+              "id": "minecraft:diamond_helmet",
+              "count": 1,
+              "schema_version": 1
+            }
+          },
+          "CHEST": {
+            "Item": {
+              "DataVersion": 4435,
+              "id": "minecraft:diamond_chestplate",
+              "count": 1,
+              "schema_version": 1
+            }
+          }
+        },
+        "CanTick": true
       },
-      "Chestplate": {
-        "DataVersion" : 4435,
-        "id" : "minecraft:diamond_chestplate",
-        "count" : 1,
-        "schema_version" : 1
-      },
-      "Leggings": {},
-      "Boots": {},
-      "MainHand": {},
-      "OffHand": {},
-      "HeadPose": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "BodyPose": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "LeftArmPose": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "RightArmPose": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "LeftLegPose": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "RightLegPose": {
-        "x": 0,
-        "y": 0,
-        "z": 0
+      {
+        "Type": "BLOCK_DISPLAY",
+        "Offset" : {
+          "x" : 0.5,
+          "y" : 0.0,
+          "z" : 0.5
+        },
+        "Yaw": 0.0,
+        "Pitch": 10.0,
+        "Block" : "minecraft:stone",
+        "Translation" : {
+          "x" : 0.0,
+          "y" : 0.0,
+          "z" : 0.0
+        },
+        "LeftRotation" : {
+          "x" : 0.0,
+          "y" : 0.0,
+          "z" : 0.0,
+          "w" : 1.0
+        },
+        "Scale" : {
+          "x" : 1.0,
+          "y" : 1.0,
+          "z" : 1.0
+        },
+        "RightRotation" : {
+          "x" : 0.0,
+          "y" : 0.0,
+          "z" : 0.0,
+          "w" : 1.0
+        },
+        "InterpolationDuration" : 0,
+        "TeleportDuration" : 0,
+        "ViewRange" : 1.0,
+        "ShadowRadius" : 0.0,
+        "ShadowStrength" : 1.0,
+        "DisplayWidth" : 0.0,
+        "DisplayHeight" : 0.0,
+        "InterpolationDelay" : 0,
+        "Billboard" : "CENTER",
+        "Glowing" : false,
+        "Brightness": {
+          "BlockLight": 15,
+          "SkyLight": 15
+        }
       }
-    }
+    ]
   }
 }
