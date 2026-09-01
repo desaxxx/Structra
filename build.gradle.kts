@@ -20,7 +20,19 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
+configurations.all {
+    if (isCanBeResolved) {
+        attributes {
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+        }
+    }
+}
+
 tasks {
+    withType<JavaCompile> {
+        options.release.set(16)
+    }
+
     shadowJar {
         relocate("com.fasterxml.jackson", "com.desoi.structra.jackson")
         relocate("org.bstats", "com.desoi.structra.bstats")
