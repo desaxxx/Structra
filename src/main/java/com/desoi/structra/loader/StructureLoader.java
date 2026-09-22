@@ -5,6 +5,7 @@ import com.desoi.structra.history.HistoryFile;
 import com.desoi.structra.model.BlockTraversalOrder;
 import com.desoi.structra.model.IInform;
 import com.desoi.structra.model.Position;
+import com.desoi.structra.model.Rotation;
 import com.desoi.structra.util.Validate;
 import com.desoi.structra.writer.StructureWriteTask;
 import com.desoi.structra.writer.StructureWriter;
@@ -35,10 +36,17 @@ public class StructureLoader implements IInform {
     private final @NotNull BlockTraversalOrder blockTraversalOrder;
     private final @NotNull ArrayNode reorderedBlockDataNode;
 
+    private final @NotNull Rotation rotation;
     private final @NotNull List<Position> positions;
 
-    public StructureLoader(StructureFile structureFile, CommandSender executor, int delayTicks, int periodTicks, int batchSize,
-                           Location originLocation, BlockTraversalOrder blockTraversalOrder) {
+    public StructureLoader(StructureFile structureFile,
+                           CommandSender executor,
+                           int delayTicks,
+                           int periodTicks,
+                           int batchSize,
+                           Location originLocation,
+                           BlockTraversalOrder blockTraversalOrder,
+                           Rotation rotation) {
         Validate.notNull(structureFile, "StructureFile cannot be null.");
         Validate.notNull(executor, "Executor cannot be null.");
         Validate.validate(delayTicks >= 0, "Delay ticks cannot be negative.");
@@ -47,6 +55,7 @@ public class StructureLoader implements IInform {
         Validate.notNull(originLocation, "Origin location cannot be null.");
         Validate.notNull(originLocation.getWorld(), "Origin world cannot be null.");
         Validate.notNull(blockTraversalOrder, "BlockTraversalOrder cannot be null.");
+        Validate.notNull(rotation, "Rotation cannot be null.");
 
         this.structureFile = structureFile;
         this.executor = executor;
@@ -56,11 +65,31 @@ public class StructureLoader implements IInform {
 
         this.originLocation = originLocation.clone();
         this.originWorld = originLocation.getWorld();
-        this.minPosition = structureFile.getRelative().copy().add(Position.fromLocation(this.originLocation, false));
-        this.maxPosition = minPosition.copy().add(new Position(structureFile.getXSize()-1, structureFile.getYSize()-1, structureFile.getZSize()-1));
+
+        this.rotation = rotation;
+        int actualSizeX = (rotation == Rotation.CW_90 || rotation == Rotation.CW_270) ? structureFile.getZSize() : structureFile.getXSize();
+        int actualSizeZ = (rotation == Rotation.CW_90 || rotation == Rotation.CW_270) ? structureFile.getXSize() : structureFile.getZSize();
+        Position rotatedRelative = structureFile.getRelative().rotateRelative(rotation, structureFile.getXSize(), structureFile.getZSize());
+
+        this.minPosition = rotatedRelative.copy().add(Position.fromLocation(this.originLocation, false));
+        this.maxPosition = minPosition.copy().add(new Position(actualSizeX-1, structureFile.getYSize()-1, actualSizeZ-1));
+
         this.blockTraversalOrder = blockTraversalOrder;
         this.positions = blockTraversalOrder.getPositions(minPosition, maxPosition);
-        this.reorderedBlockDataNode = blockTraversalOrder.reorderBlockData(structureFile.getBlockDataNode(), minPosition, maxPosition, BlockTraversalOrder.DEFAULT);
+        this.reorderedBlockDataNode = blockTraversalOrder.buildOrderedBlockData(
+                this.positions,
+                this.minPosition,
+                rotation,
+                structureFile.getBlockDataNode(),
+                structureFile.getXSize(),
+                structureFile.getYSize(),
+                structureFile.getZSize()
+        );
+    }
+
+    /** @since 2.0-beta3 */
+    public StructureLoader(StructureFile structureFile, CommandSender executor, int delayTicks, int periodTicks, int batchSize, Location originLocation, BlockTraversalOrder blockTraversalOrder) {
+        this(structureFile, executor, delayTicks, periodTicks, batchSize, originLocation, blockTraversalOrder, Rotation.NONE);
     }
 
     public StructureLoader(HistoryFile historyFile, CommandSender executor, int delayTicks, int periodTicks, int batchSize, BlockTraversalOrder blockTraversalOrder) {
@@ -164,6 +193,10 @@ public class StructureLoader implements IInform {
 
     public @NotNull ArrayNode getReorderedBlockDataNode() {
         return reorderedBlockDataNode;
+    }
+
+    public @NotNull Rotation getRotation() {
+        return rotation;
     }
 
     public @NotNull List<Position> getPositions() {

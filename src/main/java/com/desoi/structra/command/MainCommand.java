@@ -68,8 +68,15 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             return Util.savesFileNames();
         } else if(args.length == 2 && "pasteHistory".equals(args[0])) {
             return Util.historyFileNames();
-        } else if(args.length >= 3 && args[0].equals("paste") && args[args.length-1].startsWith("--")) {
-            return List.of("--skipHistory");
+        } else if(args.length >= 3 && args[0].equals("paste")) {
+            String arg = args[args.length-1];
+            String prevArg = args[args.length-2];
+
+            if (arg.startsWith("-")) {
+                return List.of("--skipHistory","--rotate","-r");
+            } else if (prevArg.startsWith("--rotate") || prevArg.startsWith("-r")) {
+                return List.of("90","180","270");
+            }
         }
         return List.of();
     }

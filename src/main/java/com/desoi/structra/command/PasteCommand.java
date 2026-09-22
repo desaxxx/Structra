@@ -4,6 +4,7 @@ import com.desoi.structra.Structra;
 import com.desoi.structra.loader.StructureFile;
 import com.desoi.structra.loader.StructureLoader;
 import com.desoi.structra.model.BlockTraversalOrder;
+import com.desoi.structra.model.Rotation;
 import com.desoi.structra.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,6 +23,7 @@ public class PasteCommand implements BaseCommand {
     /*
      * PLAYER: /structra paste <fileName> [<batchSize>] [<x>] [<y>] [<z>] [<world>]
      * CONSOLE: /structra paste <fileName> <x> <y> <z> <world> [<batchSize>]
+     * parameters: --skipHistory, --rotate <90|180|270>
      */
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
@@ -37,6 +39,7 @@ public class PasteCommand implements BaseCommand {
         }
 
         boolean skipHistory = Arrays.asList(args).contains("--skipHistory");
+        Rotation rotation = parseRotation(args);
 
         int batchSize = 50;
         int x, y, z;
@@ -72,7 +75,7 @@ public class PasteCommand implements BaseCommand {
 
         BlockTraversalOrder traversalOrder = BlockTraversalOrder.DEFAULT;
         StructureFile structureFile = new StructureFile(file);
-        StructureLoader structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation, traversalOrder);
+        StructureLoader structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation, traversalOrder, rotation);
 
         if(skipHistory) {
             structureLoader.createPasteTask().execute();
@@ -81,5 +84,31 @@ public class PasteCommand implements BaseCommand {
         }
         Util.tell(sender, "&aLoading Structure...");
         return true;
+    }
+
+    private Rotation parseRotation(String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+
+            if (arg.startsWith("--rotate=") || arg.startsWith("-r=")) {
+                String val = arg.substring(arg.indexOf('=') + 1);
+                return matchRotation(val);
+            }
+
+            if (arg.equalsIgnoreCase("--rotate") || arg.equalsIgnoreCase("-r")) {
+                if (i + 1 < args.length) {
+                    return matchRotation(args[i + 1]);
+                }
+            }
+        }
+        return Rotation.NONE;
+    }
+    private Rotation matchRotation(String value) {
+        return switch (value.toUpperCase()) {
+            case "90", "CW_90", "RIGHT" -> Rotation.CW_90;
+            case "180", "CW_180", "BACK" -> Rotation.CW_180;
+            case "270", "CW_270", "LEFT" -> Rotation.CW_270;
+            default -> Rotation.NONE;
+        };
     }
 }

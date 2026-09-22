@@ -374,6 +374,19 @@ public class Position {
     }
 
     /**
+     * Rotates the relative offset vector around the player/origin (0,0) by the given rotation.
+     * Ensures the structure appears at the correct rotated position relative to the player.
+     */
+    public Position rotateRelative(Rotation rotation, int sizeX, int sizeZ) {
+        return switch (rotation) {
+            case NONE -> new Position(x, y, z);
+            case CW_90 -> new Position(-(z + sizeZ - 1), y, x);
+            case CW_180 -> new Position(-(x + sizeX - 1), y, -(z + sizeZ - 1));
+            case CW_270 -> new Position(z, y, -(x + sizeX - 1));
+        };
+    }
+
+    /**
      * Copy other Position values to the Position.
      *
      * @param other the other position

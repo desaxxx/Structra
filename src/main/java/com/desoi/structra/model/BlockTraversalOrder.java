@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class BlockTraversalOrder {
@@ -68,9 +69,9 @@ public class BlockTraversalOrder {
         int thirdSize = getDistance(third, width, height, length);
 
         LinkedList<Position> positions = new LinkedList<>();
-        for(int k = 0; k <= thirdSize; k++) {
-            for(int j = 0; j <= secondSize; j++) {
-                for(int i = 0; i <= firstSize; i++) {
+        for(int k = 0; k < thirdSize; k++) {
+            for(int j = 0; j < secondSize; j++) {
+                for(int i = 0; i < firstSize; i++) {
 
                     Position offset = new Position(0, 0 ,0);
                     offset = offset.add(applyAxis(first, i, minPosition, maxPosition));
@@ -128,6 +129,41 @@ public class BlockTraversalOrder {
             return new Position(0, 0, z);
         }
         return new Position(0, 0, 0);
+    }
+
+    public ArrayNode buildOrderedBlockData(
+            @NotNull List<Position> positions,
+            @NotNull Position minPos,
+            @NotNull Rotation rotation,
+            @NotNull ArrayNode fileBlockData,
+            int fileSizeX, int fileSizeY, int fileSizeZ) {
+
+        ArrayNode result = JsonNodeFactory.instance.arrayNode();
+
+        for (Position worldPos : positions) {
+            int rx = worldPos.getX() - minPos.getX();
+            int ry = worldPos.getY() - minPos.getY();
+            int rz = worldPos.getZ() - minPos.getZ();
+
+            Position fileCoord = inverseRotate(new Position(rx, ry, rz), rotation, fileSizeX, fileSizeZ);
+
+            int srcIdx = fileCoord.getX()
+                    + fileCoord.getY() * fileSizeX
+                    + fileCoord.getZ() * fileSizeX * fileSizeY;
+
+            result.add(fileBlockData.get(srcIdx));
+        }
+
+        return result;
+    }
+
+    public Position inverseRotate(Position p, Rotation rotation, int sizeX, int sizeZ) {
+        return switch (rotation) {
+            case NONE   -> p.copy();
+            case CW_90  -> new Position(p.getZ(), p.getY(), sizeZ - 1 - p.getX());
+            case CW_180 -> new Position(sizeX - 1 - p.getX(), p.getY(), sizeZ - 1 - p.getZ());
+            case CW_270 -> new Position(sizeX - 1 - p.getZ(), p.getY(), p.getX());
+        };
     }
 
     /**
