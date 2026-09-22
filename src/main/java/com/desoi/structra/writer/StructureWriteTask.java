@@ -27,7 +27,9 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class StructureWriteTask implements IInform {
@@ -82,7 +84,8 @@ public class StructureWriteTask implements IInform {
         }
         running = true;
         structureWriter.setStartNanoTime(System.nanoTime());
-        final int size = structureWriter.getPositions().size();
+        final List<Position> positions = new ArrayList<>(structureWriter.getPositions());
+        final int size = positions.size();
 
         Map<String, Collection<Entity>> positionKeyToEntities = collectEntities();
 
@@ -113,7 +116,7 @@ public class StructureWriteTask implements IInform {
                         return;
                     }
 
-                    Position blockPosition = structureWriter.getPositions().get(index);
+                    Position blockPosition = positions.get(index);
                     Location blockLocation = blockPosition.toLocation(structureWriter.getOriginWorld());
                     Block block = blockLocation.getBlock();
                     String positionKey = blockPosition.copy().subtract(structureWriter.getMinPosition()).separatedByComma(); // "15,5,0"

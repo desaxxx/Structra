@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class StructureLoader implements IInform {
         this.maxPosition = minPosition.copy().add(new Position(actualSizeX-1, structureFile.getYSize()-1, actualSizeZ-1));
 
         this.blockTraversalOrder = blockTraversalOrder;
-        this.positions = blockTraversalOrder.getPositions(minPosition, maxPosition);
+        this.positions = new ArrayList<>(blockTraversalOrder.getPositions(minPosition, maxPosition));
         this.reorderedBlockDataNode = blockTraversalOrder.buildOrderedBlockData(
                 this.positions,
                 this.minPosition,
