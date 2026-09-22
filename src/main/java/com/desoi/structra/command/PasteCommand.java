@@ -3,8 +3,10 @@ package com.desoi.structra.command;
 import com.desoi.structra.Structra;
 import com.desoi.structra.loader.StructureFile;
 import com.desoi.structra.loader.StructureLoader;
+import com.desoi.structra.loader.StructurePasteTask;
 import com.desoi.structra.model.BlockTraversalOrder;
 import com.desoi.structra.model.Rotation;
+import com.desoi.structra.model.StructraException;
 import com.desoi.structra.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -59,7 +61,7 @@ public class PasteCommand implements BaseCommand {
                 world = Bukkit.getWorld(args[6]);
             }
         }else {
-            if(args.length < 5) {
+            if(args.length < 6) {
                 Util.tell(sender, "&cUsage: /structra paste <fileName> <x> <y> <z> <world> [<batchSize>]");
                 return true;
             }
@@ -71,16 +73,28 @@ public class PasteCommand implements BaseCommand {
                 batchSize = Util.parseInt(args[6], batchSize);
             }
         }
+        if(world == null) {
+            Util.tell(sender, "&cWorld not found.");
+            return true;
+        }
         Location originLocation = new Location(world, x, y, z);
 
         BlockTraversalOrder traversalOrder = BlockTraversalOrder.DEFAULT;
-        StructureFile structureFile = new StructureFile(file);
-        StructureLoader structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation, traversalOrder, rotation);
+        StructureLoader structureLoader;
+        StructurePasteTask pasteTask;
+        try {
+            StructureFile structureFile = new StructureFile(file);
+            structureLoader = new StructureLoader(structureFile, sender, 0, 20, batchSize, originLocation, traversalOrder, rotation);
+            pasteTask = structureLoader.createPasteTask();
+        } catch (StructraException e) {
+            Util.tellError(sender, e);
+            return true;
+        }
 
         if(skipHistory) {
-            structureLoader.createPasteTask().execute();
+            pasteTask.execute();
         }else {
-            structureLoader.saveHistory(() -> structureLoader.createPasteTask().execute());
+            structureLoader.saveHistory(pasteTask::execute);
         }
         Util.tell(sender, "&aLoading Structure...");
         return true;
