@@ -20,7 +20,7 @@ public class Direction3D {
     private final int encoded;
 
     private Direction3D(int encoded) {
-        this.encoded = (byte) (encoded & 4095);
+        this.encoded = encoded & 4095;
     }
 
     @NotNull
@@ -30,9 +30,9 @@ public class Direction3D {
         Validate.notNull(third, "Third direction cannot be null.");
         Validate.validate(areDifferentAxis(first, second, third), "Directions cannot be on same axis.");
 
-        byte value = 0;
-        value |= (byte) (first.getEncoded() << 8);
-        value |= (byte) (second.getEncoded() << 4);
+        int value = 0;
+        value |= first.getEncoded() << 8;
+        value |= second.getEncoded() << 4;
         value |= third.getEncoded();
         return new Direction3D(value);
     }
