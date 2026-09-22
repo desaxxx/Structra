@@ -8,6 +8,7 @@ import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -227,6 +228,10 @@ public class Position {
      */
     public @NotNull Vector toVector() {
         return new Vector(x, y, z);
+    }
+
+    public @NotNull Vector3i toVector3i() {
+        return new Vector3i(x, y, z);
     }
 
 

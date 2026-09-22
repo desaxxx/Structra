@@ -71,8 +71,16 @@ public class Direction3D {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Direction3D that = (Direction3D) o;
+        if (o == this) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Direction3D that)) {
+            return false;
+        }
+
         return encoded == that.encoded;
     }
 
