@@ -19,7 +19,7 @@ public interface IStateHandler<B extends BlockState> {
     }
 
     //
-    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = JsonHelper.OBJECT_MAPPER;
 
     @NotNull
     default String name() {
