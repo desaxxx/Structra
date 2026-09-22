@@ -71,8 +71,8 @@ public class StructurePasteTask implements IInform {
     public int estimatedRemainingTime() {
         int size = structureLoader.getPositions().size();
         int batchSize = structureLoader.getBatchSize();
-        int period = structureLoader.getPeriodTicks() / 20;
-        return (int) Math.floor((double) (size-1) / batchSize * period);
+        double periodSeconds = structureLoader.getPeriodTicks() / 20.0;
+        return (int) Math.floor((double) (size-1) / batchSize * periodSeconds);
     }
 
     private boolean running = false;
@@ -118,6 +118,7 @@ public class StructurePasteTask implements IInform {
                         long elapsedMS = (System.nanoTime() - startNanoTime) / 1_000_000;
                         inform(String.format("&ePasting Structra to world '%s'... (%.1f%%)", structureLoader.getOriginWorld().getName(), ratio*100));
                         inform(String.format("&aPasted '%d blocks and %d entities' to world '%s' in %d ms", size, entityCount, structureLoader.getOriginWorld().getName(), elapsedMS));
+                        running = false;
                         completeTask.run();
                         return;
                     }
