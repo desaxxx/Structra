@@ -8,7 +8,6 @@ import com.desoi.structra.service.entityhandler.EntityService;
 import com.desoi.structra.service.entityhandler.IEntityHandler;
 import com.desoi.structra.service.statehandler.IStateHandler;
 import com.desoi.structra.service.statehandler.StateService;
-import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Util;
 import com.desoi.structra.util.Validate;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,6 +18,7 @@ import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -28,7 +28,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -91,6 +91,11 @@ public class StructurePasteTask implements IInform {
         running = true;
         startNanoTime = System.nanoTime();
         final int size = structureLoader.getPositions().size();
+        final World world = structureLoader.getOriginWorld();
+        final ObjectNode tileEntitiesNode = structureLoader.getStructureFile().getTileEntitiesNode();
+        final ObjectNode entitiesNode = structureLoader.getStructureFile().getEntitiesNode();
+        final boolean hasExtras = !tileEntitiesNode.isEmpty() || !entitiesNode.isEmpty();
+        final BlockData[] palette = resolvePalette();
         new BukkitRunnable() {
             int looped = 0;
             int index = 0;
@@ -118,15 +123,7 @@ public class StructurePasteTask implements IInform {
                     }
 
                     Position blockPosition = structureLoader.getPositions().get(index);
-                    Location blockLocation = blockPosition.toLocation(structureLoader.getOriginWorld());
-                    if(!blockLocation.getChunk().isLoaded()) {
-                        blockLocation.getChunk().load(true);
-                    }
-                    Block block = blockLocation.getBlock();
-
-                    Position relative = blockPosition.copy().subtract(structureLoader.getMinPosition());
-                    Position fileCoord = structureLoader.getBlockTraversalOrder().inverseRotate(relative, structureLoader.getRotation(), structureLoader.getStructureFile().getXSize(), structureLoader.getStructureFile().getZSize());
-                    String positionKey = fileCoord.separatedByComma();
+                    Block block = world.getBlockAt(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
 
                     short id = structureLoader.getReorderedBlockDataNode().get(index) instanceof NumericNode idNode ? idNode.shortValue() : -1;
                     if(id == -1) {
@@ -134,19 +131,22 @@ public class StructurePasteTask implements IInform {
                         continue;
                     }
 
-                    String data = JsonHelper.getPropertyMatching(structureLoader.getStructureFile().getPaletteNode(), (int) id, "");
-                    try {
-                        BlockData bData = Bukkit.createBlockData(data);
-                        rotateBlockData(bData, structureLoader.getRotation());
-                        block.setType(bData.getMaterial(), false); // false -> no physics
-                        block.setBlockData(bData);
-                    } catch (IllegalArgumentException e) {
+                    BlockData bData = id >= 0 && id < palette.length ? palette[id] : null;
+                    if(bData != null) {
+                        block.setBlockData(bData, false); // false -> no physics
+                    } else {
                         Util.tell(structureLoader.getExecutor(), String.format("There was an error reading BlockData for index '%s'", index));
                         block.setType(Material.AIR, false);
                     }
 
+                    if(!hasExtras) continue;
+
                     // Block pos - Min Pos
-                    if(structureLoader.getStructureFile().getTileEntitiesNode().get(positionKey) instanceof ObjectNode tileEntity) {
+                    Position relative = blockPosition.copy().subtract(structureLoader.getMinPosition());
+                    Position fileCoord = structureLoader.getBlockTraversalOrder().inverseRotate(relative, structureLoader.getRotation(), structureLoader.getStructureFile().getXSize(), structureLoader.getStructureFile().getZSize());
+                    String positionKey = fileCoord.separatedByComma();
+
+                    if(tileEntitiesNode.get(positionKey) instanceof ObjectNode tileEntity) {
                         BlockState blockState = block.getState();
                         IStateHandler<BlockState> handler = StateService.getHandler(blockState);
                         if(handler != null) {
@@ -154,7 +154,8 @@ public class StructurePasteTask implements IInform {
                         }
                     }
 
-                    if(structureLoader.getStructureFile().getEntitiesNode().get(positionKey) instanceof ArrayNode nearbyNode) {
+                    if(entitiesNode.get(positionKey) instanceof ArrayNode nearbyNode) {
+                        Location blockLocation = block.getLocation();
                         for(JsonNode entityJNode : nearbyNode) {
                             if(!(entityJNode instanceof ObjectNode entityNode)) continue;
 
@@ -208,6 +209,28 @@ public class StructurePasteTask implements IInform {
      */
     public void execute() {
         execute(() -> {});
+    }
+
+    private BlockData @NotNull [] resolvePalette() {
+        ObjectNode paletteNode = structureLoader.getStructureFile().getPaletteNode();
+        int maxId = -1;
+        for (Map.Entry<String, JsonNode> entry : paletteNode.properties()) {
+            if (entry.getValue().isInt()) maxId = Math.max(maxId, entry.getValue().asInt());
+        }
+
+        maxId = Math.min(maxId, Short.MAX_VALUE);
+        BlockData[] palette = new BlockData[maxId + 1];
+        for (Map.Entry<String, JsonNode> entry : paletteNode.properties()) {
+            if (!entry.getValue().isInt()) continue;
+            int id = entry.getValue().asInt();
+            if (id < 0 || id > maxId || palette[id] != null) continue;
+            try {
+                BlockData data = Bukkit.createBlockData(entry.getKey());
+                rotateBlockData(data, structureLoader.getRotation());
+                palette[id] = data;
+            } catch (IllegalArgumentException ignored) {}
+        }
+        return palette;
     }
 
     private void rotateBlockData(BlockData data, Rotation rotation) {
