@@ -5,6 +5,7 @@ import com.desoi.structra.model.Position;
 import com.desoi.structra.service.Cache;
 import com.desoi.structra.util.Util;
 import com.desoi.structra.writer.StructureWriter;
+import com.desoi.structra_dev.options.StructureOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -73,6 +74,11 @@ public class WriteCommand implements BaseCommand {
             }
         }
         Location originLocation = new Location(world, x, y, z);
+//
+//        StructureOptions options = new StructureOptions();
+//        options.batchSize(batchSize);
+//        com.desoi.structra_dev.write.StructureWriter writer = new com.desoi.structra_dev.write.StructureWriter(sender, position1.toVector3i(), position2.toVector3i(), originLocation, options);
+//        writer.createTask(file).execute(null);
 
         StructureWriter structureWriter = new StructureWriter(file, sender, position1, position2, originLocation, 0, 20, batchSize);
         structureWriter.createWriteTask().execute();
