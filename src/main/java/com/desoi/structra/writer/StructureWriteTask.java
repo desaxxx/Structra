@@ -2,7 +2,6 @@ package com.desoi.structra.writer;
 
 import com.desoi.structra.Structra;
 import com.desoi.structra.model.Position;
-import com.desoi.structra.model.StructraException;
 import com.desoi.structra.model.IInform;
 import com.desoi.structra.service.entityhandler.EntityService;
 import com.desoi.structra.service.entityhandler.IEntityHandler;
@@ -16,6 +15,7 @@ import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class StructureWriteTask implements IInform {
 
@@ -106,13 +107,7 @@ public class StructureWriteTask implements IInform {
                     index = i + looped;
                     if(index >= size) {
                         cancel();
-
-                        saveToFile();
-                        ratio = 1.0f;
-                        long elapsedMS = (System.nanoTime() - structureWriter.getStartNanoTime()) / 1_000_000;
-                        inform(String.format("&eCopying Structra to file... (%.1f%%)", ratio*100));
-                        inform(String.format("&aSaved '%d blocks and %d entities' to file '%s' in %d ms", size, entityCount, structureWriter.getFile().getName(), elapsedMS));
-                        completeTask.run();
+                        saveToFileAsync(size, entityCount, completeTask);
                         return;
                     }
 
@@ -133,8 +128,8 @@ public class StructureWriteTask implements IInform {
 
                     BlockState state = block.getState();
                     IStateHandler<BlockState> stateHandler = StateService.getHandler(state);
-                    ObjectNode tileEntity = JsonHelper.OBJECT_MAPPER.createObjectNode();
                     if(stateHandler != null) {
+                        ObjectNode tileEntity = JsonHelper.OBJECT_MAPPER.createObjectNode();
                         tileEntity.put("Type", stateHandler.name());
                         stateHandler.save(state, tileEntity);
                         structureWriter.getTileEntitiesNode().set(positionKey, tileEntity);
@@ -173,12 +168,32 @@ public class StructureWriteTask implements IInform {
         }.runTaskTimer(Structra.getInstance(), structureWriter.getDelayTicks(), structureWriter.getPeriodTicks());
     }
 
-    private void saveToFile() {
-        try {
-            JsonHelper.OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(structureWriter.getFile(), structureWriter.getRoot());
-        } catch (IOException e) {
-            throw new StructraException(String.format("Couldn't save to file '%s'", structureWriter.getFile().getName()) + e);
-        }
+    private void saveToFileAsync(int blockCount, int entityCount, Runnable completeTask) {
+        Structra plugin = Structra.getInstance();
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            IOException error = null;
+            try {
+                JsonHelper.OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(structureWriter.getFile(), structureWriter.getRoot());
+            } catch (IOException e) {
+                error = e;
+            }
+
+            final IOException finalError = error;
+            if(!plugin.isEnabled()) return;
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                running = false;
+                if(finalError != null) {
+                    plugin.getLogger().log(Level.SEVERE, String.format("Couldn't save to file '%s'", structureWriter.getFile().getName()), finalError);
+                    informIgnoreSilent(String.format("&cCouldn't save to file '%s': %s", structureWriter.getFile().getName(), finalError.getMessage()));
+                    return;
+                }
+
+                long elapsedMS = (System.nanoTime() - structureWriter.getStartNanoTime()) / 1_000_000;
+                inform(String.format("&eCopying Structra to file... (%.1f%%)", 100.0f));
+                inform(String.format("&aSaved '%d blocks and %d entities' to file '%s' in %d ms", blockCount, entityCount, structureWriter.getFile().getName(), elapsedMS));
+                completeTask.run();
+            });
+        });
     }
 
     private @NotNull Map<String, Collection<Entity>> collectEntities() {
