@@ -1,5 +1,6 @@
 package com.desoi.structra.service.entityhandler;
 
+import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -18,7 +19,7 @@ public interface IEntityHandler<E extends Entity> {
     }
 
     //
-    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = JsonHelper.OBJECT_MAPPER;
 
     @NotNull
     default String name() {

@@ -30,4 +30,12 @@ public class Cache {
         Validate.notNull(key, "Selection key cannot be null.");
         return SELECTIONS_MAP.computeIfAbsent(key, k -> new Selections());
     }
+
+    /**
+     * Remove the Selections of the given key.
+     * @param key Key of the map
+     */
+    public static void removeSelections(CommandSender key) {
+        SELECTIONS_MAP.remove(key);
+    }
 }

@@ -2,17 +2,15 @@ package com.desoi.structra.loader;
 
 import com.desoi.structra.Structra;
 import com.desoi.structra.model.Position;
+import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Validate;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 public class StructureFile {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
     protected final @NotNull File file;
     protected final @NotNull ObjectNode root;
 
@@ -31,7 +29,7 @@ public class StructureFile {
         Validate.notNull(file, "File cannot be null.");
         Validate.validate(file.exists(), "File doesn't exist.");
         Validate.validate(file.getName().endsWith(Structra.FILE_EXTENSION), String.format("File extension must be '%s'.", Structra.FILE_EXTENSION));
-        this.root = Validate.validateException(() -> (ObjectNode) objectMapper.readTree(file), "Failed to read root node of the file.", true);
+        this.root = Validate.validateException(() -> (ObjectNode) JsonHelper.OBJECT_MAPPER.readTree(file), "Failed to read root node of the file.", true);
         Validate.validate(root.get("Version") instanceof TextNode, "Failed to read Version node - expected a text.");
         Validate.validate(root.get("Size") instanceof ObjectNode sizeNode &&
                 sizeNode.get("x") instanceof IntNode &&

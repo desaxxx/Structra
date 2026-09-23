@@ -61,11 +61,13 @@ public class VersionUtil {
         }
 
         public boolean isAtLeast(int major, int minor, int patch) {
-            return this.major >= major && this.minor >= minor && this.patch >= patch;
+            if (this.major != major) return this.major > major;
+            if (this.minor != minor) return this.minor > minor;
+            return this.patch >= patch;
         }
 
         public boolean isAtLeast(int major, int minor) {
-            return this.major >= major && this.minor >= minor;
+            return isAtLeast(major, minor, 0);
         }
 
         public boolean isAtLeast(int major) {

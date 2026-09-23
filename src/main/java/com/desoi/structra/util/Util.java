@@ -2,6 +2,7 @@ package com.desoi.structra.util;
 
 import com.desoi.structra.Structra;
 import com.desoi.structra.model.Position;
+import com.desoi.structra.model.StructraException;
 import com.desoi.structra.service.Cache;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -26,6 +27,13 @@ public class Util {
         }
     }
 
+
+
+    public static void tellError(@NotNull CommandSender receiver, @NotNull StructraException exception) {
+        String message = String.valueOf(exception.getMessage());
+        if(message.startsWith(PREFIX)) message = message.substring(PREFIX.length());
+        tell(receiver, "&c" + message);
+    }
 
 
     private static final boolean DEBUG = true;

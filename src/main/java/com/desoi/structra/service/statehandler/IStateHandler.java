@@ -19,7 +19,7 @@ public interface IStateHandler<B extends BlockState> {
     }
 
     //
-    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = JsonHelper.OBJECT_MAPPER;
 
     @NotNull
     default String name() {
@@ -35,7 +35,7 @@ public interface IStateHandler<B extends BlockState> {
     }
     default <T extends TileState> void loadToTileState(@NotNull T tileState, ObjectNode node) {
         if(node.get("TileState") instanceof ObjectNode tileStateNode) {
-            NonState.saveTileState(tileState, tileStateNode);
+            NonState.loadToTileState(tileState, tileStateNode);
         }
     }
 }
