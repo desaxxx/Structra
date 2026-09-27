@@ -60,7 +60,7 @@ public class WriteCommand implements BaseCommand {
                 world = Bukkit.getWorld(args[6]);
             }
         }else {
-            if(args.length < 5) {
+            if(args.length < 6) {
                 Util.tell(sender, "&cUsage: /structra write <fileName> <x> <y> <z> <world> [<batchSize>]");
                 return true;
             }
@@ -71,6 +71,10 @@ public class WriteCommand implements BaseCommand {
             if(args.length > 6) {
                 batchSize = Util.parseInt(args[6], batchSize);
             }
+        }
+        if(world == null) {
+            Util.tell(sender, "&cWorld not found.");
+            return true;
         }
         Location originLocation = new Location(world, x, y, z);
 

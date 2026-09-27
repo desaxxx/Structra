@@ -11,6 +11,7 @@ import java.util.Map;
 public class StateService {
 
     private static final Map<Class<?>, IStateHandler<?>> handlers = new HashMap<>();
+    private static final Map<Class<?>, IStateHandler<?>> resolved = new HashMap<>();
 
     static {
         handlers.put(Banner.class, new BannerState());
@@ -68,14 +69,18 @@ public class StateService {
     @SuppressWarnings("unchecked")
     @Nullable
     public static <B extends BlockState> IStateHandler<B> getHandler(BlockState blockState) {
-        IStateHandler<?> handler = handlers.get(blockState.getClass());
-        if (handler != null) return (IStateHandler<B>) handler;
-        handler = handlers.entrySet().stream()
-                .filter(e -> e.getKey().isInstance(blockState))
-                .findFirst()
-                .map(Map.Entry::getValue)
-                .orElse(null);
-        if (handler != null) handlers.put(blockState.getClass(), handler);
+        Class<?> stateClass = blockState.getClass();
+        if (resolved.containsKey(stateClass)) return (IStateHandler<B>) resolved.get(stateClass);
+
+        IStateHandler<?> handler = handlers.get(stateClass);
+        if (handler == null) {
+            handler = handlers.entrySet().stream()
+                    .filter(e -> e.getKey().isInstance(blockState))
+                    .findFirst()
+                    .map(Map.Entry::getValue)
+                    .orElse(null);
+        }
+        resolved.put(stateClass, handler);
         return (IStateHandler<B>) handler;
     }
 }

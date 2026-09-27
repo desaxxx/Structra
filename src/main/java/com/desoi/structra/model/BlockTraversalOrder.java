@@ -73,12 +73,11 @@ public class BlockTraversalOrder {
             for(int j = 0; j < secondSize; j++) {
                 for(int i = 0; i < firstSize; i++) {
 
-                    Position offset = new Position(0, 0 ,0);
-                    offset = offset.add(applyAxis(first, i, minPosition, maxPosition));
-                    offset = offset.add(applyAxis(second, j, minPosition, maxPosition));
-                    offset = offset.add(applyAxis(third, k, minPosition, maxPosition));
+                    int x = getCoordinateForAxis(first, i, second, j, third, k, minPosition.getX(), maxPosition.getX(), 'X');
+                    int y = getCoordinateForAxis(first, i, second, j, third, k, minPosition.getY(), maxPosition.getY(), 'Y');
+                    int z = getCoordinateForAxis(first, i, second, j, third, k, minPosition.getZ(), maxPosition.getZ(), 'Z');
 
-                    positions.addLast(offset);
+                    positions.addLast(new Position(x, y, z));
                 }
             }
         }
@@ -103,32 +102,6 @@ public class BlockTraversalOrder {
         if (direction.isY()) return height;
         if (direction.isZ()) return length;
         return 0;
-    }
-
-    /**
-     * Calculate a position with specified direction, step size, min and max positions.
-     *
-     * @param direction Direction
-     * @param step Step size
-     * @param min Minimum position
-     * @param max Maximum position
-     * @return new Position similar to a vector
-     * @since 1.1
-     */
-    private Position applyAxis(Direction direction, int step, Position min, Position max) {
-        if (direction.isX()) {
-            int x = direction.isPositive() ? min.getX() + step : max.getX() - step;
-            return new Position(x, 0, 0);
-        }
-        if (direction.isY()) {
-            int y = direction.isPositive() ? min.getY() + step : max.getY() - step;
-            return new Position(0, y, 0);
-        }
-        if (direction.isZ()) {
-            int z = direction.isPositive() ? min.getZ() + step : max.getZ() - step;
-            return new Position(0, 0, z);
-        }
-        return new Position(0, 0, 0);
     }
 
     public ArrayNode buildOrderedBlockData(

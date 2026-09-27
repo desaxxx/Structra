@@ -4,6 +4,7 @@ import com.desoi.structra.Structra;
 import com.desoi.structra.history.HistoryFile;
 import com.desoi.structra.loader.StructureLoader;
 import com.desoi.structra.model.BlockTraversalOrder;
+import com.desoi.structra.model.StructraException;
 import com.desoi.structra.util.Util;
 import org.bukkit.command.CommandSender;
 
@@ -36,9 +37,14 @@ public class PasteHistoryCommand implements BaseCommand {
             batchSize = Util.parseInt(args[2], batchSize);
         }
 
-        HistoryFile historyFile = new HistoryFile(file);
-        StructureLoader structureLoader = new StructureLoader(historyFile, sender, 0, 20, batchSize, BlockTraversalOrder.DEFAULT);
-        structureLoader.createPasteTask().execute();
+        try {
+            HistoryFile historyFile = new HistoryFile(file);
+            StructureLoader structureLoader = new StructureLoader(historyFile, sender, 0, 20, batchSize, BlockTraversalOrder.DEFAULT);
+            structureLoader.createPasteTask().execute();
+        } catch (StructraException e) {
+            Util.tellError(sender, e);
+            return true;
+        }
         Util.tell(sender, "&aLoading History Structure...");
         return true;
     }

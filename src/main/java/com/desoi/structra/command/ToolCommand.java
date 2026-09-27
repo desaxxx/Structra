@@ -13,7 +13,7 @@ public class ToolCommand implements BaseCommand {
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         if(!sender.hasPermission("structra.tool")) {
-            Util.tell(sender, "&cYou don't have permission to get the too.");
+            Util.tell(sender, "&cYou don't have permission to get the tool.");
             return true;
         }
         if(!(sender instanceof Player player)) {
