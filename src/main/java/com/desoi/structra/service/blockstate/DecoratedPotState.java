@@ -1,6 +1,7 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
 import com.desoi.structra.util.JsonHelper;
 import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -15,8 +16,8 @@ import java.util.Map;
 public class DecoratedPotState implements IStateHandler<DecoratedPot> {
 
     /**
-     * later of 1.20 -> added Sherd methods and Side enum
-     * 1.20.4 -> implemented BlockInventoryHolder
+     * 1.20.1 -> added Sherd methods and Side enum
+     * 1.20.4 -> implements BlockInventoryHolder and Lootable additionally
      */
     @Override
     public int minSupportedVersion() {
@@ -25,15 +26,17 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
 
     @Override
     public void save(@NotNull DecoratedPot blockState, @NotNull ObjectNode node) {
-        /*
-         * DecoratedPot had only getShards() method, rest of the methods was added on Paper 1.20.1
-         */
         if(Wrapper.getInstance().getVersion() >= 12001) {
             ObjectNode sherdsNode = JsonHelper.getOrCreate(node, "Sherds");
             for(Map.Entry<DecoratedPot.Side, Material> entry : blockState.getSherds().entrySet()) {
                 sherdsNode.put(entry.getKey().name(), entry.getValue().name());
             }
         }
+        if (Wrapper.getInstance().getVersion() >= 12004) {
+            NonState.saveInventory(blockState.getSnapshotInventory(), JsonHelper.getOrCreate(node, "inventory"));
+            NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
+        }
+
         saveTileState(blockState, node);
     }
 
@@ -58,6 +61,11 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
                 }
             }
         }
+        if (Wrapper.getInstance().getVersion() >= 12004) {
+            NonState.loadToInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "inventory"));
+            NonState.loadToLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
+        }
+
         loadToTileState(blockState, node);
 
         blockState.update(true, false);
