@@ -1,6 +1,8 @@
 package com.desoi.structra.service.blockstate;
 
 import com.desoi.structra.service.statehandler.IStateHandler;
+import com.desoi.structra.service.statehandler.NonState;
+import com.desoi.structra.util.Wrapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -19,6 +21,11 @@ public class BannerState implements IStateHandler<Banner> {
     public void save(@NotNull Banner blockState, @NotNull ObjectNode node) {
         node.put("BaseColor", blockState.getBaseColor().toString());
         node.set("Patterns", objectMapper.valueToTree(blockState.getPatterns()));
+
+        if (Wrapper.getInstance().getVersion() >= 11900) {
+            NonState.saveNameable(blockState, node);
+        }
+
         saveTileState(blockState, node);
     }
 
@@ -38,6 +45,11 @@ public class BannerState implements IStateHandler<Banner> {
             }
         }
         blockState.setPatterns(patterns);
+
+        if (Wrapper.getInstance().getVersion() >= 11900) {
+            NonState.loadToNameable(blockState, node);
+        }
+
         loadToTileState(blockState, node);
 
         blockState.update(true, false);

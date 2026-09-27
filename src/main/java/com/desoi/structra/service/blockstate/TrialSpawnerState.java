@@ -16,7 +16,7 @@ public class TrialSpawnerState implements IStateHandler<TrialSpawner> {
      */
     @Override
     public int minSupportedVersion() {
-        return 2100;
+        return 12100;
     }
 
     @Override

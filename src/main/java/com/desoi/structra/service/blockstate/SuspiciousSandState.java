@@ -12,7 +12,7 @@ public class SuspiciousSandState implements IStateHandler<SuspiciousSand> {
 
     @Override
     public int minSupportedVersion() {
-        return 1904;
+        return 11904;
     }
 
     @Override

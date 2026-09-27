@@ -21,7 +21,7 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
      */
     @Override
     public int minSupportedVersion() {
-        return 2000;
+        return 12000;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
             }
         }
         if (Wrapper.getInstance().getVersion() >= 12004) {
-            NonState.saveInventory(blockState.getSnapshotInventory(), JsonHelper.getOrCreate(node, "inventory"));
+            NonState.saveInventory(blockState.getSnapshotInventory(), JsonHelper.getOrCreate(node, "Inventory"));
             NonState.saveLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
         }
 
@@ -63,8 +63,12 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
             }
         }
         if (Wrapper.getInstance().getVersion() >= 12004) {
-            NonState.loadToInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "inventory"));
-            NonState.loadToLootable(blockState, JsonHelper.getOrCreate(node, "Lootable"));
+            if (node.get("Inventory") instanceof ObjectNode inventoryNode) {
+                NonState.loadToInventory(blockState.getInventory(), inventoryNode);
+            }
+            if (node.get("Lootable") instanceof ObjectNode lootableNode) {
+                NonState.loadToLootable(blockState, lootableNode);
+            }
         }
 
         loadToTileState(blockState, node);

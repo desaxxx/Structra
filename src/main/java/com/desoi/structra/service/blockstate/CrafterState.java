@@ -12,7 +12,7 @@ public class CrafterState implements IStateHandler<Crafter> {
 
     @Override
     public int minSupportedVersion() {
-        return 2100;
+        return 12003;
     }
 
     @Override
@@ -38,6 +38,7 @@ public class CrafterState implements IStateHandler<Crafter> {
         if(node.get("SlotDisabled") instanceof ObjectNode slotDisabledNode) {
             for (int i = 0; i < blockState.getInventory().getSize(); i++) {
                 if(slotDisabledNode.get(String.valueOf(i)) instanceof BooleanNode isDisabledNode) {
+                    // TODO: why does it work the opposite way?
                     blockState.setSlotDisabled(i, !isDisabledNode.asBoolean()); // it works the other way somehow.
                 }
             }

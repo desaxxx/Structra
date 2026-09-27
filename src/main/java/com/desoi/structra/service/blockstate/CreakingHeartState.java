@@ -9,7 +9,7 @@ public class CreakingHeartState implements IStateHandler<CreakingHeart> {
 
     @Override
     public int minSupportedVersion() {
-        return 2104;
+        return 12104;
     }
 
     @Override

@@ -13,7 +13,7 @@ public class ShelfState implements IStateHandler<Shelf> {
 
     @Override
     public int minSupportedVersion() {
-        return 2109;
+        return 12109;
     }
 
     @Override

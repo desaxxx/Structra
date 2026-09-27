@@ -12,7 +12,7 @@ public class CopperGolemStatueState implements IStateHandler<CopperGolemStatue> 
 
     @Override
     public int minSupportedVersion() {
-        return 2109;
+        return 12109;
     }
 
     @Override

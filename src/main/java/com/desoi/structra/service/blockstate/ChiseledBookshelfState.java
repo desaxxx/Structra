@@ -12,14 +12,14 @@ public class ChiseledBookshelfState implements IStateHandler<ChiseledBookshelf> 
 
     @Override
     public int minSupportedVersion() {
-        return 1903;
+        return 11903;
     }
 
     @Override
     public void save(@NotNull ChiseledBookshelf blockState, @NotNull ObjectNode node) {
         node.put("LastInteractedSlot", blockState.getLastInteractedSlot());
 
-        NonState.saveInventory(blockState.getInventory(), JsonHelper.getOrCreate(node, "Inventory"));
+        NonState.saveInventory(blockState.getSnapshotInventory(), JsonHelper.getOrCreate(node, "Inventory"));
         saveTileState(blockState, node);
     }
 

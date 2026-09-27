@@ -32,7 +32,7 @@ public class NonState {
         ObjectNode itemsNode = JsonNodeFactory.instance.objectNode();
         for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack item = inventory.getItem(i);
-            if (item != null && !item.isEmpty()) {
+            if (item != null && !item.getType().isAir()) {
                 itemsNode.put(String.valueOf(i), JsonHelper.serializeItemStack(item));
             }
         }

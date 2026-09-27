@@ -5,18 +5,20 @@ import com.desoi.structra.service.statehandler.NonState;
 import com.desoi.structra.util.JsonHelper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.block.BrushableBlock;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class BrushableBlockState implements IStateHandler<BrushableBlock> {
 
     @Override
     public int minSupportedVersion() {
-        return 2000;
+        return 12000;
     }
 
     @Override
     public void save(@NotNull BrushableBlock blockState, @NotNull ObjectNode node) {
-        if(!blockState.getItem().isEmpty()) {
+        ItemStack item = blockState.getItem();
+        if(item != null && !item.getType().isAir()) {
             node.put("Item", JsonHelper.serializeItemStack(blockState.getItem()));
         }
 

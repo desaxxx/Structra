@@ -33,18 +33,10 @@ public class SkullState implements IStateHandler<Skull> {
             node.put("NoteBlockSound", blockState.getNoteBlockSound() != null ? blockState.getNoteBlockSound().toString() : null);
         }
 
-        boolean hasProfile = false;
-
-        if(minecraft >= 11801) {
-            if(blockState.getPlayerProfile() != null) {
-                hasProfile = true;
-                node.set("PlayerProfile", playerProfileToJson(blockState.getPlayerProfile()));
-            }
+        if(blockState.getPlayerProfile() != null) {
+            node.set("PlayerProfile", playerProfileToJson(blockState.getPlayerProfile()));
         }
 
-        if(blockState.getOwningPlayer() != null && !hasProfile) {
-            node.set("OwningPlayer", owningPlayerToJson(blockState.getOwningPlayer()));
-        }
         saveTileState(blockState, node);
     }
 
@@ -60,21 +52,10 @@ public class SkullState implements IStateHandler<Skull> {
             }
         }
 
-        boolean hasProfile = false;
-
-        if(minecraft >= 11801) {
-            if(node.has("PlayerProfile")) {
-                hasProfile = true;
-                blockState.setPlayerProfile(jsonToPlayerProfile(node.get("PlayerProfile")));
-            }
+        if(node.has("PlayerProfile")) {
+            blockState.setPlayerProfile(jsonToPlayerProfile(node.get("PlayerProfile")));
         }
 
-        if(node.has("OwningPlayer") && !hasProfile) {
-            OfflinePlayer owningPlayer = jsonToOwningPlayer(node.get("OwningPlayer"));
-            if(owningPlayer != null) {
-                blockState.setOwningPlayer(owningPlayer);
-            }
-        }
         loadToTileState(blockState, node);
         blockState.update(true, false);
     }
@@ -91,18 +72,20 @@ public class SkullState implements IStateHandler<Skull> {
             node.put("Id", profile.getId().toString());
         }
 
-        PlayerTextures textures = profile.getTextures();
-        if(!textures.isEmpty()) {
-            ObjectNode texturesNode = JsonHelper.getOrCreate(node, "Textures");
+        if (Wrapper.getInstance().getVersion() >= 11801) {
+            PlayerTextures textures = profile.getTextures();
+            if (!textures.isEmpty()) {
+                ObjectNode texturesNode = JsonHelper.getOrCreate(node, "Textures");
 
-            texturesNode.put("SkinModel", textures.getSkinModel().name());
+                texturesNode.put("SkinModel", textures.getSkinModel().name());
 
-            if(textures.getSkin() != null) {
-                texturesNode.put("Skin", textures.getSkin().toString());
-            }
+                if (textures.getSkin() != null) {
+                    texturesNode.put("Skin", textures.getSkin().toString());
+                }
 
-            if(textures.getCape() != null) {
-                texturesNode.put("Cape", textures.getCape().toString());
+                if (textures.getCape() != null) {
+                    texturesNode.put("Cape", textures.getCape().toString());
+                }
             }
         }
 
@@ -119,7 +102,6 @@ public class SkullState implements IStateHandler<Skull> {
         return node;
     }
 
-    // TODO: this is not going to work (return type is invalid for lower MC 1.18.1)
     private PlayerProfile jsonToPlayerProfile(JsonNode node) {
         String name = node.get("Name") instanceof TextNode nameNode ? nameNode.asText() : null;
 
@@ -133,7 +115,7 @@ public class SkullState implements IStateHandler<Skull> {
 
         PlayerProfile profile = Bukkit.createProfile(id, name);
 
-        if(node.get("Textures") instanceof ObjectNode texturesNode) {
+        if(Wrapper.getInstance().getVersion() >= 11801 && node.get("Textures") instanceof ObjectNode texturesNode) {
             PlayerTextures textures = profile.getTextures();
 
             if(texturesNode.get("Skin") instanceof TextNode skinNode) {
@@ -178,29 +160,5 @@ public class SkullState implements IStateHandler<Skull> {
         profile.setProperties(properties);
 
         return profile;
-    }
-
-    private JsonNode owningPlayerToJson(OfflinePlayer owningPlayer) {
-        ObjectNode node = objectMapper.createObjectNode();
-
-        node.put("UUID", owningPlayer.getUniqueId().toString());
-
-        return node;
-    }
-
-    private @Nullable OfflinePlayer jsonToOwningPlayer(JsonNode node) {
-        UUID uuid = null;
-        if(node.get("UUID") instanceof TextNode uuidNode) {
-            try {
-                uuid = UUID.fromString(uuidNode.asText());
-            } catch (Exception ignored) {
-            }
-        }
-
-        if(uuid == null) {
-            return null;
-        }
-
-        return Bukkit.getOfflinePlayer(uuid);
     }
 }

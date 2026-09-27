@@ -12,7 +12,7 @@ public class VaultState implements IStateHandler<Vault> {
 
     @Override
     public int minSupportedVersion() {
-        return 2100;
+        return 12100;
     }
 
     @Override
