@@ -46,6 +46,7 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
             Iterator<String> sideKeys = sherdsNode.fieldNames();
             while(sideKeys.hasNext()) {
                 String sideString = sideKeys.next();
+                String materialString = sherdsNode.get(sideString).asText();
 
                 DecoratedPot.Side side = null;
                 try {
@@ -53,7 +54,7 @@ public class DecoratedPotState implements IStateHandler<DecoratedPot> {
                 } catch (IllegalArgumentException ignored) {}
                 Material material = null;
                 try {
-                    material = Material.valueOf(sideString);
+                    material = Material.valueOf(materialString);
                 } catch (IllegalArgumentException ignored) {}
 
                 if(side != null && material != null) {
