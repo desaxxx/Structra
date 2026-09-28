@@ -8,18 +8,32 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-public class PosCommand implements BaseCommand {
-    public static final PosCommand INSTANCE = new PosCommand();
+import java.util.Collection;
+import java.util.List;
 
-    private PosCommand() {}
+@NullMarked
+public class PosCommand implements SubCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, String[] args) {
-        if(!sender.hasPermission("structra.select")) {
-            Util.tell(sender, "&cYou don't have permission to select a position.");
-            return true;
-        }
+    public String getName() {
+        return "pos1";
+    }
+
+    @Override
+    public Collection<String> aliases() {
+        return List.of("pos2");
+    }
+
+    @Override
+    public @Nullable String getPermission() {
+        return "structra.select";
+    }
+
+    @Override
+    public void execute(CommandSender sender, String[] args) {
         int x, y, z;
         World world;
         if(args.length > 4) {
@@ -30,7 +44,7 @@ public class PosCommand implements BaseCommand {
         }else {
             if(!(sender instanceof Player player)) {
                 Util.tell(sender, "&cUsage: /structra <pos1|pos2> <x> <y> <z> <world>");
-                return true;
+                return;
             }
             Location location = player.getLocation();
             Block targetBlock = player.getTargetBlockExact(10);
@@ -44,6 +58,19 @@ public class PosCommand implements BaseCommand {
 
         Position position = new Position(x, y, z, world == null ? null : world.getName());
         Util.selectPosition(sender, position, args[0].equals("pos1") ? 1 : 2);
-        return true;
+    }
+
+    @Override
+    public Collection<String> suggest(CommandSender sender, String[] args) {
+        if (args.length == 2) {
+            return List.of("<x>");
+        } else if (args.length == 3) {
+            return List.of("<y>");
+        } else if (args.length == 4) {
+            return List.of("<z>");
+        } else if (args.length == 5) {
+            return List.of("<world>");
+        }
+        return List.of();
     }
 }

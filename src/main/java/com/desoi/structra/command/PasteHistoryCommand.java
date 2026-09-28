@@ -7,29 +7,33 @@ import com.desoi.structra.model.BlockTraversalOrder;
 import com.desoi.structra.model.StructraException;
 import com.desoi.structra.util.Util;
 import org.bukkit.command.CommandSender;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
-public class PasteHistoryCommand implements BaseCommand {
-    public static final PasteHistoryCommand INSTANCE = new PasteHistoryCommand();
+@NullMarked
+public class PasteHistoryCommand implements SubCommand {
 
-    private PasteHistoryCommand() {}
-
-    /*
-     * PLAYER: /structra paste <fileName> [<batchSize>] [<x>] [<y>] [<z>] [<world>]
-     * CONSOLE: /structra paste <fileName> <x> <y> <z> <world> [<batchSize>]
-     */
     @Override
-    public boolean onCommand(CommandSender sender, String[] args) {
+    public String getName() {
+        return "pasteHistory";
+    }
+
+    @Override
+    public @Nullable String getPermission() {
+        return "structra.paste";
+    }
+
+    @Override
+    public void execute(CommandSender sender, String[] args) {
         String fileName = args[1];
-        if(!sender.hasPermission("structra.paste." + fileName) && !sender.hasPermission("structra.paste.*")) {
-            Util.tell(sender, "&cYou don't have permission to paste this Structra.");
-            return true;
-        }
         File file = new File(Structra.getInstance().getHistoryFolder(), fileName + Structra.FILE_EXTENSION);
         if(!file.exists()) {
             Util.tell(sender, "&cFile doesn't exist.");
-            return true;
+            return;
         }
 
         int batchSize = 50;
@@ -43,9 +47,20 @@ public class PasteHistoryCommand implements BaseCommand {
             structureLoader.createPasteTask().execute();
         } catch (StructraException e) {
             Util.tellError(sender, e);
-            return true;
+            return;
         }
+
         Util.tell(sender, "&aLoading History Structure...");
-        return true;
+    }
+
+    @Override
+    public Collection<String> suggest(CommandSender sender, String[] args) {
+        if (args.length == 2) {
+            return Util.historyFileNames();
+        } else if (args.length == 3) {
+            return List.of("50", "100", "500", "1000");
+        }
+
+        return List.of();
     }
 }

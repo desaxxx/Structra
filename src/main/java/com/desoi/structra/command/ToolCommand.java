@@ -4,24 +4,39 @@ import com.desoi.structra.Structra;
 import com.desoi.structra.util.Util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-public class ToolCommand implements BaseCommand {
-    public static final ToolCommand INSTANCE = new ToolCommand();
+import java.util.Collection;
+import java.util.List;
 
-    private ToolCommand() {}
+@NullMarked
+public class ToolCommand implements SubCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, String[] args) {
-        if(!sender.hasPermission("structra.tool")) {
-            Util.tell(sender, "&cYou don't have permission to get the tool.");
-            return true;
-        }
-        if(!(sender instanceof Player player)) {
-            Util.tell(sender, "&cYou can't use this command on console.");
-            return true;
-        }
+    public String getName() {
+        return "tool";
+    }
+
+    @Override
+    public @Nullable String getPermission() {
+        return "structra.tool";
+    }
+
+    @Override
+    public boolean isPlayerOnly() {
+        return true;
+    }
+
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
         player.getInventory().addItem(Structra.SELECTOR_TOOL);
         Util.tell(player, "&eHere your tool!");
-        return true;
+    }
+
+    @Override
+    public Collection<String> suggest(CommandSender sender, String[] args) {
+        return List.of();
     }
 }

@@ -1,83 +1,98 @@
 package com.desoi.structra.command;
 
 import com.desoi.structra.util.Util;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @since 1.0-SNAPSHOT
  */
-public class MainCommand implements CommandExecutor, TabCompleter {
+public class MainCommand extends BaseCommand {
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
-        /*
-         * PLAYER: /structra tool
-         */
-        if(args.length >= 1 && args[0].equals("tool")) {
-            return ToolCommand.INSTANCE.onCommand(sender, args);
-        }
-        /*
-         * PLAYER: /structra <pos1|pos2> [<x>] [<y>] [<z>] [<world>]
-         * CONSOLE: /structra <pos1|pos2> <x> <y> <z> <world>
-         */
-        else if(args.length >= 1 && (args[0].equals("pos1") || args[0].equals("pos2"))) {
-            return PosCommand.INSTANCE.onCommand(sender, args);
-        }
-        /*
-         * PLAYER: /structra write <fileName> [<batchSize>] [<x>] [<y>] [<z>] [<world>]
-         * CONSOLE: /structra write <fileName> <x> <y> <z> <world> [<batchSize>]
-         */
-        else if(args.length >= 2 && args[0].equals("write")) {
-            return WriteCommand.INSTANCE.onCommand(sender, args);
-        }
-        /*
-         * PLAYER: /structra paste <fileName> [<batchSize>] [<x>] [<y>] [<z>] [<world>]
-         * CONSOLE: /structra paste <fileName> <x> <y> <z> <world> [<batchSize>]
-         */
-        else if(args.length >= 2 && args[0].equals("paste")) {
-            return PasteCommand.INSTANCE.onCommand(sender, args);
-        }
-        /*
-         * /structra pasteHistory <fileName> [<batchSize>]
-         */
-        else if(args.length >= 2 && args[0].equals("pasteHistory")) {
-            return PasteHistoryCommand.INSTANCE.onCommand(sender, args);
-        }
-        /*
-         * /structra delete <fileName>
-         */
-        else if(args.length >= 2 && args[0].equals("delete")) {
-            return DeleteCommand.INSTANCE.onCommand(sender, args);
-        }
-        return true;
+    /**
+     * Structra command syntax.
+     *
+     * <p><b>Selection</b></p>
+     * <ul>
+     *   <li><code>/structra tool</code></li>
+     *   <li><code>/structra pos1 [x y z world]</code> (player)</li>
+     *   <li><code>/structra pos1 x y z world</code> (console)</li>
+     *   <li><code>/structra pos2 [x y z world]</code> (player)</li>
+     *   <li><code>/structra pos2 x y z world</code> (console)</li>
+     * </ul>
+     *
+     * <p><b>Write</b></p>
+     * <ul>
+     *   <li><code>/structra write &lt;file&gt; [batchSize] [x y z world]</code> (player)</li>
+     *   <li><code>/structra write &lt;file&gt; x y z world [batchSize]</code> (console)</li>
+     * </ul>
+     *
+     * <p><b>Paste</b></p>
+     * <ul>
+     *   <li><code>/structra paste &lt;file&gt; &lt;batchSize&gt; [x y z world]</code> (player)</li>
+     *   <li><code>/structra paste &lt;file&gt; x y z world [batchSize]</code> (console)</li>
+     * </ul>
+     *
+     * <p>Additional paste flags:</p>
+     * <ul>
+     *   <li><code>--skipHistory</code></li>
+     *   <li><code>--rotate &lt;90|180|270&gt;</code></li>
+     * </ul>
+     *
+     * <p><b>History</b></p>
+     * <ul>
+     *   <li><code>/structra pasteHistory &lt;file&gt; [batchSize]</code></li>
+     * </ul>
+     *
+     * <p><b>Delete</b></p>
+     * <ul>
+     *   <li><code>/structra delete &lt;file&gt;</code></li>
+     * </ul>
+     */
+    public MainCommand() {
+        register(new ToolCommand());
+        register(new PosCommand());
+        register(new WriteCommand());
+        register(new PasteCommand());
+        register(new PasteHistoryCommand());
+        register(new DeleteCommand());
+
+        registerPermissions();
     }
 
-
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
-        if(args.length == 1) {
-            return List.of("tool", "pos1", "pos2", "write", "paste","delete","pasteHistory");
-        } else if(args.length == 2 && List.of("paste","delete").contains(args[0])) {
-            return Util.savesFileNames();
-        } else if(args.length == 2 && "pasteHistory".equals(args[0])) {
-            return Util.historyFileNames();
-        } else if(args.length >= 3 && args[0].equals("paste")) {
-            String arg = args[args.length-1];
-            String prevArg = args[args.length-2];
-
-            if (arg.startsWith("-")) {
-                return List.of("--skipHistory","--rotate","-r");
-            } else if (prevArg.startsWith("--rotate") || prevArg.startsWith("-r")) {
-                return List.of("90","180","270");
-            }
+    public void execute(CommandSourceStack source, String[] args) {
+        CommandSender sender = source.getSender();
+        if(args.length == 0) {
+            sender.sendMessage("Invalid command.");
+            return;
         }
-        return List.of();
+
+        SubCommand subCommand = getSubCommand(args[0].toLowerCase(Locale.ROOT));
+        if(subCommand == null) {
+            sender.sendMessage("Invalid command.");
+            return;
+        }
+
+        if(subCommand.isPlayerOnly() && !(sender instanceof Player)) {
+            sender.sendMessage("Only players can use this command.");
+            return;
+        }
+
+        if(subCommand.getPermission() != null && !sender.hasPermission(subCommand.getPermission())) {
+            sender.sendMessage("You do not have permission to use this command.");
+            return;
+        }
+
+        subCommand.execute(sender, args);
     }
 }

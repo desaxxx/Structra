@@ -9,12 +9,10 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.Objects;
 
 public final class Structra extends JavaPlugin {
     public static final String FILE_EXTENSION = ".structra";
@@ -34,10 +32,7 @@ public final class Structra extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        PluginCommand command = Objects.requireNonNull(getCommand("structra"));
-        MainCommand mainCommand = new MainCommand();
-        command.setExecutor(mainCommand);
-        command.setTabCompleter(mainCommand);
+        registerCommand("structra", new MainCommand());
 
         Bukkit.getPluginManager().registerEvents(new BukkitListener(), this);
 

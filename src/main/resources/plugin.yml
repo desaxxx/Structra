@@ -3,9 +3,6 @@ version: '${version}'
 main: com.desoi.structra.Structra
 api-version: '1.17'
 authors: [ desaxx, aysihuniks ]
-commands:
-  structra:
-    description: Main command of the plugin.
 permissions:
   structra.admin:
     default: op
